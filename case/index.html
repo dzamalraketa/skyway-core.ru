@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ru" prefix="og: https://ogp.me/ns#">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портфолио | SKYWAY — Инженерные решения</title>
+    <meta name="description" content="Портфолио инженерных решений. Проектирование и разработка сложных систем на чистом коде.">
+    <meta name="keywords" content="кейсы SKYWAY, портфолио, разработка сайтов, digital-проекты">
+    <meta name="robots" content="index,follow">
+    <meta property="og:title" content="Портфолио | SKYWAY — Инженерные решения">
+    <meta property="og:description" content="Проектируем и строим системы, которые работают на уровне ядра. Чистый код, никакого мусора.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:site_name" content="SKYWAY">
+    <meta property="og:url" content="https://skyway-core.ru/case/">
+    <meta property="og:image" content="https://skyway-core.ru/og-image.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Портфолио | SKYWAY — Инженерные решения">
+    <meta name="twitter:description" content="Проектируем и строим системы, которые работают на уровне ядра. Чистый код, никакого мусора.">
+    <meta name="twitter:image" content="https://skyway-core.ru/og-image.svg">
+
+    <link rel="canonical" href="https://skyway-core.ru/case/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"SKYWAY","url":"https://skyway-core.ru/","logo":"https://skyway-core.ru/android-chrome-192x192.png","sameAs":["https://t.me/skywayapsny","https://wa.me/79407117706"],"contactPoint":[{"@type":"ContactPoint","contactType":"sales","telephone":"+7 (940) 711-77-06","availableLanguage":["ru"],"url":"https://skyway-core.ru/contact/","areaServed":"RU"}]},{"@type":"WebSite","name":"SKYWAY","url":"https://skyway-core.ru/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://skyway-core.ru/"},{"@type":"ListItem","position":2,"name":"Кейсы","item":"https://skyway-core.ru/case/"}]}]}</script>
+    
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Ubuntu:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/android-chrome-192x192.png">
+    <script src="/js/main.js" defer></script>
+</head>
+<body>
+    <div class="scan-line"></div>
+
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="/" class="logo-link">
+                        <span class="logo-brand">SKYWAY</span>
+                        <span class="logo-sub">Инженерные решения</span>
+                    </a>
+                </div>
+
+                <nav class="main-nav">
+                    <ul class="nav-list">
+                        <li><a href="/" class="nav-link">Главная</a></li>
+                        <li><a href="/services/" class="nav-link">Услуги</a></li>
+                        <li><a href="/case/" class="nav-link active">Кейсы</a></li>
+                        <li><a href="/about/" class="nav-link">О нас</a></li>
+                        <li><a href="/contact/" class="nav-link">Контакты</a></li>
+                    </ul>
+                </nav>
+
+                <div class="header-cta-dropdown desktop-only">
+                    <button class="btn btn-primary btn-small dropdown-trigger" id="headerCtaBtn" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-paper-plane"></i> Связаться
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                    </button>
+                    <div class="dropdown-menu" id="headerCtaMenu" role="menu">
+                        <a href="#contact" class="dropdown-item" role="menuitem">
+                            <i class="fas fa-edit"></i> Написать
+                        </a>
+                        <a href="https://wa.me/79407117706" class="dropdown-item" target="_blank" rel="noopener noreferrer" role="menuitem">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="https://t.me/skywayapsny" class="dropdown-item" target="_blank" rel="noopener noreferrer" role="menuitem">
+                            <i class="fab fa-telegram"></i> Telegram
+                        </a>
+                    </div>
+                </div>
+
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-content">
+            <button class="mobile-menu-close" id="mobileMenuClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <a href="/" class="mobile-nav-link">Главная</a>
+            <a href="/services/" class="mobile-nav-link">Услуги</a>
+            <a href="/case/" class="mobile-nav-link active">Кейсы</a>
+            <a href="/about/" class="mobile-nav-link">О нас</a>
+            <a href="/contact/" class="mobile-nav-link">Контакты</a>
+            <a href="#contact" class="btn btn-primary btn-block mobile-only">Обсудить проект</a>
+        </div>
+    </div>
+
+    <!-- Hero Banner Section -->
+    <section class="banner hero-cases">
+        <!-- Matrix Canvas Background -->
+        <canvas id="matrix-cases"></canvas>
+        
+        <div class="container">
+            <div class="banner-content">
+                <h1 class="banner-title">
+                    <span class="title-line">Портфолио инженерных решений</span>
+                    <span class="title-line typed-text" id="typedText"></span>
+                    <span class="typed-cursor">|</span>
+                </h1>
+                
+                <p class="banner-subtitle">
+                    Мы строим системы для реального бизнеса: от крупнейшего тур-портала Абхазии до высоконагруженных доставок еды.
+                </p>
+                
+                <div class="banner-actions">
+                    <a href="#cases" class="btn btn-primary btn-large">
+                        <i class="fas fa-code"></i> Смотреть проекты
+                    </a>
+                    <a href="#contact" class="btn btn-outline btn-large">
+                        <i class="fas fa-rocket"></i> Обсудить проект
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main id="main-content">
+        <nav aria-label="Хлебные крошки">
+            <ol class="breadcrumbs container">
+                <li><a href="/">Главная</a></li>
+                <li aria-current="page">Кейсы</li>
+            </ol>
+        </nav>
+    <section class="cases-section section" id="cases">
+        <div class="container">
+            <div class="section-header cases-section-header">
+                <span class="section-label">Портфолио</span>
+                <h2 class="section-title">Наши проекты</h2>
+                <p class="section-subtitle">Системы, построенные на чистом коде и инженерном подходе</p>
+            </div>
+            
+            <div class="cases-filters" role="group" aria-label="Фильтр проектов">
+                <button class="filter-btn active" data-filter="all">Все проекты</button>
+                <button class="filter-btn" data-filter="tourism">Туризм</button>
+                <button class="filter-btn" data-filter="food">FoodTech</button>
+                <button class="filter-btn" data-filter="services">Услуги</button>
+            </div>
+            
+            <div class="cases-grid">
+                <!-- Проект 1: SKYWAY APSNY -->
+                <div class="case-card animate-on-scroll" data-category="tourism">
+                    <div class="case-image">
+                        <div class="case-image-content">
+                            <i class="fas fa-mountain-sun case-icon"></i>
+                            <div class="case-domain">SKYWAY-APSNY.RU</div>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3 class="case-title">SKYWAY APSNY</h3>
+                        <p class="case-description">
+                            Туристический портал Абхазии. Агрегатор отелей, туров и локаций с продуманной SEO-структурой. Сложная архитектура данных и высокая посещаемость.
+                        </p>
+                        <div class="case-tech">
+                            <span class="tech-tag">Агрегатор</span>
+                            <span class="tech-tag">SEO-структура</span>
+                            <span class="tech-tag">Туризм</span>
+                        </div>
+                        <a href="https://skywayapsny.ru" target="_blank" rel="noopener" class="btn btn-outline btn-small">
+                            <i class="fas fa-external-link-alt"></i> Перейти на сайт
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Проект 2: SEIKO -->
+                <div class="case-card animate-on-scroll" data-category="food">
+                    <div class="case-image">
+                        <div class="case-image-content">
+                            <i class="fas fa-shrimp case-icon"></i>
+                            <div class="case-domain">SEIKO-SUKHUM.RU</div>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3 class="case-title">SEIKO</h3>
+                        <p class="case-description">
+                            Доставка японской кухни. Высокая нагрузка, UX-заказа в 3 клика, скорость загрузки менее 0.8 секунд. Оптимизировано для пиковых нагрузок.
+                        </p>
+                        <div class="case-tech">
+                            <span class="tech-tag">Высокая нагрузка</span>
+                            <span class="tech-tag">UX 3 клика</span>
+                            <span class="tech-tag">Японская кухня</span>
+                        </div>
+                        <a href="https://seiko-sukhum.ru" target="_blank" rel="noopener" class="btn btn-outline btn-small">
+                            <i class="fas fa-external-link-alt"></i> Перейти на сайт
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Проект 3: FIRE-ABH.RU -->
+                <div class="case-card animate-on-scroll" data-category="services">
+                    <div class="case-image">
+                        <div class="case-image-content">
+                            <i class="fas fa-fire case-icon"></i>
+                            <div class="case-domain">FIRE-ABH.RU</div>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3 class="case-title">FIRE-ABH.RU</h3>
+                        <p class="case-description">
+                            Сайт фаер-шоу (артисты). Оптимизация тяжелого видео и фото без потери производительности. Визуальный контент с сохранением высокой скорости загрузки.
+                        </p>
+                        <div class="case-tech">
+                            <span class="tech-tag">Оптимизация медиа</span>
+                            <span class="tech-tag">Визуальный контент</span>
+                            <span class="tech-tag">Фаер-шоу</span>
+                        </div>
+                        <a href="https://fire-abh.ru" target="_blank" rel="noopener" class="btn btn-outline btn-small">
+                            <i class="fas fa-external-link-alt"></i> Перейти на сайт
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Проект 4: PROPLEX.ONLINE -->
+                <div class="case-card animate-on-scroll" data-category="services">
+                    <div class="case-image">
+                        <div class="case-image-content">
+                            <i class="fas fa-window-maximize case-icon"></i>
+                            <div class="case-domain">PROPLEX.ONLINE</div>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3 class="case-title">PROPLEX.ONLINE</h3>
+                        <p class="case-description">
+                            Оконные системы (ПВХ). Лидогенерация. Проект-донор с процентной моделью вознаграждения. Высокая конверсия и SEO-оптимизация.
+                        </p>
+                        <div class="case-tech">
+                            <span class="tech-tag">Лидогенерация</span>
+                            <span class="tech-tag">Окна/ПВХ</span>
+                            <span class="tech-tag">Процентная модель</span>
+                        </div>
+                        <a href="https://proplex.online" target="_blank" rel="noopener" class="btn btn-outline btn-small">
+                            <i class="fas fa-external-link-alt"></i> Перейти на сайт
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Проект 5: ХРУСТЯЩАЯ КУРОЧКА -->
+                <div class="case-card animate-on-scroll" data-category="food">
+                    <div class="case-image">
+                        <div class="case-image-content">
+                            <i class="fas fa-drumstick-bite case-icon"></i>
+                            <div class="case-domain">JAPAN-STORY.RU</div>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3 class="case-title">ХРУСТЯЩАЯ КУРОЧКА</h3>
+                        <p class="case-description">
+                            FoodTech проект. Прямая конкуренция с КФС. Работа в условиях слабого 3G. Оптимизация для мобильных устройств и низкоскоростного интернета.
+                        </p>
+                        <div class="case-tech">
+                            <span class="tech-tag">FoodTech</span>
+                            <span class="tech-tag">Оптимизация 3G</span>
+                            <span class="tech-tag">Мобильная доставка</span>
+                        </div>
+                        <a href="https://japan-story.ru" target="_blank" rel="noopener" class="btn btn-outline btn-small">
+                            <i class="fas fa-external-link-alt"></i> Перейти на сайт
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Проект 6: MOTO-ABH.RU -->
+                <div class="case-card animate-on-scroll" data-category="tourism">
+                    <div class="case-image">
+                        <div class="case-image-content">
+                            <i class="fas fa-motorcycle case-icon"></i>
+                            <div class="case-domain">MOTO-ABH.RU</div>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <h3 class="case-title">MOTO-ABH.RU</h3>
+                        <p class="case-description">
+                            Эндуро-туры и прокат техники. Каталог с системой онлайн-бронирования. Интеграция с календарями и системой управления парком.
+                        </p>
+                        <div class="case-tech">
+                            <span class="tech-tag">Онлайн-бронирование</span>
+                            <span class="tech-tag">Каталог техники</span>
+                            <span class="tech-tag">Эндуро-туры</span>
+                        </div>
+                        <a href="https://moto-abh.ru" target="_blank" rel="noopener" class="btn btn-outline btn-small">
+                            <i class="fas fa-external-link-alt"></i> Перейти на сайт
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="code-snippet code-snippet-spaced cases-code-footer" aria-hidden="true">
+                <code>
+                    <span class="code-comment">// Каждый проект — это система, построенная на чистом коде</span><br>
+                    <span class="code-keyword">function</span> <span class="code-variable">buildSystem</span>(requirements) {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> <span class="code-function">architecture</span> = designArchitecture(requirements);<br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> <span class="code-function">code</span> = writePureCode(architecture);<br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> <span class="code-function">system</span> = optimizePerformance(code);<br>
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> system;<br>
+                    }<br>
+                    <br>
+                    <span class="code-console">console</span>.<span class="code-function">log</span>(<span class="code-string">'Готовы спроектировать систему для вашего бизнеса'</span>);
+                </code>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact section" id="contact">
+        <div class="container">
+            <div class="section-header section-header-center">
+                <h2 class="section-title">Готовы спроектировать систему?</h2>
+                <p class="section-subtitle section-subtitle-narrow">
+                    Расскажите о вашей задаче, и мы спроектируем архитектуру системы на чистом коде.
+                </p>
+                
+                <div class="hero-actions hero-actions-center">
+                    <a href="https://t.me/skywayapsny" class="btn btn-telegram btn-large" target="_blank" rel="noopener">
+                        <i class="fab fa-telegram"></i> Обсудить в Telegram
+                    </a>
+                    <a href="https://wa.me/79407117706" class="btn btn-whatsapp btn-large" target="_blank" rel="noopener">
+                        <i class="fab fa-whatsapp"></i> Обсудить в WhatsApp
+                    </a>
+                </div>
+                
+                <div class="contact-footnote">
+                    <i class="fas fa-rocket"></i> Техническая консультация — бесплатно. Проанализируем задачу и предложим архитектуру.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo">
+                        <span class="logo-brand">SKYWAY</span>
+                        <span class="logo-sub">Инженерные решения</span>
+                    </div>
+                    <p class="footer-tagline">
+                        Проектирование цифрового превосходства. Системы, а не сайты.
+                    </p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4 class="footer-title">Навигация</h4>
+                        <ul>
+                            <li><a href="/"><i class="fas fa-home"></i> Главная</a></li>
+                            <li><a href="/services/"><i class="fas fa-code"></i> Услуги</a></li>
+                            <li><a href="/case/"><i class="fas fa-chart-bar"></i> Кейсы</a></li>
+                            <li><a href="/about/"><i class="fas fa-users"></i> О нас</a></li>
+                            <li><a href="/contact/"><i class="fas fa-phone"></i> Контакты</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4 class="footer-title">Типы проектов</h4>
+                        <ul>
+                            <li><a href="#" class="filter-link" data-filter="all"><i class="fas fa-layer-group"></i> Все проекты</a></li>
+                            <li><a href="#" class="filter-link" data-filter="tourism"><i class="fas fa-mountain-sun"></i> Туризм</a></li>
+                            <li><a href="#" class="filter-link" data-filter="food"><i class="fas fa-utensils"></i> FoodTech</a></li>
+                            <li><a href="#" class="filter-link" data-filter="services"><i class="fas fa-cogs"></i> Услуги</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4 class="footer-title">Связь</h4>
+                        <ul>
+                            <li><a href="https://t.me/skywayapsny" target="_blank" rel="noopener"><i class="fab fa-telegram"></i> Telegram</a></li>
+                            <li><a href="https://wa.me/79407117706" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-copy">
+                    <p>&copy; <span id="currentYear">2026</span> SKYWAY. Инженерные решения. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // MATRIX EFFECT для страницы портфолио
+        function initMatrixEffect() {
+            const canvas = document.getElementById('matrix-cases');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            
+            function resizeCanvas() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            const chars = '01';
+            const fontSize = 16;
+            const columns = Math.floor(canvas.width / fontSize);
+            const drops = Array(columns).fill(1);
+            const columnChars = Array(columns).fill('');
+            
+            for (let i = 0; i < columns; i++) {
+                let binaryString = '';
+                for (let j = 0; j < 15; j++) {
+                    binaryString += Math.random() > 0.5 ? '1' : '0';
+                }
+                columnChars[i] = binaryString;
+            }
+            
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(0, 15, 5, 0.06)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#00ff00';
+                ctx.font = `bold ${fontSize}px 'Courier New', monospace`;
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const pos = Math.floor(drops[i]) % columnChars[i].length;
+                    const char = columnChars[i][pos];
+                    
+                    const x = i * fontSize;
+                    const y = drops[i] * fontSize;
+                    
+                    if (char === '1') {
+                        ctx.fillStyle = '#00ff00';
+                        ctx.shadowColor = '#00ff00';
+                        ctx.shadowBlur = 4;
+                    } else {
+                        ctx.fillStyle = '#00cc00';
+                        ctx.shadowBlur = 0;
+                    }
+                    
+                    ctx.fillText(char, x, y);
+                    ctx.shadowBlur = 0;
+                    
+                    if (y > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                        let newBinary = '';
+                        for (let j = 0; j < 15; j++) {
+                            newBinary += Math.random() > 0.5 ? '1' : '0';
+                        }
+                        columnChars[i] = newBinary;
+                    }
+                    
+                    drops[i] += char === '1' ? 0.6 : 0.4;
+                }
+            }
+            
+            const matrixInterval = setInterval(drawMatrix, 50);
+            
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    clearInterval(matrixInterval);
+                }
+            });
+        }
+        
+        // АНИМАЦИЯ ПЕЧАТАЮЩЕГОСЯ ТЕКСТА
+        function initTypedText() {
+            const typedText = document.getElementById('typedText');
+            if (!typedText) return;
+            
+            const texts = [
+                'Чистый код, никакого мусора',
+                'Проектирование архитектуры',
+                'Системы, а не сайты',
+                'Инженерный подход'
+            ];
+            
+            let textIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+            let typingSpeed = 100;
+            
+            function typeEffect() {
+                const currentText = texts[textIndex];
+                
+                if (isDeleting) {
+                    typedText.textContent = currentText.substring(0, charIndex - 1);
+                    charIndex--;
+                    typingSpeed = 50;
+                } else {
+                    typedText.textContent = currentText.substring(0, charIndex + 1);
+                    charIndex++;
+                    typingSpeed = 100;
+                }
+                
+                if (!isDeleting && charIndex === currentText.length) {
+                    isDeleting = true;
+                    typingSpeed = 1500;
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    textIndex = (textIndex + 1) % texts.length;
+                    typingSpeed = 500;
+                }
+                
+                setTimeout(typeEffect, typingSpeed);
+            }
+            
+            setTimeout(typeEffect, 1000);
+        }
+        
+        // ФИЛЬТРАЦИЯ ПРОЕКТОВ С АНИМАЦИЕЙ
+        function initFilters() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const caseCards = document.querySelectorAll('.case-card');
+            const filterLinks = document.querySelectorAll('.filter-link');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+                    
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Анимация исчезновения
+                    caseCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-category').includes(filter)) {
+                            card.classList.remove('hidden');
+                        } else {
+                            card.classList.add('hidden');
+                        }
+                    });
+                    
+                    // Анимация появления
+                    setTimeout(() => {
+                        caseCards.forEach(card => {
+                            if (filter === 'all' || card.getAttribute('data-category').includes(filter)) {
+                                card.style.display = 'flex';
+                                setTimeout(() => {
+                                    card.style.opacity = '1';
+                                    card.style.transform = 'translateY(0)';
+                                }, 10);
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                    }, 400);
+                });
+            });
+            
+            filterLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const filter = this.getAttribute('data-filter');
+                    
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        if (btn.getAttribute('data-filter') === filter) {
+                            btn.classList.add('active');
+                            btn.click();
+                        }
+                    });
+                    
+                    // Прокрутка к фильтрам на мобильных
+                    if (window.innerWidth < 768) {
+                        const filtersSection = document.querySelector('.cases-filters');
+                        if (filtersSection) {
+                            window.scrollTo({
+                                top: filtersSection.offsetTop - 100,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+        }
+        
+        // АНИМАЦИЯ ПРИ СКРОЛЛЕ
+        function initScrollAnimation() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animated');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+        }
+        
+        // МОБИЛЬНОЕ МЕНЮ - используется версия из main.js
+        
+        // ОБНОВЛЕНИЕ ГОДА В ФУТЕРЕ
+        function updateCurrentYear() {
+            const yearElement = document.getElementById('currentYear');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear();
+            }
+        }
+        
+        // ИНИЦИАЛИЗАЦИЯ ВСЕХ ФУНКЦИЙ
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('SKYWAY - Портфолио FINAL загружено');
+            
+            initMatrixEffect();
+            // initMobileMenu() вызывается из main.js
+            initTypedText();
+            initFilters();
+            initScrollAnimation();
+            updateCurrentYear();
+            
+            // Добавляем класс для анимации после загрузки
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

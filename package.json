@@ -1,0 +1,10 @@
+{
+  "name": "skyway-core",
+  "private": true,
+  "scripts": {
+    "minify:css": "npx clean-css-cli css/style.css -o css/style.min.css --sourceMap",
+    "minify:js": "npx terser js/main.js -o js/main.min.js -c -m --source-map",
+    "minify": "npm run minify:css && npm run minify:js"
+  },
+  "devDependencies": {}
+}

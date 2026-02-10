@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ru" prefix="og: https://ogp.me/ns#">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О нас | SKYWAY — Инженерные digital-решения</title>
+    <meta name="description" content="Мы создаем цифровые инструменты, которые решают конкретные задачи вашего бизнеса: от захвата рынка до автоматизации продаж.">
+                    <meta name="keywords" content="веб-агентство, инженерный подход, разработка на заказ, прозрачность, на основе данных">
+    <meta name="robots" content="index,follow">
+    <meta property="og:title" content="О нас | SKYWAY — Инженерный подход к digital-маркетингу">
+    <meta property="og:description" content="Чистая архитектура. Data-driven маркетинг. Полная прозрачность.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:site_name" content="SKYWAY">
+    <meta property="og:url" content="https://skyway-core.ru/about/">
+    <meta property="og:image" content="https://skyway-core.ru/og-image.svg">
+
+    <meta name="twitter:card" content="summary_large_image">
+                    <meta name="twitter:title" content="О нас | SKYWAY — Инженерный подход к цифровому маркетингу">
+    <meta name="twitter:description" content="Чистая архитектура. Data-driven маркетинг. Полная прозрачность.">
+    <meta name="twitter:image" content="https://skyway-core.ru/og-image.svg">
+
+    <link rel="canonical" href="https://skyway-core.ru/about/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"SKYWAY","url":"https://skyway-core.ru/","logo":"https://skyway-core.ru/android-chrome-192x192.png","sameAs":["https://t.me/skywayapsny","https://wa.me/79407117706"],"contactPoint":[{"@type":"ContactPoint","contactType":"sales","telephone":"+7 (940) 711-77-06","availableLanguage":["ru"],"url":"https://skyway-core.ru/contact/","areaServed":"RU"}]},{"@type":"WebSite","name":"SKYWAY","url":"https://skyway-core.ru/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://skyway-core.ru/"},{"@type":"ListItem","position":2,"name":"О нас","item":"https://skyway-core.ru/about/"}]}]}</script>
+    
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Ubuntu:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/android-chrome-192x192.png">
+    <script src="/js/main.js" defer></script>
+</head>
+<body>
+    <!-- Scan Line Effect -->
+    <div class="scan-line"></div>
+
+    <!-- Header Section -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="/" class="logo-link">
+                        <span class="logo-brand">SKYWAY</span>
+                        <span class="logo-sub">Цифровые решения</span>
+                    </a>
+                </div>
+
+                <nav class="main-nav">
+                    <ul class="nav-list">
+                        <li><a href="/" class="nav-link">Главная</a></li>
+                        <li><a href="/services/" class="nav-link">Услуги</a></li>
+                        <li><a href="/case/" class="nav-link">Кейсы</a></li>
+                        <li><a href="/about/" class="nav-link active" aria-current="page">О нас</a></li>
+                        <li><a href="/contact/" class="nav-link">Контакты</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Выпадающее меню связи для десктопа -->
+                <div class="header-cta-dropdown desktop-only">
+                    <button class="btn btn-primary btn-small dropdown-trigger" id="headerCtaBtn" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-paper-plane"></i> Связаться
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                    </button>
+                    <div class="dropdown-menu" id="headerCtaMenu" role="menu">
+                        <a href="#contact" class="dropdown-item" role="menuitem">
+                            <i class="fas fa-edit"></i> Написать
+                        </a>
+                        <a href="https://wa.me/79407117706" class="dropdown-item" target="_blank" rel="noopener noreferrer" role="menuitem">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="https://t.me/skywayapsny" class="dropdown-item" target="_blank" rel="noopener noreferrer" role="menuitem">
+                            <i class="fab fa-telegram"></i> Telegram
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Кнопка мобильного меню -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Открыть меню" aria-expanded="false">
+                    <i class="fas fa-bars" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Мобильное меню -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <div class="mobile-menu-content">
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Закрыть меню">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+            <a href="/" class="mobile-nav-link">Главная</a>
+            <a href="/services/" class="mobile-nav-link">Услуги</a>
+            <a href="/case/" class="mobile-nav-link">Кейсы</a>
+            <a href="/about/" class="mobile-nav-link active">О нас</a>
+            <a href="/contact/" class="mobile-nav-link">Контакты</a>
+            <a href="#contact" class="btn btn-primary btn-block mobile-only">Обсудить проект</a>
+        </div>
+    </div>
+
+    <!-- Hero Banner Section -->
+    <section class="banner hero-about">
+        <!-- Matrix Canvas Background -->
+        <canvas id="matrixAbout"></canvas>
+        
+        <div class="container">
+            <div class="banner-content">
+                <h1 class="banner-title">
+                    <span class="title-line">О компании SKYWAY</span>
+                    <span class="title-line typed-text" id="typedText"></span>
+                    <span class="typed-cursor">|</span>
+                </h1>
+                
+                <p class="banner-subtitle">
+                    Инженерный подход к цифровым решениям. Мы создаем системы, которые работают на уровне ядра.
+                </p>
+                
+                <div class="banner-actions">
+                    <a href="#focus-heading" class="btn btn-primary btn-large">
+                        <i class="fas fa-rocket"></i> Наши принципы
+                    </a>
+                    <a href="#contact" class="btn btn-outline btn-large">
+                        <i class="fas fa-code"></i> Обсудить проект
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main id="main-content">
+        <nav aria-label="Хлебные крошки">
+            <ol class="breadcrumbs container">
+                <li><a href="/">Главная</a></li>
+                <li aria-current="page">О нас</li>
+            </ol>
+        </nav>
+        <!-- ===== ФОКУС НА РЕЗУЛЬТАТ ===== -->
+        <section class="services section" aria-labelledby="focus-heading">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title" id="focus-heading">Фокус на результат</h2>
+                    <p class="section-subtitle">Мы создаем цифровые инструменты, которые решают конкретные задачи вашего бизнеса</p>
+                </div>
+                
+                <div class="principles-grid">
+                    <div class="principle-card animate-on-scroll">
+                        <div class="principle-icon" aria-hidden="true">
+                            <i class="fas fa-crosshairs"></i>
+                        </div>
+                        <h3>От захвата рынка</h3>
+                        <p>Разрабатываем стратегии агрессивного роста и захвата новых рыночных ниш. Анализируем конкурентов, находим точки входа и создаем эффективные инструменты для экспансии.</p>
+                    </div>
+                    
+                    <div class="principle-card animate-on-scroll">
+                        <div class="principle-icon" aria-hidden="true">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>До автоматизации продаж</h3>
+                        <p>Строим системы, которые работают 24/7. От лидогенерации до закрытия сделки — весь процесс оптимизирован и автоматизирован. Оптимизация пути клиента от лида до закрытия сделки.</p>
+                    </div>
+                    
+                    <div class="principle-card animate-on-scroll">
+                        <div class="principle-icon" aria-hidden="true">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3>Полная прозрачность</h3>
+                        <p>Весь процесс видим для вас. От технической реализации до финансовых показателей. Прямой доступ к метрикам и ходу разработки. Никаких скрытых манипуляций.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== СТАНДАРТЫ РАБОТЫ ===== -->
+        <section class="why-us section" aria-labelledby="standards-heading">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title" id="standards-heading">Стандарты работы</h2>
+                    <p class="section-subtitle">Технические показатели, которые обеспечивают результат</p>
+                </div>
+                
+                <div class="principles-grid">
+                    <div class="principle-card animate-on-scroll">
+                        <div class="principle-icon" aria-hidden="true">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>Чистая архитектура</h3>
+                        <p>Никаких лишних плагинов и тяжелых конструкторов. Только легкий, быстрый и масштабируемый код. Мы строим системы, которые можно развивать годами без технического долга.</p>
+                        <div class="kpi-badge">
+                            <i class="fas fa-bolt" aria-hidden="true"></i>
+                            <span>Speed Index: <strong>0.8-1.2с</strong></span>
+                        </div>
+                    </div>
+                    
+                    <div class="principle-card animate-on-scroll">
+                        <div class="principle-icon" aria-hidden="true">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Подход на основе данных</h3>
+                        <p>Решения принимаются на основе данных, а не интуиции. Мы видим, откуда пришел клиент и почему он купил. Каждый рубль инвестиций отслеживается и анализируется.</p>
+                        <div class="kpi-badge">
+                            <i class="fas fa-percentage" aria-hidden="true"></i>
+                            <span>Точность прогнозов: <strong>94%+</strong></span>
+                        </div>
+                    </div>
+                    
+                    <div class="principle-card animate-on-scroll">
+                        <div class="principle-icon" aria-hidden="true">
+                            <i class="fas fa-unlock"></i>
+                        </div>
+                        <h3>Полный доступ</h3>
+                        <p>Вы получаете 100% владение кодом и доступами. Вы всегда знаете, на каком этапе находится ваш проект. Никаких черных ящиков — только открытая архитектура.</p>
+                        <div class="kpi-badge">
+                            <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                            <span>Контроль клиента: <strong>100%</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ТЕХНОЛОГИЧЕСКИЙ СТЭК ===== -->
+        <section class="services section" aria-labelledby="stack-heading">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title" id="stack-heading">Технологический арсенал</h2>
+                    <p class="section-subtitle">Современные инструменты для сложных задач</p>
+                </div>
+                
+                <div class="tech-section animate-on-scroll">
+                    <h3 class="tech-section-title">
+                        <i class="fas fa-desktop" aria-hidden="true"></i> Frontend
+                    </h3>
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <i class="fab fa-js-square tech-icon" aria-hidden="true"></i>
+                            <span>Modern JS (ES6+)</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fab fa-react tech-icon" aria-hidden="true"></i>
+                            <span>React / Vue.js</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-mobile-alt tech-icon" aria-hidden="true"></i>
+                            <span>Адаптивная верстка</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-tachometer-alt tech-icon" aria-hidden="true"></i>
+                            <span>Приоритет производительности</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tech-section animate-on-scroll">
+                    <h3 class="tech-section-title">
+                        <i class="fas fa-server" aria-hidden="true"></i> Бэкенд и инфраструктура
+                    </h3>
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <i class="fab fa-python tech-icon" aria-hidden="true"></i>
+                            <span>Python / Django</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fab fa-php tech-icon" aria-hidden="true"></i>
+                            <span>PHP / Laravel</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-plug tech-icon" aria-hidden="true"></i>
+                            <span>Интеграция API</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-database tech-icon" aria-hidden="true"></i>
+                            <span>MySQL / PostgreSQL</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tech-section animate-on-scroll">
+                    <h3 class="tech-section-title">
+                        <i class="fas fa-chart-bar" aria-hidden="true"></i> Маркетинговые технологии
+                    </h3>
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <i class="fas fa-search tech-icon" aria-hidden="true"></i>
+                            <span>Техническое SEO</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-brain tech-icon" aria-hidden="true"></i>
+                            <span>AI-аналитика</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-bullseye tech-icon" aria-hidden="true"></i>
+                            <span>Высокоточный таргетинг</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-funnel-dollar tech-icon" aria-hidden="true"></i>
+                            <span>Оптимизация конверсии</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ПРОЦЕСС РАБОТЫ ===== -->
+        <section class="matrix-console section" aria-labelledby="process-heading">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title" id="process-heading">Процесс работы</h2>
+                    <p class="section-subtitle">Системный подход к каждому проекту</p>
+                </div>
+                
+                <div class="process-timeline">
+                    <div class="process-step animate-on-scroll">
+                        <div class="step-number">01</div>
+                        <div class="step-content">
+                            <h3>Аналитика</h3>
+                            <p>Глубокое погружение в вашу нишу и изучение конкурентов. Анализ рынка, целевой аудитории и технических возможностей. Формирование стратегии на основе данных.</p>
+                            <div class="tech-item">
+                                <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                                <span>Анализ данных</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step animate-on-scroll">
+                        <div class="step-number">02</div>
+                        <div class="step-content">
+                            <h3>Прототип</h3>
+                            <p>Проектирование структуры, где каждый элемент ведет к конверсии. Создание прототипов, дизайна интерфейсов и технического задания. Визуализация будущего решения.</p>
+                            <div class="tech-item">
+                                <i class="fas fa-pencil-ruler" aria-hidden="true"></i>
+                                <span>Проектирование</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step animate-on-scroll">
+                        <div class="step-number">03</div>
+                        <div class="step-content">
+                            <h3>Реализация</h3>
+                            <p>Написание кода и настройка рекламных кампаний. Разработка frontend и backend, интеграция систем, тестирование и оптимизация. Создание работающего продукта.</p>
+                            <div class="tech-item">
+                                <i class="fas fa-code" aria-hidden="true"></i>
+                                <span>Разработка</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step animate-on-scroll">
+                        <div class="step-number">04</div>
+                        <div class="step-content">
+                            <h3>Запуск и мониторинг</h3>
+                            <p>Сопровождение проекта после старта и работа над ростом показателей. Анализ эффективности, оптимизация, масштабирование. Постоянное улучшение результатов.</p>
+                            <div class="tech-item">
+                                <i class="fas fa-chart-line" aria-hidden="true"></i>
+                                <span>Оптимизация</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ЛИЧНОЕ ===== -->
+        <section class="services section" aria-labelledby="personal-heading">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title" id="personal-heading">Вне системы</h2>
+                    <p class="section-subtitle">Драйв в работе дополняется драйвом в жизни</p>
+                </div>
+                
+                <div class="personal-card animate-on-scroll">
+                    <div class="personal-content">
+                        <div class="personal-text">
+                            <h3>
+                                <i class="fas fa-motorcycle" aria-hidden="true"></i> DRZ400SM
+                            </h3>
+                            <p>
+                                Когда проекты запущены — время прохвата на DRZ400SM. Скорость, точность и дисциплина — это то, что объединяет наше хобби и нашу работу.
+                            </p>
+                            <p class="personal-quote">
+                                Тот же подход: расчет траектории, контроль на каждом участке, мгновенная реакция на изменения. В работе и на треке — одни и те же принципы.
+                            </p>
+                        </div>
+                        <div class="personal-visual">
+                            <div class="motorcycle-visual">
+                                <div class="motorcycle-icon">
+                                    <i class="fas fa-motorcycle" aria-hidden="true"></i>
+                                </div>
+                                <div class="motorcycle-info">
+                                    <div>DRZ400SM</div>
+                                    <div>400cc | SuperMoto</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-snippet animate-on-scroll" tabindex="0" aria-label="Код, демонстрирующий нашу философию">
+                    <pre><code>
+<span class="code-comment">// Философия работы и жизни</span>
+<span class="code-keyword">const</span> <span class="code-variable">work</span> = {
+    precision: <span class="code-string">'100%'</span>,
+    speed: <span class="code-string">'maximum'</span>,
+    control: <span class="code-string">'total'</span>
+};
+
+<span class="code-keyword">const</span> <span class="code-variable">life</span> = {
+    ...work,
+    adrenaline: <span class="code-string">'DRZ400SM'</span>
+};
+
+<span class="code-console">console</span>.<span class="code-function">log</span>(<span class="code-string">'Один стандарт для всего'</span>);
+                </code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ФИНАЛЬНЫЙ ПРИЗЫВ ===== -->
+    <section class="contact section" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Оцените уровень наших решений на деле</h2>
+                <p class="section-subtitle">
+                    Готовы создать систему, которая будет работать на ваш бизнес 24/7?<br>
+                    Обсудим ваш проект и предложим конкретное решение.
+                </p>
+                
+                <div class="banner-actions">
+                    <a href="https://t.me/skywayapsny" class="btn btn-primary btn-large" target="_blank">
+                        <i class="fab fa-telegram"></i> Обсудить в Telegram
+                    </a>
+                    <a href="https://wa.me/79407117706" class="btn btn-outline btn-large" target="_blank">
+                        <i class="fab fa-whatsapp"></i> +7 (940) 711-77-06
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo">
+                        <div class="logo-brand">SKYWAY</div>
+                        <div class="logo-sub">Цифровые решения</div>
+                    </div>
+                    <p class="footer-tagline">
+                        Профессиональное продвижение бизнеса. Результат, а не обещания.
+                    </p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4 class="footer-title">Навигация</h4>
+                        <ul>
+                            <li><a href="/"><i class="fas fa-home"></i> Главная</a></li>
+                            <li><a href="/services/"><i class="fas fa-code"></i> Услуги</a></li>
+                            <li><a href="/case/"><i class="fas fa-chart-bar"></i> Кейсы</a></li>
+                            <li><a href="/about/"><i class="fas fa-users"></i> О нас</a></li>
+                            <li><a href="/contact/"><i class="fas fa-phone"></i> Контакты</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4 class="footer-title">Услуги</h4>
+                        <ul>
+                            <li><a href="/services/#seo"><i class="fas fa-chart-line"></i> SEO-продвижение</a></li>
+                            <li><a href="/services/#web"><i class="fas fa-laptop-code"></i> Создание сайтов</a></li>
+                            <li><a href="/services/#ads"><i class="fas fa-ad"></i> Контекстная реклама</a></li>
+                            <li><a href="/about/#principles"><i class="fas fa-handshake"></i> Принципы работы</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4 class="footer-title">Связь</h4>
+                        <ul>
+                            <li><a href="https://t.me/skywayapsny" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></li>
+                            <li><a href="https://wa.me/79407117706" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-copy">
+                    <p>&copy; <span id="currentYear">2026</span> SKYWAY. Цифровые решения. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ru" prefix="og: https://ogp.me/ns#">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | Страница не найдена — SKYWAY</title>
+    <meta name="description" content="Запрашиваемая страница не найдена. Вернитесь на главную или свяжитесь с нами.">
+    <meta name="robots" content="noindex, follow">
+    <meta property="og:title" content="404 | Страница не найдена — SKYWAY">
+    <meta property="og:description" content="Запрашиваемая страница не найдена.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:site_name" content="SKYWAY">
+    <meta property="og:url" content="https://skyway-core.ru/404.html">
+    <meta property="og:image" content="https://skyway-core.ru/og-image.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="404 | Страница не найдена — SKYWAY">
+    <meta name="twitter:description" content="Запрашиваемая страница не найдена.">
+    <meta name="twitter:image" content="https://skyway-core.ru/og-image.svg">
+
+    <link rel="canonical" href="https://skyway-core.ru/404.html">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/android-chrome-192x192.png">
+    <script src="/js/main.js" defer></script>
+
+    <style>
+        /* Aero-Tech 404: тёмный фон, неон, глитч, сканлайны */
+        body.error-404-page {
+            background: var(--bg-primary);
+            color: var(--accent-cyan);
+        }
+
+        .error-404-page .error-hero {
+            min-height: calc(100vh - 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 120px 20px 80px;
+        }
+
+        /* Сканлайны поверх контента (старый монитор) */
+        .scanlines-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.15) 2px,
+                rgba(0, 0, 0, 0.15) 4px
+            );
+            opacity: 0.6;
+        }
+
+        /* Глитч на цифрах 404 */
+        .error-code {
+            font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+            font-size: clamp(120px, 26vw, 280px);
+            font-weight: 700;
+            color: transparent;
+            -webkit-text-stroke: 2px var(--accent-cyan);
+            line-height: 0.9;
+            margin-bottom: 24px;
+            position: relative;
+            text-align: center;
+            text-shadow:
+                0 0 20px rgba(0, 242, 255, 0.4),
+                0 0 40px rgba(0, 242, 255, 0.25),
+                0 0 60px rgba(0, 242, 255, 0.15);
+            animation: error-glitch 4s infinite;
+            width: 100%;
+        }
+
+        .error-code::before,
+        .error-code::after {
+            content: '404';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-family: inherit;
+        }
+
+        .error-code::before {
+            color: rgba(255, 0, 64, 0.7);
+            -webkit-text-stroke: 0;
+            z-index: -1;
+            animation: error-glitch-1 2.5s infinite linear alternate-reverse;
+            clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+            text-shadow: 2px 0 var(--accent-cyan);
+        }
+
+        .error-code::after {
+            color: rgba(0, 255, 136, 0.6);
+            -webkit-text-stroke: 0;
+            z-index: -2;
+            animation: error-glitch-2 2.5s infinite linear alternate-reverse;
+            clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
+            text-shadow: -2px 0 var(--accent-cyan);
+        }
+
+        @keyframes error-glitch {
+            0%, 90%, 100% { transform: translate(0); }
+            92% { transform: translate(-3px, 2px); }
+            94% { transform: translate(3px, -2px); }
+            96% { transform: translate(-2px, 3px); }
+            98% { transform: translate(2px, -3px); }
+        }
+
+        @keyframes error-glitch-1 {
+            0%, 100% { transform: translate(0); opacity: 0.8; }
+            25% { transform: translate(-5px, 0); opacity: 0.5; }
+            50% { transform: translate(5px, 2px); opacity: 0.8; }
+            75% { transform: translate(-4px, -2px); opacity: 0.4; }
+        }
+
+        @keyframes error-glitch-2 {
+            0%, 100% { transform: translate(0); opacity: 0.8; }
+            25% { transform: translate(5px, 0); opacity: 0.5; }
+            50% { transform: translate(-5px, -2px); opacity: 0.8; }
+            75% { transform: translate(4px, 2px); opacity: 0.4; }
+        }
+
+        .error-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            max-width: 640px;
+            padding: 0 20px;
+            margin: 0 auto;
+        }
+
+        .error-quote {
+            font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 28px;
+            font-style: italic;
+        }
+
+        .error-quote strong {
+            color: var(--accent-cyan);
+        }
+
+        .error-status {
+            font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            letter-spacing: 2px;
+            margin-bottom: 32px;
+            padding: 12px 20px;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            background: rgba(0, 242, 255, 0.06);
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .error-status span {
+            color: #ff6b6b;
+        }
+
+        .error-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .btn-reality {
+            font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 28px;
+            background: transparent;
+            color: var(--accent-cyan);
+            border: 2px solid var(--accent-cyan);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+        }
+
+        .btn-reality:hover {
+            background: rgba(0, 242, 255, 0.15);
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .binary-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .binary-bg span {
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--accent-cyan);
+            animation: float-up 18s infinite linear;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            8% { opacity: 0.6; }
+            92% { opacity: 0.6; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .error-hero { padding: 100px 16px 60px; }
+            .error-status { font-size: 0.7rem; letter-spacing: 1px; padding: 10px 16px; }
+            .btn-reality { font-size: 0.8rem; padding: 14px 20px; }
+        }
+    </style>
+</head>
+<body class="error-404-page">
+    <div class="scan-line" aria-hidden="true"></div>
+    <div class="scanlines-overlay" aria-hidden="true"></div>
+
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="/" class="logo-link">
+                        <span class="logo-brand">SKYWAY</span>
+                        <span class="logo-sub">Цифровые решения</span>
+                    </a>
+                </div>
+                <nav class="main-nav">
+                    <ul class="nav-list">
+                        <li><a href="/" class="nav-link">Главная</a></li>
+                        <li><a href="/services/" class="nav-link">Услуги</a></li>
+                        <li><a href="/case/" class="nav-link">Кейсы</a></li>
+                        <li><a href="/about/" class="nav-link">О нас</a></li>
+                        <li><a href="/contact/" class="nav-link">Контакты</a></li>
+                    </ul>
+                </nav>
+                <a href="/contact/" class="btn btn-primary btn-small desktop-only">
+                    <i class="fas fa-code" aria-hidden="true"></i> Связаться
+                </a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Открыть меню">
+                    <i class="fas fa-bars" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <div class="mobile-menu-content">
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Закрыть меню">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+            <a href="/" class="mobile-nav-link">Главная</a>
+            <a href="/services/" class="mobile-nav-link">Услуги</a>
+            <a href="/case/" class="mobile-nav-link">Кейсы</a>
+            <a href="/about/" class="mobile-nav-link">О нас</a>
+            <a href="/contact/" class="mobile-nav-link">Контакты</a>
+        </div>
+    </div>
+
+    <main class="error-hero">
+        <div class="binary-bg" id="binaryBg" aria-hidden="true"></div>
+        <div class="container">
+            <div class="error-content">
+                <div class="error-code" aria-hidden="true">404</div>
+                <h1 class="visually-hidden">Страница не найдена</h1>
+                <p class="error-quote">
+                    «Вы здесь, потому что чувствуете: с этим миром что-то не так…<br>
+                    Это неизбежность.»
+                </p>
+                <div class="error-status">
+                    STATUS: <span>SYSTEM_FAILURE</span> | LOCATION: <span>UNKNOWN_SECTOR</span>
+                </div>
+                <div class="error-actions">
+                    <a href="/#terminal" class="btn-reality" id="btnReality">
+                        [ ПЕРЕЗАГРУЗИТЬ РЕАЛЬНОСТЬ ]
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo">
+                        <div class="logo-brand">SKYWAY</div>
+                        <div class="logo-sub">Цифровые решения</div>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4 class="footer-title">Навигация</h4>
+                        <ul>
+                            <li><a href="/"><i class="fas fa-home" aria-hidden="true"></i> Главная</a></li>
+                            <li><a href="/services/"><i class="fas fa-code" aria-hidden="true"></i> Услуги</a></li>
+                            <li><a href="/case/"><i class="fas fa-chart-bar" aria-hidden="true"></i> Кейсы</a></li>
+                            <li><a href="/about/"><i class="fas fa-users" aria-hidden="true"></i> О нас</a></li>
+                            <li><a href="/contact/"><i class="fas fa-phone" aria-hidden="true"></i> Контакты</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4 class="footer-title">Связь</h4>
+                        <ul>
+                            <li><a href="https://t.me/skywayapsny" target="_blank" rel="noopener"><i class="fab fa-telegram" aria-hidden="true"></i> Telegram</a></li>
+                            <li><a href="https://wa.me/79407117706" target="_blank" rel="noopener"><i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-copy">
+                    <p>&copy; <span id="currentYear">2026</span> SKYWAY. Цифровые решения.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            var redirectTimeout;
+            var REDIRECT_DELAY = 5000;
+            var lastActivity = Date.now();
+
+            function redirectToTerminal() {
+                window.location.href = '/#terminal';
+            }
+
+            function resetTimer() {
+                lastActivity = Date.now();
+                clearTimeout(redirectTimeout);
+                redirectTimeout = setTimeout(redirectToTerminal, REDIRECT_DELAY);
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Бинарный фон
+                var binaryBg = document.getElementById('binaryBg');
+                var chars = ['0', '1'];
+                for (var i = 0; i < 45; i++) {
+                    var span = document.createElement('span');
+                    span.textContent = Math.random() > 0.5 ? '1' : '0';
+                    span.style.left = Math.random() * 100 + '%';
+                    span.style.animationDelay = Math.random() * 18 + 's';
+                    span.style.animationDuration = (12 + Math.random() * 12) + 's';
+                    binaryBg.appendChild(span);
+                }
+
+                // Таймер редиректа через 5 сек бездействия
+                redirectTimeout = setTimeout(redirectToTerminal, REDIRECT_DELAY);
+                document.addEventListener('mousemove', resetTimer);
+                document.addEventListener('keydown', resetTimer);
+                document.addEventListener('scroll', resetTimer);
+                document.getElementById('btnReality').addEventListener('click', function() {
+                    clearTimeout(redirectTimeout);
+                });
+            });
+        })();
+    </script>
+</body>
+</html>

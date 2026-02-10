@@ -1,0 +1,7 @@
+name = "deepseek-proxy"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# Ключ DeepSeek задаётся в панели Cloudflare:
+# Workers & Pages → deepseek-proxy → Settings → Variables → DEEPSEEK_API_KEY (Secret)
+# vars = { DEEPSEEK_API_KEY = "sk-..." }  # или только через Dashboard
