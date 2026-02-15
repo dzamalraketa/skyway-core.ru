@@ -166,7 +166,32 @@ function initMatrixEffect() {
     
     // Start animation
     isVisible = true;
-    animate();
+    
+    // FPS Control
+    let lastTime = 0;
+    const mobileFPS = 30;
+    const interval = 1000 / mobileFPS;
+    
+    function animate(timestamp) {
+        if (!isVisible) {
+            animationId = null;
+            return;
+        }
+
+        // Limit FPS on mobile
+        if (window.innerWidth < 768) {
+             if (timestamp - lastTime < interval) {
+                 animationId = requestAnimationFrame(animate);
+                 return;
+             }
+             lastTime = timestamp;
+        }
+
+        drawMatrix();
+        animationId = requestAnimationFrame(animate);
+    }
+    
+    animate(0);
     
     // Handle visibility change
     document.addEventListener('visibilitychange', () => {
@@ -494,14 +519,33 @@ function initConsole() {
 }
 
 // ===== CONTACT FORM =====
+const pageStartTime = Date.now();
+
 function initContactForm() {
     const contactForm = document.getElementById('contactForm');
     const submitBtn = document.getElementById('submitBtn');
+    const formStatus = document.getElementById('formStatus');
     
     if (!contactForm) return;
     
     contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
+        const trapField = document.getElementById('trap_field');
+        const trapValue = trapField ? trapField.value : '';
+        const timeSpent = (Date.now() - pageStartTime) / 1000;
+        
+        // 1. SECURITY CHECK (Anti-Bot)
+        // Check trap field (must be empty) and time spent (must be > 3 seconds)
+        if (trapValue.length > 0 || timeSpent < 3) {
+            if (formStatus) {
+                formStatus.innerText = '✅ ЗАЯВКА ПРИНЯТА! ИНЖЕНЕР СКОРО СВЯЖЕТСЯ.';
+                formStatus.style.display = 'block';
+                formStatus.style.color = '#00ff41';
+            }
+            contactForm.reset();
+            return;
+        }
         
         const formData = new FormData(contactForm);
         const data = Object.fromEntries(formData);
@@ -513,33 +557,59 @@ function initContactForm() {
         }
         
         // Disable button during submission
+        const originalBtnText = submitBtn ? submitBtn.innerHTML : '';
         if (submitBtn) {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
         }
         
+        if (formStatus) formStatus.style.display = 'none';
+        
         try {
-            const response = await fetch(contactForm.action, {
+            // Using the worker URL from the inline script which seems correct
+            const response = await fetch('https://skyway-bot.darkotrss.workers.dev/', {
                 method: 'POST',
-                body: formData,
+                mode: 'cors',
                 headers: {
-                    'Accept': 'application/json'
-                }
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: data.name,
+                    phone: data.phone,
+                    business: data.business,
+                    msg: data.message || ''
+                })
             });
             
-            if (response.ok) {
+            if (response.ok || response.status === 200) {
+                // Yandex Metrica Goal
+                if (typeof ym !== 'undefined') {
+                    ym(106787007, 'reachGoal', 'lead_success');
+                }
+                
                 showNotification('Заявка отправлена! Мы свяжемся с вами в ближайшее время.', 'success');
+                if (formStatus) {
+                    formStatus.innerText = '✅ ЗАЯВКА ПРИНЯТА! ИНЖЕНЕР СКОРО СВЯЖЕТСЯ.';
+                    formStatus.style.display = 'block';
+                    formStatus.style.color = '#00ff41';
+                }
                 contactForm.reset();
             } else {
                 throw new Error('Ошибка отправки');
             }
         } catch (error) {
+            console.error('Submission error:', error);
             showNotification('Ошибка при отправке. Пожалуйста, напишите нам напрямую в Telegram.', 'error');
+            if (formStatus) {
+                formStatus.innerText = '❌ ОШИБКА ОТПРАВКИ. НАПИШИТЕ В ТГ @SkyWayApsny';
+                formStatus.style.display = 'block';
+                formStatus.style.color = '#ff4d4d';
+            }
         } finally {
             // Re-enable button
             if (submitBtn) {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Отправить заявку';
+                submitBtn.innerHTML = originalBtnText || '<i class="fas fa-paper-plane"></i> Отправить заявку';
             }
         }
     });

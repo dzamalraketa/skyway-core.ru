@@ -110,7 +110,11 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/android-chrome-192x192.png">
     <script src="/js/main.js?v=2" defer></script>
-	
+
+    <style>
+    /* Custom styles if any */
+    </style>
+    
 	<!-- Yandex.Metrika counter -->
 <script type="text/javascript">
     (function(m,e,t,r,i,k,a){
@@ -154,22 +158,10 @@
                     </ul>
                 </nav>
 
-                <div class="header-cta-dropdown desktop-only">
-                    <button class="btn btn-primary btn-small dropdown-trigger" id="headerCtaBtn" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-paper-plane"></i> Связаться
-                        <i class="fas fa-chevron-down dropdown-icon"></i>
-                    </button>
-                    <div class="dropdown-menu" id="headerCtaMenu" role="menu">
-                        <a href="#contact" class="dropdown-item" role="menuitem">
-                            <i class="fas fa-edit"></i> Написать
-                        </a>
-                        <a href="https://wa.me/79407117706" class="dropdown-item" target="_blank" rel="noopener noreferrer" role="menuitem">
-                            <i class="fab fa-whatsapp"></i> WhatsApp
-                        </a>
-                        <a href="https://t.me/skywayapsny" class="dropdown-item" target="_blank" rel="noopener noreferrer" role="menuitem">
-                            <i class="fab fa-telegram"></i> Telegram
-                        </a>
-                    </div>
+                <div class="header-cta desktop-only">
+                     <a href="#contactForm" class="btn btn-primary btn-small">
+                         <i class="fas fa-paper-plane"></i> Связаться
+                     </a>
                 </div>
 
                 <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Открыть мобильное меню">
@@ -234,7 +226,7 @@
                         <a href="https://t.me/skywayapsny" class="btn btn-outline btn-large" target="_blank">
                             <i class="fab fa-telegram"></i> Написать в Telegram
                         </a>
-                        <a href="#contact" class="btn btn-amber btn-large">
+                        <a href="#contactForm" class="btn btn-amber btn-large">
                             <i class="fas fa-exclamation-triangle"></i> Срочная заявка
                         </a>
                     </div>
@@ -471,6 +463,11 @@
             <input type="tel" id="phone" name="phone" required>
         </div>
         
+        		<div style="display:none !important;">
+    <label>Данные</label>
+    <input type="text" id="trap_field" name="trap_field" tabindex="-1" autocomplete="off">
+		</div>
+
         <div class="form-group">
             <label for="business">Сфера бизнеса *</label>
             <input type="text" id="business" name="business" required>
@@ -484,7 +481,7 @@
         <button type="submit" class="btn btn-primary btn-large btn-block" id="submitBtn">
             <i class="fas fa-paper-plane"></i> Отправить заявку
         </button>
-        
+        		
         <div id="formStatus" style="display: none; margin-top: 15px; font-weight: bold; text-align: center;"></div>
     </form>
 				</div>
@@ -547,61 +544,5 @@
             </div>
         </div>
     </footer>
-<script>
-document.getElementById('contactForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const btn = document.getElementById('submitBtn');
-    const status = document.getElementById('formStatus');
-    
-    // Собираем данные из полей
-    const data = {
-        name: document.getElementById('name').value,
-        phone: document.getElementById('phone').value,
-        business: document.getElementById('business').value,
-        msg: document.getElementById('message').value
-    };
-
-    // Визуальная индикация начала отправки
-    btn.disabled = true;
-    const originalBtnText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ОТПРАВКА...';
-    status.style.display = 'none';
-
-    try {
-        // Твоя проверенная ссылка на Cloudflare Worker
-        const workerUrl = 'https://skyway-bot.darkotrss.workers.dev/';
-
-        const response = await fetch(workerUrl, {
-            method: 'POST',
-            mode: 'cors', // Явное указание для браузера
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        if (response.ok) {
-            // Если Воркер ответил статусом 200
-            status.innerText = '✅ ЗАЯВКА ПРИНЯТА! ИНЖЕНЕР СКОРО СВЯЖЕТСЯ.';
-            status.style.color = '#00ff41'; // Кибер-зеленый
-            this.reset(); // Очищаем форму
-        } else {
-            // Если сервер прислал ошибку (например, 500)
-            throw new Error('Ошибка сервера');
-        }
-    } catch (err) {
-        // Если запрос не дошел или заблокирован браузером
-        console.error('Ошибка при отправке:', err);
-        status.innerText = '❌ ОШИБКА ОТПРАВКИ. НАПИШИТЕ В ТГ @SkyWayApsny';
-        status.style.color = '#ff4d4d'; // Красный
-    } finally {
-        // В любом случае возвращаем кнопку в рабочее состояние
-        status.style.display = 'block';
-        btn.disabled = false;
-        btn.innerHTML = originalBtnText;
-    }
-});
-</script>
 </body>
 </html>

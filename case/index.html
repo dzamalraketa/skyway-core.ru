@@ -57,22 +57,10 @@
                     </ul>
                 </nav>
 
-                <div class="header-cta-dropdown desktop-only">
-                    <button class="btn btn-primary btn-small dropdown-trigger" id="headerCtaBtn" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-paper-plane"></i> Связаться
-                        <i class="fas fa-chevron-down dropdown-icon"></i>
-                    </button>
-                    <div class="dropdown-menu" id="headerCtaMenu" role="menu">
-                        <a href="#contact" class="dropdown-item" role="menuitem">
-                            <i class="fas fa-edit"></i> Написать
-                        </a>
-                        <a href="https://wa.me/79407117706" class="dropdown-item" target="_blank" rel="noopener noreferrer" role="menuitem">
-                            <i class="fab fa-whatsapp"></i> WhatsApp
-                        </a>
-                        <a href="https://t.me/skywayapsny" class="dropdown-item" target="_blank" rel="noopener noreferrer" role="menuitem">
-                            <i class="fab fa-telegram"></i> Telegram
-                        </a>
-                    </div>
+                <div class="header-cta desktop-only">
+                     <a href="/#contactForm" class="btn btn-primary btn-small">
+                         <i class="fas fa-paper-plane"></i> Связаться
+                     </a>
                 </div>
 
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -92,7 +80,7 @@
             <a href="/case/" class="mobile-nav-link active">Кейсы</a>
             <a href="/about/" class="mobile-nav-link">О нас</a>
             <a href="/contact/" class="mobile-nav-link">Контакты</a>
-            <a href="#contact" class="btn btn-primary btn-block mobile-only">Обсудить проект</a>
+            <a href="/#contactForm" class="btn btn-primary btn-block mobile-only">Обсудить проект</a>
         </div>
     </div>
 
@@ -117,7 +105,7 @@
                     <a href="#cases" class="btn btn-primary btn-large">
                         <i class="fas fa-code"></i> Смотреть проекты
                     </a>
-                    <a href="#contact" class="btn btn-outline btn-large">
+                    <a href="/#contactForm" class="btn btn-outline btn-large">
                         <i class="fas fa-rocket"></i> Обсудить проект
                     </a>
                 </div>
@@ -389,128 +377,6 @@
     </footer>
     
     <script>
-        // MATRIX EFFECT для страницы портфолио
-        function initMatrixEffect() {
-            const canvas = document.getElementById('matrix-cases');
-            if (!canvas) return;
-            
-            const ctx = canvas.getContext('2d');
-            
-            function resizeCanvas() {
-                canvas.width = canvas.offsetWidth;
-                canvas.height = canvas.offsetHeight;
-            }
-            
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-            
-            const chars = '01';
-            const fontSize = 16;
-            const columns = Math.floor(canvas.width / fontSize);
-            const drops = Array(columns).fill(1);
-            const columnChars = Array(columns).fill('');
-            
-            for (let i = 0; i < columns; i++) {
-                let binaryString = '';
-                for (let j = 0; j < 15; j++) {
-                    binaryString += Math.random() > 0.5 ? '1' : '0';
-                }
-                columnChars[i] = binaryString;
-            }
-            
-            function drawMatrix() {
-                ctx.fillStyle = 'rgba(0, 15, 5, 0.06)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#00ff00';
-                ctx.font = `bold ${fontSize}px 'Courier New', monospace`;
-                
-                for (let i = 0; i < drops.length; i++) {
-                    const pos = Math.floor(drops[i]) % columnChars[i].length;
-                    const char = columnChars[i][pos];
-                    
-                    const x = i * fontSize;
-                    const y = drops[i] * fontSize;
-                    
-                    if (char === '1') {
-                        ctx.fillStyle = '#00ff00';
-                        ctx.shadowColor = '#00ff00';
-                        ctx.shadowBlur = 4;
-                    } else {
-                        ctx.fillStyle = '#00cc00';
-                        ctx.shadowBlur = 0;
-                    }
-                    
-                    ctx.fillText(char, x, y);
-                    ctx.shadowBlur = 0;
-                    
-                    if (y > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                        let newBinary = '';
-                        for (let j = 0; j < 15; j++) {
-                            newBinary += Math.random() > 0.5 ? '1' : '0';
-                        }
-                        columnChars[i] = newBinary;
-                    }
-                    
-                    drops[i] += char === '1' ? 0.6 : 0.4;
-                }
-            }
-            
-            const matrixInterval = setInterval(drawMatrix, 50);
-            
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden) {
-                    clearInterval(matrixInterval);
-                }
-            });
-        }
-        
-        // АНИМАЦИЯ ПЕЧАТАЮЩЕГОСЯ ТЕКСТА
-        function initTypedText() {
-            const typedText = document.getElementById('typedText');
-            if (!typedText) return;
-            
-            const texts = [
-                'Чистый код, никакого мусора',
-                'Проектирование архитектуры',
-                'Системы, а не сайты',
-                'Инженерный подход'
-            ];
-            
-            let textIndex = 0;
-            let charIndex = 0;
-            let isDeleting = false;
-            let typingSpeed = 100;
-            
-            function typeEffect() {
-                const currentText = texts[textIndex];
-                
-                if (isDeleting) {
-                    typedText.textContent = currentText.substring(0, charIndex - 1);
-                    charIndex--;
-                    typingSpeed = 50;
-                } else {
-                    typedText.textContent = currentText.substring(0, charIndex + 1);
-                    charIndex++;
-                    typingSpeed = 100;
-                }
-                
-                if (!isDeleting && charIndex === currentText.length) {
-                    isDeleting = true;
-                    typingSpeed = 1500;
-                } else if (isDeleting && charIndex === 0) {
-                    isDeleting = false;
-                    textIndex = (textIndex + 1) % texts.length;
-                    typingSpeed = 500;
-                }
-                
-                setTimeout(typeEffect, typingSpeed);
-            }
-            
-            setTimeout(typeEffect, 1000);
-        }
-        
         // ФИЛЬТРАЦИЯ ПРОЕКТОВ С АНИМАЦИЕЙ
         function initFilters() {
             const filterButtons = document.querySelectorAll('.filter-btn');
@@ -577,21 +443,6 @@
             });
         }
         
-        // АНИМАЦИЯ ПРИ СКРОЛЛЕ
-        function initScrollAnimation() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animated');
-                    }
-                });
-            }, { threshold: 0.1 });
-            
-            document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
-        }
-        
-        // МОБИЛЬНОЕ МЕНЮ - используется версия из main.js
-        
         // ОБНОВЛЕНИЕ ГОДА В ФУТЕРЕ
         function updateCurrentYear() {
             const yearElement = document.getElementById('currentYear');
@@ -604,11 +455,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('SKYWAY - Портфолио FINAL загружено');
             
-            initMatrixEffect();
-            // initMobileMenu() вызывается из main.js
-            initTypedText();
+            // MatrixEffect, TypedText, ScrollAnimations, MobileMenu вызываются из main.js
+            
             initFilters();
-            initScrollAnimation();
             updateCurrentYear();
             
             // Добавляем класс для анимации после загрузки

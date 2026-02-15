@@ -404,16 +404,20 @@ img {
     top: 0;
     left: 0;
     width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.4), transparent);
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 242, 255, 0.4) 50%, transparent 100%);
+    background-size: 100% 4px;
+    background-repeat: no-repeat;
     z-index: 10000;
     animation: scan 6s linear infinite;
     pointer-events: none;
+    will-change: transform;
+    transform: translateY(-100%);
 }
 
 @keyframes scan {
-    0% { top: 0; }
-    100% { top: 100%; }
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
 }
 
 /* ===== HEADER ===== */
@@ -428,6 +432,11 @@ img {
     border-bottom: 1px solid var(--glass-border);
     padding: var(--space-sm) 0;
     transition: var(--transition-base);
+    transform: translateZ(0);
+}
+
+#contactForm {
+    scroll-margin-top: 100px;
 }
 
 .header-content {
@@ -863,6 +872,11 @@ img {
     overflow: visible;
 }
 
+.banner {
+    contain: content;
+    transform: translateZ(0);
+}
+
 .service-card {
     background: var(--glass-bg);
     backdrop-filter: blur(var(--blur-glass));
@@ -879,6 +893,7 @@ img {
     justify-content: flex-start;
     will-change: transform;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 242, 255, 0.06);
+    transform: translateZ(0);
 }
 
 .service-card:hover {
