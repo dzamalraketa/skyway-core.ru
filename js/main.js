@@ -566,19 +566,14 @@ function initContactForm() {
         if (formStatus) formStatus.style.display = 'none';
         
         try {
-            // Using the worker URL from the inline script which seems correct
-            const response = await fetch('https://skyway-bot.darkotrss.workers.dev/', {
+            // Send to Formspree
+            data._subject = "SkyWay";
+            const response = await fetch('https://formspree.io/f/mbdaykgw', {
                 method: 'POST',
-                mode: 'cors',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    name: data.name,
-                    phone: data.phone,
-                    business: data.business,
-                    msg: data.message || ''
-                })
+                body: JSON.stringify(data)
             });
             
             if (response.ok || response.status === 200) {
