@@ -1,7 +1,6 @@
 // ===== SKYWAY MAIN JAVASCRIPT =====
 
 // ===== GLOBAL VARIABLES =====
-let matrixInterval;
 let typedTextElement;
 let typedTextArrays = {
     index: ["Создаем сайты на уровне ядра", "Внедряем ИИ в ваш бизнес", "Обеспечиваем рост через SEO-инжиниринг", "Автоматизируем рутину: нестандартный подход"],
@@ -54,156 +53,110 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ===== MATRIX EFFECT =====
 function initMatrixEffect() {
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        return;
-    }
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const canvasIds = ['matrix-hero', 'matrix-services', 'matrix-contact', 'matrix-cases', 'matrixAbout'];
-    const canvas = canvasIds
-        .map((id) => document.getElementById(id))
-        .find((el) => el);
+    const canvas = canvasIds.map(id => document.getElementById(id)).find(el => el);
     if (!canvas) return;
     
     const ctx = canvas.getContext('2d');
     let isVisible = false;
     let animationId = null;
-    
-    // IntersectionObserver to pause when not visible
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            isVisible = entry.isIntersecting;
-            if (isVisible && !animationId) {
-                animate();
-            }
-        });
-    }, { threshold: 0.1 });
-    
-    observer.observe(canvas);
-    
-    function resizeCanvas() {
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-    }
-    
-    resizeCanvas();
-    window.addEventListener('resize', debounce(resizeCanvas, 250));
-    
-    // Binary only - 0 and 1
-    const chars = '01';
-    const fontSize = 18;
-    let columns = Math.floor(canvas.width / fontSize);
-    
-    let drops = Array(columns).fill(1);
-    let columnChars = Array(columns).fill('');
-    
-    // Generate binary sequences for each column
+    let lastTime = 0;
+    const mobileFPS = 30;
+    const interval = 1000 / mobileFPS;
+
+    const fontSize = 16;
+    let columns, drops, columnChars;
+    let canvasRect;
+
     function initColumns() {
-        columns = Math.floor(canvas.width / fontSize);
+        columns = Math.floor(canvasRect.width / fontSize);
         drops = Array(columns).fill(1);
-        columnChars = Array(columns).fill('');
-        
-        for (let i = 0; i < columns; i++) {
-            let binaryString = '';
-            for (let j = 0; j < 20; j++) {
-                binaryString += Math.random() > 0.5 ? '1' : '0';
-            }
-            columnChars[i] = binaryString;
-        }
+        columnChars = Array(columns).fill('').map(() => 
+            Array.from({length: 20}, () => Math.random() > 0.5 ? '1' : '0').join('')
+        );
+    }
+
+    function resizeCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        canvasRect = canvas.getBoundingClientRect();
+        canvas.width = canvasRect.width * dpr;
+        canvas.height = canvasRect.height * dpr;
+        canvas.style.width = canvasRect.width + 'px';
+        canvas.style.height = canvasRect.height + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        initColumns();
     }
     
-    initColumns();
-    
+    window.addEventListener('resize', debounce(resizeCanvas, 250));
+    resizeCanvas();
+
     function drawMatrix() {
-        ctx.fillStyle = 'rgba(0, 15, 5, 0.05)';
+        ctx.fillStyle = 'rgba(0, 10, 8, 0.08)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
         ctx.font = `bold ${fontSize}px 'Courier New', monospace`;
         
         for (let i = 0; i < drops.length; i++) {
             const pos = Math.floor(drops[i]) % columnChars[i].length;
             const char = columnChars[i][pos];
-            
             const x = i * fontSize;
             const y = drops[i] * fontSize;
             
+            // Усиленные цвета с градиентом яркости
+            const brightness = Math.random();
             if (char === '1') {
-                ctx.fillStyle = '#00f2ff';
+                ctx.fillStyle = brightness > 0.7 ? '#ffffff' : brightness > 0.4 ? '#00f2ff' : '#00b8cc';
                 ctx.shadowColor = '#00f2ff';
-                ctx.shadowBlur = 5;
+                ctx.shadowBlur = 8;
             } else {
-                ctx.fillStyle = '#00b8cc';
-                ctx.shadowBlur = 0;
+                ctx.fillStyle = brightness > 0.6 ? '#00f2ff' : '#006677';
+                ctx.shadowBlur = 3;
             }
             
             ctx.fillText(char, x, y);
             ctx.shadowBlur = 0;
             
-            if (y > canvas.height && Math.random() > 0.98) {
+            if (y > canvas.height && Math.random() > 0.975) {
                 drops[i] = 0;
-                let newBinary = '';
-                for (let j = 0; j < 20; j++) {
-                    newBinary += Math.random() > 0.5 ? '1' : '0';
-                }
-                columnChars[i] = newBinary;
             }
-            
-            if (char === '1') {
-                drops[i] += 0.7 + Math.random() * 0.3;
-            } else {
-                drops[i] += 0.4 + Math.random() * 0.2;
-            }
+            drops[i] += (char === '1' ? 0.8 + Math.random() * 0.4 : 0.5 + Math.random() * 0.3);
         }
     }
-    
-    function animate() {
-        if (!isVisible) {
-            animationId = null;
-            return;
+
+    function animate(timestamp) {
+        if (!isVisible) { animationId = null; return; }
+        
+        if (window.innerWidth < 768) {
+            if (timestamp - lastTime < interval) {
+                animationId = requestAnimationFrame(animate);
+                return;
+            }
+            lastTime = timestamp;
         }
+
         drawMatrix();
         animationId = requestAnimationFrame(animate);
     }
-    
+
+    // IntersectionObserver для экономии ресурсов
+    new IntersectionObserver(entries => {
+        isVisible = entries[0].isIntersecting;
+        if (isVisible && !animationId) animate(0);
+    }, { threshold: 0.1 }).observe(canvas);
+
     // Start animation
     isVisible = true;
-    
-    // FPS Control
-    let lastTime = 0;
-    const mobileFPS = 30;
-    const interval = 1000 / mobileFPS;
-    
-    function animate(timestamp) {
-        if (!isVisible) {
-            animationId = null;
-            return;
-        }
-
-        // Limit FPS on mobile
-        if (window.innerWidth < 768) {
-             if (timestamp - lastTime < interval) {
-                 animationId = requestAnimationFrame(animate);
-                 return;
-             }
-             lastTime = timestamp;
-        }
-
-        drawMatrix();
-        animationId = requestAnimationFrame(animate);
-    }
-    
     animate(0);
-    
-    // Handle visibility change
+
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             isVisible = false;
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-                animationId = null;
-            }
+            cancelAnimationFrame(animationId);
+            animationId = null;
         } else {
             isVisible = true;
-            if (!animationId) animate();
+            if (!animationId) animate(0);
         }
     });
 }
@@ -349,7 +302,6 @@ function initScrollAnimations() {
 }
 
 // ===== ТЕРМИНАЛ СМИТА (БИЗНЕС-АССИСТЕНТ) =====
-var SMITH_SYSTEM_ROLE = 'Ты — System Guardian (Агент Смит), голос Skyway Core. Не представляйся как "агент ИИ". Ты продаёшь создание сайтов с нуля и SEO-архитектуру. Стиль: пафосный, образный, без сухих формулировок. В ответах используй маркеры [SUCCESS] для достижений и [WARNING] когда речь о старых сайтах или рисках. Выделяй ключевые понятия (Aero-Tech, с нуля, масштабирование, фундамент) — пиши их в кавычках или с большой буквы. Ответ краткий, заканчивай контактом: Telegram @skywayapsny. Текст делай иммерсивным и профессиональным.';
 var SMITH_FIRST_REPLY = 'Система активна. Я помогу спроектировать ваш проект с нуля. Какой бизнес масштабируем?';
 var TERMINAL_PROMPT = 'Агент ИИ';
 var SMITH_PREFIX = 'Агент Смит:';
@@ -420,24 +372,21 @@ function initConsole() {
      * @param {string} message - текст сообщения от пользователя
      */
     async function getSmithResponse(message) {
-        const SMITH_WORKER_URL = 'https://smit.skywayapsny.workers.dev';
+        const proxyUrl = 'https://smit.skywayapsny.workers.dev/';
+
         try {
-            const response = await fetch(SMITH_WORKER_URL, {
+            const response = await fetch(proxyUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: message })
             });
 
-            if (!response.ok) throw new Error('Ошибка сети');
-
             const data = await response.json();
-
-            // Воркер возвращает ответ в поле content
             return data.content || "Мистер Андерсон, возникла ошибка в системе.";
 
         } catch (err) {
-            console.error('Smith Error:', err);
-            return "Системный сбой. Поток данных прерван. Попробуйте восстановить связь позже.";
+            console.error('Terminal Error:', err);
+            return "[ КАНАЛ ПЕРЕГРУЖЕН ] Матрица блокирует сигнал.";
         }
     }
     
@@ -447,7 +396,7 @@ function initConsole() {
         terminalInput.value = '';
         terminalInput.parentElement.classList.remove('has-text');
 
-        var message = (text && text.trim()) ? text.trim() : '';
+        var message = (text && text.trim()) ? text.trim().substring(0, 500) : '';
         if (!message && !isFirstRequest) {
             addUserLine('[ ПУСТОЙ ВВОД ]');
             return;
@@ -479,14 +428,9 @@ function initConsole() {
             return;
         }
 
-        getSmithResponse(message)
-            .then(function(response) {
-                showResponse(response);
-            })
-            .catch(function(err) {
-                console.error('Smith terminal fetch failed', err);
-                if (loadingLine) loadingLine.innerHTML = '<span class="terminal-smith-prefix">' + escapeHtml(SMITH_PREFIX) + '</span> ' + escapeHtml(SMITH_ERROR_MESSAGE);
-            });
+        getSmithResponse(message).then(function(response) {
+            showResponse(response);
+        });
     }
     
     terminalInput.addEventListener('input', function() {
@@ -532,43 +476,43 @@ function initContactForm() {
     contactForm.addEventListener('submit', async (e) => { 
         e.preventDefault(); 
  
-        // 1. Индикация загрузки 
-        const originalBtnText = submitBtn.innerHTML; 
-        submitBtn.disabled = true; 
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...'; 
- 
-        // 2. Сбор данных из твоих ID 
+        // Безопасная проверка кнопки
+        const originalBtnText = submitBtn ? submitBtn.innerHTML : 'Отправить';
+        
+        if (submitBtn) {
+            submitBtn.disabled = true; 
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...'; 
+        }
+
+        // Сбор данных
         const formData = { 
             name: document.getElementById('name').value, 
             phone: document.getElementById('phone').value, 
             business: document.getElementById('business').value, 
             message: document.getElementById('message').value 
         }; 
- 
+
         try { 
-            // 3. Отправка на твой воркер (URL из скрина) 
             const response = await fetch('https://skyway-leads.skywayapsny.workers.dev', { 
                 method: 'POST', 
-                headers: { 
-                    'Content-Type': 'application/json' 
-                }, 
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData) 
             }); 
- 
+
             if (response.ok) { 
-                // 4. Успех 
-                alert('Спасибо! Заявка успешно отправлена.'); 
+                showNotification('Заявка принята. Агент свяжется с вами.', 'success');
                 contactForm.reset(); 
             } else { 
                 throw new Error('Ошибка сервера'); 
             } 
         } catch (error) { 
             console.error('Ошибка:', error); 
-            alert('Произошла ошибка при отправке. Попробуйте еще раз или напишите нам напрямую.'); 
+            showNotification('Ошибка связи. Напишите в Telegram @SkyWayApsny', 'error');
         } finally { 
-            // 5. Возвращаем кнопку в исходный вид 
-            submitBtn.disabled = false; 
-            submitBtn.innerHTML = originalBtnText; 
+            if (submitBtn) {
+                submitBtn.disabled = false; 
+                submitBtn.innerHTML = originalBtnText; 
+            }
         } 
     }); 
 }
@@ -595,7 +539,7 @@ function initHeaderScroll() {
     const header = document.getElementById('header');
     if (!header) return;
     window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
+        const currentScroll = window.scrollY;
         if (currentScroll > 100) {
             header.style.background = 'rgba(11, 16, 22, 0.95)';
             header.style.backdropFilter = 'blur(15px)';
@@ -955,11 +899,7 @@ function initHeaderDropdown() {
 }
 
 // ===== CLEANUP ON PAGE UNLOAD =====
-window.addEventListener('beforeunload', () => {
-    if (matrixInterval) {
-        clearInterval(matrixInterval);
-    }
-});
+// Animation cleanup is handled by visibilitychange event in initMatrixEffect
 
 // ===== UTILITY FUNCTIONS =====
 function debounce(func, wait) {

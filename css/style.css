@@ -730,15 +730,21 @@ img {
     background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
 }
 
-#matrix-hero {
+/* Matrix Canvas Backgrounds - единый стиль для всех страниц */
+#matrix-hero,
+#matrix-services,
+#matrix-contact,
+#matrix-cases,
+#matrixAbout {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: 0;
-    opacity: 0.08;
+    opacity: 0.15;
     pointer-events: none;
+    will-change: transform;
 }
 
 .hero-content {
