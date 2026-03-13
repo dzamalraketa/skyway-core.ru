@@ -420,12 +420,7 @@ function initConsole() {
      * @param {string} message - текст сообщения от пользователя
      */
     async function getSmithResponse(message) {
-<<<<<<< HEAD
         const SMITH_WORKER_URL = 'https://smit.skywayapsny.workers.dev';
-=======
-        const proxyUrl = 'https://smit.skywayapsny.workers.dev/'; // Твой URL воркера
->>>>>>> 23e984376ddf1e528d4f748bef0cc5741364f768
-
         try {
             const response = await fetch(SMITH_WORKER_URL, {
                 method: 'POST',
