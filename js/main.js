@@ -53,8 +53,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ===== MATRIX EFFECT =====
 function initMatrixEffect() {
+    // Проверка на prefers-reduced-motion
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
+    
     const canvasIds = ['matrix-hero', 'matrix-services', 'matrix-contact', 'matrix-cases', 'matrixAbout'];
     const canvas = canvasIds.map(id => document.getElementById(id)).find(el => el);
     if (!canvas) return;
@@ -63,8 +64,31 @@ function initMatrixEffect() {
     let isVisible = false;
     let animationId = null;
     let lastTime = 0;
-    const mobileFPS = 30;
-    const interval = 1000 / mobileFPS;
+    let mobileFPS = 30;
+    let interval = 1000 / mobileFPS;
+
+    // Проверка Battery API (если доступен) - снижаем нагрузку при низком заряде
+    if ('getBattery' in navigator) {
+        navigator.getBattery().then(battery => {
+            const updateFPS = () => {
+                if (battery.level < 0.2 && !battery.charging) {
+                    mobileFPS = 15;
+                } else {
+                    mobileFPS = window.innerWidth < 768 ? 30 : 60;
+                }
+                interval = 1000 / mobileFPS;
+            };
+            updateFPS();
+            battery.addEventListener('levelchange', updateFPS);
+            battery.addEventListener('chargingchange', updateFPS);
+        }).catch(() => {});
+    }
+    
+    // Также снижаем FPS на мобильных устройствах
+    if (window.innerWidth < 768) {
+        mobileFPS = 30;
+        interval = 1000 / mobileFPS;
+    }
 
     const fontSize = 16;
     let columns, drops, columnChars;
