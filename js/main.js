@@ -417,7 +417,7 @@ function initConsole() {
 
     // Просто вызываем наш воркер напрямую
     async function getSmithResponse(message) {
-        const proxyUrl = 'https://smith-proxy.darkotrss.workers.dev/'; // Твой URL воркера
+        const proxyUrl = 'https://smit.skywayapsny.workers.dev/'; // Твой URL воркера
 
         try {
             const response = await fetch(proxyUrl, {
