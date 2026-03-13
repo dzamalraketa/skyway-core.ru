@@ -494,11 +494,15 @@ function initConsole() {
 function initContactForm() { 
     const contactForm = document.getElementById('contactForm'); 
     const submitBtn = document.getElementById('submitBtn'); 
+    const trapField = document.getElementById('trap_field');
  
     if (!contactForm) return; 
  
     contactForm.addEventListener('submit', async (e) => { 
         e.preventDefault(); 
+
+        // Анти-спам проверка (trap field)
+        if (trapField && trapField.value !== '') return;
  
         // Безопасная проверка кнопки
         const originalBtnText = submitBtn ? submitBtn.innerHTML : 'Отправить';
@@ -517,11 +521,16 @@ function initContactForm() {
         }; 
 
         try { 
-            const response = await fetch('https://skyway-leads.skywayapsny.workers.dev', { 
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+            const response = await fetch('https://leads.skywayapsny.workers.dev', { 
                 method: 'POST', 
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData) 
+                body: JSON.stringify(formData),
+                signal: controller.signal
             }); 
+            clearTimeout(timeoutId);
 
             if (response.ok) { 
                 showNotification('Заявка принята. Агент свяжется с вами.', 'success');
@@ -531,7 +540,8 @@ function initContactForm() {
             } 
         } catch (error) { 
             console.error('Ошибка:', error); 
-            showNotification('Ошибка связи. Напишите в Telegram @SkyWayApsny', 'error');
+            const errorMsg = error.name === 'AbortError' ? 'Время ожидания истекло' : 'Ошибка связи';
+            showNotification(`${errorMsg}. Напишите в Telegram @SkyWayApsny`, 'error');
         } finally { 
             if (submitBtn) {
                 submitBtn.disabled = false; 
