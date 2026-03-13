@@ -94,7 +94,7 @@ function initMatrixEffect() {
 
     function drawMatrix() {
         ctx.fillStyle = 'rgba(0, 10, 8, 0.08)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, canvasRect.width, canvasRect.height);
         ctx.font = `bold ${fontSize}px 'Courier New', monospace`;
         
         for (let i = 0; i < drops.length; i++) {
@@ -117,7 +117,7 @@ function initMatrixEffect() {
             ctx.fillText(char, x, y);
             ctx.shadowBlur = 0;
             
-            if (y > canvas.height && Math.random() > 0.975) {
+            if (y > canvasRect.height && Math.random() > 0.975) {
                 drops[i] = 0;
             }
             drops[i] += (char === '1' ? 0.8 + Math.random() * 0.4 : 0.5 + Math.random() * 0.3);
