@@ -415,25 +415,30 @@ function initConsole() {
     
     var SMITH_ERROR_MESSAGE = '[ КАНАЛ ПЕРЕГРУЖЕН ] Матрица блокирует сигнал. Повторите попытку или свяжитесь с Архитектором: @skywayapsny';
 
-    // Просто вызываем наш воркер напрямую
+    /**
+     * Функция для общения с Агентом Смитом
+     * @param {string} message - текст сообщения от пользователя
+     */
     async function getSmithResponse(message) {
-        const proxyUrl = 'https://smith-proxy.darkotrss.workers.dev/'; // Твой URL воркера
+        const SMITH_WORKER_URL = 'https://smit.skywayapsny.workers.dev';
 
         try {
-            const response = await fetch(proxyUrl, {
+            const response = await fetch(SMITH_WORKER_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: message })
             });
 
+            if (!response.ok) throw new Error('Ошибка сети');
+
             const data = await response.json();
 
-            // Воркер на Groq присылает ответ в поле data.content
+            // Воркер возвращает ответ в поле content
             return data.content || "Мистер Андерсон, возникла ошибка в системе.";
 
         } catch (err) {
-            console.error('Ошибка:', err);
-            return "Сбой связи с Матрицей...";
+            console.error('Smith Error:', err);
+            return "Системный сбой. Поток данных прерван. Попробуйте восстановить связь позже.";
         }
     }
     
@@ -519,95 +524,54 @@ function initConsole() {
 }
 
 // ===== CONTACT FORM =====
-const pageStartTime = Date.now();
-
-function initContactForm() {
-    const contactForm = document.getElementById('contactForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const formStatus = document.getElementById('formStatus');
-    
-    if (!contactForm) return;
-    
-    contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const trapField = document.getElementById('trap_field');
-        const trapValue = trapField ? trapField.value : '';
-        const timeSpent = (Date.now() - pageStartTime) / 1000;
-        
-        // 1. SECURITY CHECK (Anti-Bot)
-        // Check trap field (must be empty) and time spent (must be > 3 seconds)
-        if (trapValue.length > 0 || timeSpent < 3) {
-            if (formStatus) {
-                formStatus.innerText = '✅ ЗАЯВКА ПРИНЯТА! ИНЖЕНЕР СКОРО СВЯЖЕТСЯ.';
-                formStatus.style.display = 'block';
-                formStatus.style.color = '#00ff41';
-            }
-            contactForm.reset();
-            return;
-        }
-        
-        const formData = new FormData(contactForm);
-        const data = Object.fromEntries(formData);
-        
-        // Basic validation
-        if (!data.name || !data.phone || !data.business) {
-            showNotification('Пожалуйста, заполните все обязательные поля', 'error');
-            return;
-        }
-        
-        // Disable button during submission
-        const originalBtnText = submitBtn ? submitBtn.innerHTML : '';
-        if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
-        }
-        
-        if (formStatus) formStatus.style.display = 'none';
-        
-        try {
-            // Send to Formspree
-            data._subject = "SkyWay";
-            const response = await fetch('https://formspree.io/f/mbdaykgw', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-            
-            if (response.ok || response.status === 200) {
-                // Yandex Metrica Goal
-                if (typeof ym !== 'undefined') {
-                    ym(106787007, 'reachGoal', 'lead_success');
-                }
-                
-                showNotification('Заявка отправлена! Мы свяжемся с вами в ближайшее время.', 'success');
-                if (formStatus) {
-                    formStatus.innerText = '✅ ЗАЯВКА ПРИНЯТА! ИНЖЕНЕР СКОРО СВЯЖЕТСЯ.';
-                    formStatus.style.display = 'block';
-                    formStatus.style.color = '#00ff41';
-                }
-                contactForm.reset();
-            } else {
-                throw new Error('Ошибка отправки');
-            }
-        } catch (error) {
-            console.error('Submission error:', error);
-            showNotification('Ошибка при отправке. Пожалуйста, напишите нам напрямую в Telegram.', 'error');
-            if (formStatus) {
-                formStatus.innerText = '❌ ОШИБКА ОТПРАВКИ. НАПИШИТЕ В ТГ @SkyWayApsny';
-                formStatus.style.display = 'block';
-                formStatus.style.color = '#ff4d4d';
-            }
-        } finally {
-            // Re-enable button
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnText || '<i class="fas fa-paper-plane"></i> Отправить заявку';
-            }
-        }
-    });
+function initContactForm() { 
+    const contactForm = document.getElementById('contactForm'); 
+    const submitBtn = document.getElementById('submitBtn'); 
+ 
+    if (!contactForm) return; 
+ 
+    contactForm.addEventListener('submit', async (e) => { 
+        e.preventDefault(); 
+ 
+        // 1. Индикация загрузки 
+        const originalBtnText = submitBtn.innerHTML; 
+        submitBtn.disabled = true; 
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...'; 
+ 
+        // 2. Сбор данных из твоих ID 
+        const formData = { 
+            name: document.getElementById('name').value, 
+            phone: document.getElementById('phone').value, 
+            business: document.getElementById('business').value, 
+            message: document.getElementById('message').value 
+        }; 
+ 
+        try { 
+            // 3. Отправка на твой воркер (URL из скрина) 
+            const response = await fetch('https://skyway-leads.skywayapsny.workers.dev', { 
+                method: 'POST', 
+                headers: { 
+                    'Content-Type': 'application/json' 
+                }, 
+                body: JSON.stringify(formData) 
+            }); 
+ 
+            if (response.ok) { 
+                // 4. Успех 
+                alert('Спасибо! Заявка успешно отправлена.'); 
+                contactForm.reset(); 
+            } else { 
+                throw new Error('Ошибка сервера'); 
+            } 
+        } catch (error) { 
+            console.error('Ошибка:', error); 
+            alert('Произошла ошибка при отправке. Попробуйте еще раз или напишите нам напрямую.'); 
+        } finally { 
+            // 5. Возвращаем кнопку в исходный вид 
+            submitBtn.disabled = false; 
+            submitBtn.innerHTML = originalBtnText; 
+        } 
+    }); 
 }
 
 // ===== SMOOTH SCROLL =====
