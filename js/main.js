@@ -4,16 +4,10 @@
 let typedTextElement;
 let typedTextArrays = {
     index: ["Создаем сайты на уровне ядра", "Внедряем ИИ в ваш бизнес", "Обеспечиваем рост через SEO-инжиниринг", "Автоматизируем рутину: нестандартный подход"],
-    services: ["высокого качества", "полного цикла", "с гарантией результата"],
+    services: ["высокого качества", "полного цикла", "под задачу бизнеса"],
     case: ["реализованных в срок", "любой сложности", "с полным сопровождением"],
-    contact: ["ждем ваших идей", "на связи 24/7", "готовы к сотрудничеству"]
-};
-
-let titleTexts = {
-    index: "инженерный маркетинг",
-    services: "профессиональные услуги",
-    case: "портфолио инженерных решений",
-    contact: "свяжитесь с нами"
+    about: ["инженерный подход", "чистая архитектура", "data-driven маркетинг"],
+    contact: ["ждем ваших идей", "свяжемся с вами", "готовы к сотрудничеству"]
 };
 
 let typedTextArray = [];
@@ -49,9 +43,18 @@ document.addEventListener('DOMContentLoaded', function() {
     initChatFab();
     initMobileAccordions();
     initHeaderDropdown();
+    updateCurrentYear();
 });
 
-// ===== MATRIX EFFECT =====
+// ===== CURRENT YEAR IN FOOTER =====
+function updateCurrentYear() {
+    const yearElement = document.getElementById('currentYear');
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+    }
+}
+
+// ===== ФОН «КОНСТЕЛЛЯЦИЯ» (лёгкие частицы вместо бинарного дождя) =====
 function initMatrixEffect() {
     // Проверка на prefers-reduced-motion
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -63,115 +66,100 @@ function initMatrixEffect() {
     const ctx = canvas.getContext('2d');
     let isVisible = false;
     let animationId = null;
-    let lastTime = 0;
-    let mobileFPS = 30;
-    let interval = 1000 / mobileFPS;
-
-    // Проверка Battery API (если доступен) - снижаем нагрузку при низком заряде
-    if ('getBattery' in navigator) {
-        navigator.getBattery().then(battery => {
-            const updateFPS = () => {
-                if (battery.level < 0.2 && !battery.charging) {
-                    mobileFPS = 15;
-                } else {
-                    mobileFPS = window.innerWidth < 768 ? 30 : 60;
-                }
-                interval = 1000 / mobileFPS;
-            };
-            updateFPS();
-            battery.addEventListener('levelchange', updateFPS);
-            battery.addEventListener('chargingchange', updateFPS);
-        }).catch(() => {});
-    }
-    
-    // Также снижаем FPS на мобильных устройствах
-    if (window.innerWidth < 768) {
-        mobileFPS = 30;
-        interval = 1000 / mobileFPS;
-    }
-
-    const fontSize = 16;
-    let columns, drops, columnChars;
     let canvasRect;
+    let particles = [];
+    let time = 0;
 
-    function initColumns() {
-        columns = Math.floor(canvasRect.width / fontSize);
-        drops = Array(columns).fill(1);
-        columnChars = Array(columns).fill('').map(() => 
-            Array.from({length: 20}, () => Math.random() > 0.5 ? '1' : '0').join('')
-        );
+    const MAX_DIST = 150;      // дистанция связи между частицами
+    const LINE_ALPHA = 0.5;    // макс. прозрачность линии
+    const SPEED = 0.3;         // скорость дрейфа частиц
+
+    function initParticles() {
+        // Плотность частиц зависит от площади экрана: меньше на мобильных
+        const count = Math.min(70, Math.floor((canvasRect.width * canvasRect.height) / 18000));
+        particles = Array.from({ length: count }, () => ({
+            x: Math.random() * canvasRect.width,
+            y: Math.random() * canvasRect.height,
+            vx: (Math.random() - 0.5) * SPEED * 2,
+            vy: (Math.random() - 0.5) * SPEED * 2,
+            r: 1.2 + Math.random() * 1.8,
+            tw: Math.random() * Math.PI * 2
+        }));
     }
 
     function resizeCanvas() {
-        const dpr = window.devicePixelRatio || 1;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
         canvasRect = canvas.getBoundingClientRect();
         canvas.width = canvasRect.width * dpr;
         canvas.height = canvasRect.height * dpr;
         canvas.style.width = canvasRect.width + 'px';
         canvas.style.height = canvasRect.height + 'px';
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        initColumns();
+        initParticles();
     }
     
     window.addEventListener('resize', debounce(resizeCanvas, 250));
     resizeCanvas();
 
-    function drawMatrix() {
-        ctx.fillStyle = 'rgba(0, 10, 8, 0.08)';
-        ctx.fillRect(0, 0, canvasRect.width, canvasRect.height);
-        ctx.font = `bold ${fontSize}px 'Courier New', monospace`;
-        
-        for (let i = 0; i < drops.length; i++) {
-            const pos = Math.floor(drops[i]) % columnChars[i].length;
-            const char = columnChars[i][pos];
-            const x = i * fontSize;
-            const y = drops[i] * fontSize;
-            
-            // Усиленные цвета с градиентом яркости
-            const brightness = Math.random();
-            if (char === '1') {
-                ctx.fillStyle = brightness > 0.7 ? '#ffffff' : brightness > 0.4 ? '#00f2ff' : '#00b8cc';
-                ctx.shadowColor = '#00f2ff';
-                ctx.shadowBlur = 8;
-            } else {
-                ctx.fillStyle = brightness > 0.6 ? '#00f2ff' : '#006677';
-                ctx.shadowBlur = 3;
+    function draw() {
+        time += 0.016;
+        ctx.clearRect(0, 0, canvasRect.width, canvasRect.height);
+
+        // Тонкие связи между близкими частицами
+        ctx.lineWidth = 1;
+        for (let i = 0; i < particles.length; i++) {
+            const a = particles[i];
+            for (let j = i + 1; j < particles.length; j++) {
+                const b = particles[j];
+                const dx = a.x - b.x;
+                const dy = a.y - b.y;
+                if (dx > MAX_DIST || dx < -MAX_DIST || dy > MAX_DIST || dy < -MAX_DIST) continue;
+                const dist = Math.hypot(dx, dy);
+                if (dist < MAX_DIST) {
+                    ctx.strokeStyle = `rgba(124, 224, 213, ${((1 - dist / MAX_DIST) * LINE_ALPHA).toFixed(3)})`;
+                    ctx.beginPath();
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
+                    ctx.stroke();
+                }
             }
-            
-            ctx.fillText(char, x, y);
-            ctx.shadowBlur = 0;
-            
-            if (y > canvasRect.height && Math.random() > 0.975) {
-                drops[i] = 0;
-            }
-            drops[i] += (char === '1' ? 0.8 + Math.random() * 0.4 : 0.5 + Math.random() * 0.3);
         }
+
+        // Частицы с мягким свечением и медленным мерцанием
+        for (const p of particles) {
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < -20) p.x = canvasRect.width + 20;
+            else if (p.x > canvasRect.width + 20) p.x = -20;
+            if (p.y < -20) p.y = canvasRect.height + 20;
+            else if (p.y > canvasRect.height + 20) p.y = -20;
+
+            const glow = 0.6 + Math.sin(time * 1.5 + p.tw) * 0.4;
+            ctx.beginPath();
+            ctx.fillStyle = `rgba(124, 224, 213, ${(0.8 * glow).toFixed(3)})`;
+            ctx.shadowColor = '#7ce0d5';
+            ctx.shadowBlur = 10;
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.shadowBlur = 0;
     }
 
-    function animate(timestamp) {
+    function animate() {
         if (!isVisible) { animationId = null; return; }
-        
-        if (window.innerWidth < 768) {
-            if (timestamp - lastTime < interval) {
-                animationId = requestAnimationFrame(animate);
-                return;
-            }
-            lastTime = timestamp;
-        }
-
-        drawMatrix();
+        draw();
         animationId = requestAnimationFrame(animate);
     }
 
     // IntersectionObserver для экономии ресурсов
     new IntersectionObserver(entries => {
         isVisible = entries[0].isIntersecting;
-        if (isVisible && !animationId) animate(0);
-    }, { threshold: 0.1 }).observe(canvas);
+        if (isVisible && !animationId) animate();
+    }, { threshold: 0.05 }).observe(canvas);
 
     // Start animation
     isVisible = true;
-    animate(0);
+    animate();
 
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
@@ -180,7 +168,7 @@ function initMatrixEffect() {
             animationId = null;
         } else {
             isVisible = true;
-            if (!animationId) animate(0);
+            if (!animationId) animate();
         }
     });
 }
@@ -188,8 +176,7 @@ function initMatrixEffect() {
 // ===== TYPED TEXT ANIMATION =====
 function initTypedText() {
     typedTextElement = document.getElementById('typedText');
-    const titleElement = document.querySelector('.title-line:first-child');
-    if (!typedTextElement || !titleElement) return;
+    if (!typedTextElement) return;
 
     // Determine current page
     const path = window.location.pathname;
@@ -199,12 +186,13 @@ function initTypedText() {
         pageKey = 'services';
     } else if (path.includes('case')) {
         pageKey = 'case';
+    } else if (path.includes('about')) {
+        pageKey = 'about';
     } else if (path.includes('contact')) {
         pageKey = 'contact';
     }
 
     typedTextArray = typedTextArrays[pageKey] || typedTextArrays['index'];
-    titleElement.textContent = titleTexts[pageKey] || titleTexts['index'];
 
     function typeText() {
         const currentText = typedTextArray[arrayIndex];
@@ -442,13 +430,12 @@ function initConsole() {
 
         if (isFirstRequest) {
             isFirstRequest = false;
+            // Приветствие системы, затем реальный ответ на вопрос пользователя
+            addSmithLine(SMITH_FIRST_REPLY);
+        }
+
+        if (!message) {
             if (loadingLine && loadingLine.parentNode) loadingLine.remove();
-            var outLine = document.createElement('div');
-            outLine.className = 'terminal-line smith-response';
-            terminalOutput.appendChild(outLine);
-            typewriter(outLine, SMITH_FIRST_REPLY, 25, function() {
-                terminalInput.focus();
-            });
             return;
         }
 
@@ -555,10 +542,14 @@ function initContactForm() {
 function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            
+            const href = this.getAttribute('href');
+            if (!href || href.length < 2) {
+                e.preventDefault();
+                return;
+            }
+            const target = document.querySelector(href);
             if (target) {
+                e.preventDefault();
                 target.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
@@ -616,8 +607,8 @@ function showNotification(message, type = 'info') {
             }
             
             .notification-success {
-                background: linear-gradient(45deg, #00f2ff, #00b8cc);
-                box-shadow: 0 0 20px rgba(0, 242, 255, 0.6);
+                background: linear-gradient(45deg, #7ce0d5, #5fc9bf);
+                box-shadow: 0 0 20px rgba(124, 224, 213, 0.6);
             }
             
             .notification-error {
@@ -626,8 +617,8 @@ function showNotification(message, type = 'info') {
             }
             
             .notification-info {
-                background: linear-gradient(45deg, #00f2ff, #00b8cc);
-                box-shadow: 0 0 20px rgba(0, 242, 255, 0.6);
+                background: linear-gradient(45deg, #7ce0d5, #5fc9bf);
+                box-shadow: 0 0 20px rgba(124, 224, 213, 0.6);
             }
             
             .notification.show {

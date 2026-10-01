@@ -1,0 +1,172 @@
+/* SKYWAY inner pages: same quiet engineering visual system as the home page. */
+body.site-core {
+    --bg-primary: #080e10;
+    --bg-secondary: #0c1719;
+    --bg-tertiary: #102023;
+    --accent-cyan: #7ce0d5;
+    --accent-cyan-dark: #5cbeb5;
+    --accent-primary: #7ce0d5;
+    --text-primary: #ecf7f4;
+    --text-secondary: #b6cac5;
+    --text-muted: #94aaa5;
+    --glass-bg: rgba(12, 25, 26, .9);
+    --glass-border: rgba(124, 224, 213, .18);
+    --glass-shadow: none;
+    --glow-cyan: none;
+    --core-line: rgba(124, 224, 213, .18);
+    --core-accent: #7ce0d5;
+    --core-paper: #ecf7f4;
+    --core-muted: #a0b5b5;
+    background: #080e10;
+    color: var(--core-paper);
+}
+.site-core .core-field { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: .58; }
+.site-core .header, .site-core .banner, .site-core main, .site-core .footer { position: relative; z-index: 1; }
+.site-core .scan-line, .site-core .binary-decor { display: none; }
+.site-core .header { background: rgba(8, 14, 16, .9); border-bottom: 1px solid var(--core-line); backdrop-filter: blur(14px); box-shadow: none; }
+.site-core .logo-brand { color: var(--core-paper); letter-spacing: .12em; text-shadow: none; background: none; -webkit-text-fill-color: currentColor; }
+.site-core .logo-sub { color: var(--core-muted); }
+.site-core .nav-link:hover, .site-core .nav-link.active { color: var(--core-accent); text-shadow: none; }
+.site-core .btn { border-radius: 3px; box-shadow: none; text-shadow: none; }
+.site-core .btn-primary, .site-core .btn-telegram, .site-core .btn-whatsapp { background: var(--core-accent); color: #061112; border-color: var(--core-accent); font-weight: 700; box-shadow: none; }
+.site-core .btn-primary:hover, .site-core .btn-telegram:hover, .site-core .btn-whatsapp:hover { background: #b1f4eb; border-color: #b1f4eb; color: #061112; box-shadow: 0 10px 30px rgba(124,224,213,.14); }
+.site-core .btn-outline { color: var(--core-paper); border-color: rgba(124,224,213,.48); background: rgba(12,25,26,.55); }
+.site-core .btn-outline:hover { background: rgba(124,224,213,.12); border-color: var(--core-accent); color: var(--core-paper); box-shadow: none; }
+.site-core .btn i { margin-right: 8px; }
+.site-core :focus-visible { outline: 2px solid var(--core-accent); outline-offset: 3px; }
+.site-core .section::before, .site-core .section::after { display: none; }
+.site-core .section { background: transparent; padding-top: 95px; padding-bottom: 95px; }
+.site-core .services, .site-core .why-us, .site-core .cases-section, .site-core .matrix-console, .site-core .contact { background: transparent; }
+.site-core .section-title { color: var(--core-paper); font-family: var(--font-sans); font-size: clamp(2rem,3.5vw,3.65rem); line-height: 1.12; letter-spacing: -.05em; font-weight: 600; text-shadow: none; }
+.site-core .section-title::after { background: var(--core-accent); box-shadow: none; }
+.site-core .section-subtitle { color: var(--core-muted); line-height: 1.65; font-size: 1rem; }
+.site-core .heading-green, .site-core .text-green, .site-core .code-function, .site-core .code-keyword { color: var(--core-accent); text-shadow: none; }
+.site-core .breadcrumbs { color: #91aaa3; }
+.site-core .breadcrumbs a { color: #b2d1ca; }
+.site-core .breadcrumbs a:hover { color: var(--core-accent); }
+
+/* Inner-page hero */
+.site-core .banner { min-height: 580px; padding: 164px 0 90px; background: radial-gradient(circle at 78% 51%, rgba(124,224,213,.065), transparent 30%), rgba(9,18,20,.55); justify-content: flex-start; overflow: hidden; }
+.site-core .banner::before { display: none; }
+.site-core .banner::after { content: ''; position: absolute; z-index: 0; width: min(38vw, 470px); aspect-ratio: 1; right: 8%; top: 50%; transform: translateY(-50%); border: 1px solid rgba(124,224,213,.18); border-radius: 50%; box-shadow: 0 0 0 65px rgba(124,224,213,.022), 0 0 0 130px rgba(124,224,213,.018); pointer-events: none; }
+.site-core .banner::after { display: none; }
+.site-core .banner > .container { width: 100%; position: relative; z-index: 2; }
+.site-core .banner-content, .site-core .hero-services .banner-content, .site-core .hero-contact .banner-content { max-width: 780px; width: 100%; min-height: 0; margin: 0; padding: 0; text-align: left; align-items: flex-start; }
+.site-core .banner-title, .site-core .hero-cases .banner-title { min-height: 0; margin: 0 0 28px; width: auto; max-width: 770px; text-align: left; font: 600 clamp(3.3rem,6.2vw,6.3rem)/1.02 var(--font-sans); letter-spacing: -.068em; color: var(--core-paper); background: none; -webkit-text-fill-color: currentColor; text-shadow: none; text-transform: none; overflow-wrap: normal; }
+.site-core .banner-subtitle, .site-core .hero-cases .banner-subtitle { color: #b9cec7; font-size: clamp(1rem,1.4vw,1.17rem); line-height: 1.68; max-width: 650px; margin: 0 0 34px; text-align: left; }
+.site-core .banner-actions, .site-core .hero-contact .banner-actions, .site-core .hero-services .banner-actions { justify-content: flex-start; gap: 14px; margin: 0; }
+.site-core .banner-actions .btn { min-width: 0; }
+.site-core .page-kicker { color: var(--core-accent); font: 600 .7rem/1.4 var(--font-mono); letter-spacing: .18em; margin-bottom: 22px; }
+.site-core .page-kicker::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--core-accent); margin-right: 12px; box-shadow: 0 0 12px rgba(124,224,213,.6); }
+
+/* Content surfaces */
+.site-core .service-detail-card, .site-core .package-card, .site-core .case-card, .site-core .principle-card,
+.site-core .contact-card, .site-core .contact-info-card, .site-core .faq-item, .site-core .tech-section,
+.site-core .process-step-panel, .site-core .personal-card, .site-core .approach-card, .site-core .feature-card {
+    background: rgba(14, 26, 27, .88);
+    border: 1px solid var(--core-line);
+    border-radius: 2px;
+    box-shadow: none;
+    backdrop-filter: blur(6px);
+}
+.site-core .service-detail-card:hover, .site-core .package-card:hover, .site-core .case-card:hover,
+.site-core .principle-card:hover, .site-core .contact-card:hover, .site-core .contact-info-card:hover {
+    border-color: rgba(124,224,213,.5);
+    box-shadow: none;
+}
+.site-core .service-detail-card.service-featured { border-color: rgba(124,224,213,.5); background: #142729; box-shadow: none; }
+.site-core .service-title-large, .site-core .case-title, .site-core .principle-title, .site-core .package-name,
+.site-core .contact-platform, .site-core .contact-info-title { color: var(--core-paper); text-shadow: none; }
+.site-core .service-description, .site-core .case-description, .site-core .principle-description { color: #a6bbb5; }
+.site-core .service-icon-large, .site-core .principle-icon, .site-core .contact-icon, .site-core .case-icon { color: var(--core-accent); text-shadow: none; box-shadow: none; }
+.site-core .package-price, .site-core .case-result, .site-core .kpi-value { color: var(--core-accent); text-shadow: none; }
+.site-core .tech-tag, .site-core .filter-btn, .site-core .services-nav-list a { border-color: var(--core-line); background: rgba(14,28,29,.88); color: #b9d3ca; box-shadow: none; }
+.site-core .filter-btn.active, .site-core .filter-btn:hover, .site-core .services-nav-list a.active, .site-core .services-nav-list a:hover { background: var(--core-accent); border-color: var(--core-accent); color: #061112; box-shadow: none; }
+.site-core .case-image { background: linear-gradient(140deg,#152d2f,#0a1719); border-bottom: 1px solid var(--core-line); }
+.site-core .code-snippet { background: #101e20; border-color: var(--core-line); box-shadow: none; }
+.site-core .contact-link { color: var(--core-accent); }
+.site-core .footer { background: #080e10; border-top: 1px solid var(--core-line); }
+.site-core .footer a:hover { color: var(--core-accent); }
+.site-core .chat-fab { background: var(--core-accent); color: #061112; box-shadow: none; }
+
+/* Privacy page is a document; keep it easy to scan. */
+.privacy-core .services { padding-top: 52px; }
+.privacy-core .section-header { max-width: 900px; margin: 0 auto 38px; text-align: left; }
+.privacy-core h1.section-title { font-size: clamp(2.15rem,4vw,3.8rem); line-height: 1.1; text-align: left; overflow-wrap: anywhere; }
+.privacy-core .section-subtitle { text-align: left; }
+.privacy-core .service-detail-card { padding: clamp(24px,4vw,55px); text-align: left; }
+.privacy-core .service-title-large { font: 600 clamp(1.35rem,2vw,1.8rem)/1.3 var(--font-sans); letter-spacing: -.025em; margin-bottom: 14px; text-align: left; }
+.privacy-core .service-detail-card p, .privacy-core .service-detail-card li { color: #b9cdc7; font-size: 1rem; line-height: 1.75; text-align: left; }
+.privacy-core .service-detail-card ul { padding-left: 0; }
+.privacy-core .service-detail-card li { padding: 3px 0; }
+.privacy-core .service-detail-card li i { color: var(--core-accent); margin-right: 9px; }
+
+/* 404 page */
+.site-core.error-404-page .error-hero { min-height: calc(100svh - 100px); display: flex; align-items: center; padding: 140px 0 85px; background: transparent; }
+.site-core.error-404-page .error-content { max-width: 740px; text-align: left; }
+.site-core.error-404-page .error-code { font: 600 clamp(6rem,18vw,13rem)/.9 var(--font-sans); letter-spacing: -.08em; color: var(--core-accent); margin-bottom: 25px; }
+.site-core.error-404-page .error-message { color: var(--core-paper); font: 600 clamp(2rem,4vw,3.4rem)/1.1 var(--font-sans); letter-spacing: -.05em; margin-bottom: 20px; }
+.site-core.error-404-page .error-lead { color: #abc3ba; font-size: 1.05rem; line-height: 1.65; margin-bottom: 28px; }
+.site-core.error-404-page .error-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 768px) {
+    .site-core .header-cta.desktop-only, .site-core .header > .container > .header-content > a.desktop-only { display: none !important; }
+    .site-core .banner { min-height: 0; padding: 140px 0 65px; }
+    .site-core .banner::after { width: 230px; right: -90px; opacity: .45; }
+    .site-core .banner-content, .site-core .hero-services .banner-content, .site-core .hero-contact .banner-content { padding: 0; }
+    .site-core .banner-title, .site-core .hero-cases .banner-title { font-size: clamp(2.6rem,10vw,4.6rem); margin-bottom: 22px; letter-spacing: -.06em; }
+    .site-core .banner-subtitle { font-size: 1rem; }
+    .site-core .banner-actions { display: flex; flex-direction: column; align-items: stretch; width: 100%; }
+    .site-core .banner-actions .btn { width: 100%; }
+    .site-core .section { padding-top: 72px; padding-bottom: 72px; }
+    .privacy-core .services { padding-top: 38px; }
+    .privacy-core .section-header { margin-bottom: 24px; }
+}
+@media (max-width: 480px) {
+    .site-core .banner-title, .site-core .hero-cases .banner-title { font-size: clamp(2.35rem,10vw,3.2rem); }
+    .site-core .page-kicker { font-size: .64rem; }
+    .site-core .section-title { font-size: clamp(1.95rem,8vw,2.8rem); }
+    .site-core .service-detail-card, .site-core .principle-card, .site-core .case-card { padding-left: 20px; padding-right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .site-core .service-detail-card, .site-core .package-card, .site-core .case-card, .site-core .principle-card { transition: none; }
+}
+/* Text-heavy service details read as documents, with clear left alignment. */
+.site-core .animate-on-scroll { opacity: 1 !important; transform: none !important; transition: none !important; }
+.site-core .service-detail-card { text-align: left; }
+.site-core .service-detail-card.service-featured::before { height: 2px; background: var(--core-accent); animation: none; }
+.site-core .service-detail-card.service-featured .service-title-large { background: none; -webkit-text-fill-color: currentColor; color: var(--core-paper); font-size: clamp(2rem,3vw,2.8rem); }
+.site-core .service-header { flex-direction: row; justify-content: flex-start; align-items: center; gap: 24px; text-align: left; }
+.site-core .service-icon-large, .site-core .service-detail-card.service-featured .service-icon-large { flex: none; width: 64px; height: 64px; margin: 0; font-size: 1.75rem; border: 1px solid var(--core-line); border-radius: 3px; background: rgba(124,224,213,.07); box-shadow: none; }
+.site-core .service-title-large, .site-core .service-tagline { text-align: left; margin-left: 0; }
+.site-core .service-content { max-width: none; text-align: left; }
+.site-core .service-content > p { max-width: 760px; line-height: 1.7; color: #b8ccc5; }
+.site-core .package-card { text-align: left; }
+.site-core .package-name, .site-core .package-price { text-align: left; }
+@media (max-width: 768px) {
+    .site-core .service-header { align-items: flex-start; gap: 16px; }
+    .site-core .service-icon-large, .site-core .service-detail-card.service-featured .service-icon-large { width: 48px; height: 48px; font-size: 1.35rem; }
+    .privacy-core h1.section-title { font-size: clamp(1.65rem,6.7vw,2rem); overflow-wrap: normal; }
+}
+.site-core .case-card[hidden] { display: none !important; }
+/* V4: restrained motion and tighter project cards. */
+.site-core .core-field { opacity: .64; }
+.site-core::before { display: none; }
+.site-core .chat-fab { width: 46px; height: 46px; bottom: 18px; right: 18px; font-size: 1rem; color: var(--core-accent); background: #132527; border: 1px solid rgba(124,224,213,.55); box-shadow: none; }
+.site-core .chat-fab:hover { background: #1a3434; box-shadow: none; }
+.site-core .case-card { min-height: 370px; }
+.site-core .case-content { display: flex; flex-direction: column; gap: 14px; }
+.site-core .case-content .btn { align-self: flex-start; margin-top: auto; }
+.site-core .case-description { line-height: 1.65; }
+@media (max-width: 768px) { .site-core .case-card { min-height: 0; } }
+/* About: short statements should form compact cards. */
+.site-core .principles-grid { gap: 18px !important; padding: 0 !important; margin: 36px auto 0; }
+.site-core .principle-card { min-height: 0; padding: 30px 24px; gap: 0; }
+.site-core .principle-icon { width: 70px; min-width: 70px; height: 70px; font-size: 2rem; margin-bottom: 22px; }
+.site-core .principle-card h3 { margin-bottom: 14px; }
+.site-core .principle-card p { flex-grow: 0; margin-bottom: 0; }
+.about-core .section { padding-top: 76px; padding-bottom: 76px; }
+
+/* Compact footer: services and direct contact. */
+.site-core .footer-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 480px) { .site-core .footer-links { grid-template-columns: 1fr; } }

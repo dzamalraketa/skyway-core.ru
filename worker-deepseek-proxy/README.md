@@ -2,6 +2,8 @@
 
 Браузер не может вызывать Gemini API из‑за CORS. Этот Worker принимает запросы с сайта и дергает Gemini — ключ хранится только в Cloudflare.
 
+Работает на `https://smit.skywayapsny.workers.dev/` (URL зашит в `js/main.js`, функция `getSmithResponse`).
+
 ## Шаги
 
 1. **Аккаунт Cloudflare**  
@@ -25,10 +27,17 @@
 5. **Секрет в Cloudflare**:
    - Workers & Pages → ваш Worker → Settings → Variables.
    - Add variable: имя **GEMINI_API_KEY**, значение — ключ Gemini, включи "Encrypt" (Secret).
+   - Либо через CLI: `wrangler secret put GEMINI_API_KEY`
 
-6. **URL воркера** (например `https://smith-proxy.ВАШ-СУБДОМЕН.workers.dev`) пропиши в **index.html**:
-   ```html
-   <script>window.DEEPSEEK_PROXY_URL = 'https://smith-proxy.ВАШ-СУБДОМЕН.workers.dev';</script>
-   ```
+## Защита воркера
 
-После этого терминал на сайте ходит в Worker, Worker — в Gemini. Ключ в браузере не светится.
+В `src/index.js` уже встроены:
+- Allowlist Origin (только `skyway-core.ru` и localhost для разработки)
+- Лимит длины сообщения (1000 символов)
+- Простой rate-limit: 10 запросов/мин на IP (в памяти изолята)
+
+Для продакшн-уровня дополнительно включи в панели Cloudflare: **Security → Rate limiting rules** и **Bot Fight Mode** для `workers.dev` или кастомного роута.
+
+## Модель
+
+Используется `gemini-3.8-flash` (быстрые ответы, бесплатный тариф AI Studio). При выходе новой модели — поменять строку в `GEMINI_URL`.

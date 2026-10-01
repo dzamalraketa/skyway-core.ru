@@ -1,7 +1,7 @@
-name = "deepseek-proxy"
+name = "smit"
 main = "src/index.js"
 compatibility_date = "2024-01-01"
 
-# Ключ DeepSeek задаётся в панели Cloudflare:
-# Workers & Pages → deepseek-proxy → Settings → Variables → DEEPSEEK_API_KEY (Secret)
-# vars = { DEEPSEEK_API_KEY = "sk-..." }  # или только через Dashboard
+# Ключ Gemini задаётся в панели Cloudflare:
+# Workers & Pages → smit → Settings → Variables → GEMINI_API_KEY (Secret)
+# vars = { GEMINI_API_KEY = "..." }  # или только через Dashboard

@@ -1,1040 +1,439 @@
 <!DOCTYPE html>
 
 <html lang="ru" prefix="og: https://ogp.me/ns#">
-
 <head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>ИИ-агенты, ИИ-менеджеры и CRM на заказ | SKYWAY</title>
+<meta content="Разрабатываем ИИ-агентов, ИИ-менеджеров, админ-панели и кастомные CRM. Интегрируем решения в процессы команды и существующие сервисы." name="description"/>
+<meta content="index,follow" name="robots"/>
+<meta content="ИИ-агенты, ИИ-менеджеры и CRM на заказ | SKYWAY" property="og:title"/>
+<meta content="Разрабатываем ИИ-агентов, ИИ-менеджеров, админ-панели и кастомные CRM. Интегрируем решения в процессы команды и существующие сервисы." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="https://skyway-core.ru/services/" property="og:url"/>
+<meta content="ru_RU" property="og:locale"/>
+<meta content="SKYWAY" property="og:site_name"/>
+<meta content="https://skyway-core.ru/og-image.png" property="og:image"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="image/png" property="og:image:type"/>
+<meta content="SKYWAY — сайты и цифровые системы для бизнеса" property="og:image:alt"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="ИИ-агенты, ИИ-менеджеры и CRM на заказ | SKYWAY" name="twitter:title"/>
+<meta content="Разрабатываем ИИ-агентов, ИИ-менеджеров, админ-панели и кастомные CRM. Интегрируем решения в процессы команды и существующие сервисы." name="twitter:description"/>
+<meta content="https://skyway-core.ru/og-image.png" name="twitter:image"/>
+<meta content="#080e10" name="theme-color"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"SKYWAY","url":"https://skyway-core.ru/","logo":"https://skyway-core.ru/android-chrome-192x192.png","sameAs":["https://t.me/skywayapsny","https://wa.me/79407117706"],"contactPoint":[{"@type":"ContactPoint","contactType":"sales","telephone":"+7 (940) 711-77-06","availableLanguage":["ru"],"url":"https://skyway-core.ru/contact/"}],"@id":"https://skyway-core.ru/#organization"},{"@type":"WebSite","name":"SKYWAY","url":"https://skyway-core.ru/","@id":"https://skyway-core.ru/#website","inLanguage":"ru","publisher":{"@id":"https://skyway-core.ru/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://skyway-core.ru/"},{"@type":"ListItem","position":2,"name":"Услуги","item":"https://skyway-core.ru/services/"}],"@id":"https://skyway-core.ru/services/#breadcrumb"},{"@type":"Service","name":"SEO-продвижение","description":"Технический аудит, улучшение структуры и контента страниц, анализ органического трафика.","provider":{"@id":"https://skyway-core.ru/#organization"},"url":"https://skyway-core.ru/services/#seo"},{"@type":"Service","name":"Создание сайтов","description":"Разработка лендингов, интернет-магазинов и корпоративных сайтов с нужными бизнесу интеграциями.","provider":{"@id":"https://skyway-core.ru/#organization"},"url":"https://skyway-core.ru/services/#web"},{"@type":"Service","name":"Внедрение ИИ","description":"AI-ассистенты для типовых вопросов, обработки заявок и работы с внутренними источниками данных.","provider":{"@id":"https://skyway-core.ru/#organization"},"url":"https://skyway-core.ru/services/#ai"},{"@type":"Service","name":"Кастомная CRM","description":"CRM-система по процессам команды с нужными ролями, этапами работы и интеграциями.","provider":{"@id":"https://skyway-core.ru/#organization"},"url":"https://skyway-core.ru/services/#crm"},{"@type":"WebPage","@id":"https://skyway-core.ru/services/#webpage","url":"https://skyway-core.ru/services/","name":"ИИ-агенты, ИИ-менеджеры и CRM на заказ | SKYWAY","description":"Разрабатываем ИИ-агентов, ИИ-менеджеров, админ-панели и кастомные CRM. Интегрируем решения в процессы команды и существующие сервисы.","inLanguage":"ru","isPartOf":{"@id":"https://skyway-core.ru/#website"},"publisher":{"@id":"https://skyway-core.ru/#organization"},"breadcrumb":{"@id":"https://skyway-core.ru/services/#breadcrumb"}}]}</script>
+<link href="/css/style.min.css?v=3" rel="stylesheet"/>
+<link href="/css/pages.css?v=9" rel="stylesheet"/>
+<link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" referrerpolicy="no-referrer" rel="stylesheet"/>
+<link href="https://skyway-core.ru/services/" rel="canonical"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Ubuntu:wght@300;400;500;700&amp;family=JetBrains+Mono:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
+<link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="/site.webmanifest" rel="manifest"/>
+<script defer="" src="/js/main.min.js?v=4"></script>
+<script defer="" src="/js/core.js?v=9"></script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=106787007', 'ym');
 
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-    <title>Услуги веб-студии: Создание сайтов, SEO, Реклама | SKYWAY</title>
-
-    <meta name="description" content="🎯 Профессиональные услуги веб-студии SKYWAY: ✓ Создание сайтов под ключ от 15 000₽ ✓ SEO продвижение от 25 000₽/мес ✓ Контекстная реклама Яндекс.Директ и Google Ads ✓ Гарантия результата. Прозрачная отчетность. Бесплатный аудит.">
-
-    <meta name="keywords" content="услуги веб студии, создание сайтов цена, стоимость разработки сайта, SEO продвижение стоимость, цена SEO оптимизации, настройка яндекс директ цена, заказать контекстную рекламу, разработка лендинга под ключ, сколько стоит создать сайт, продвижение сайта в топ цена, веб разработка услуги, digital маркетинг услуги, веб студия Сухум, создание сайтов Абхазия, разработка сайтов СНГ">
-
-    <meta name="robots" content="index,follow">
-
-    <meta property="og:title" content="Услуги веб-студии: Создание сайтов, SEO, Реклама | SKYWAY">
-
-    <meta property="og:description" content="Профессиональные услуги: Создание сайтов от 15 000₽, SEO продвижение от 25 000₽/мес, Контекстная реклама. Гарантия результата. Прозрачная отчетность.">
-
-    <meta property="og:type" content="website">
-
-    <meta property="og:url" content="https://skyway-core.ru/services/">
-
-    <meta property="og:locale" content="ru_RU">
-
-    <meta property="og:site_name" content="SKYWAY">
-
-    <meta property="og:image" content="https://skyway-core.ru/og-image.svg">
-
-    <meta name="twitter:card" content="summary_large_image">
-
-    <meta name="twitter:title" content="Услуги веб-студии: Создание сайтов, SEO, Реклама | SKYWAY">
-
-    <meta name="twitter:description" content="Профессиональные услуги: Создание сайтов от 15 000₽, SEO продвижение от 25 000₽/мес, Контекстная реклама. Гарантия результата. Прозрачная отчетность.">
-
-    <meta name="twitter:image" content="https://skyway-core.ru/og-image.svg">
-
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"SKYWAY","url":"https://skyway-core.ru/","logo":"https://skyway-core.ru/android-chrome-192x192.png","sameAs":["https://t.me/skywayapsny","https://wa.me/79407117706"],"contactPoint":[{"@type":"ContactPoint","contactType":"sales","telephone":"+7 (940) 711-77-06","availableLanguage":["ru"],"url":"https://skyway-core.ru/contact/","areaServed":"RU"}]},{"@type":"WebSite","name":"SKYWAY","url":"https://skyway-core.ru/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://skyway-core.ru/"},{"@type":"ListItem","position":2,"name":"Услуги","item":"https://skyway-core.ru/services/"}]},{"@type":"Service","name":"SEO-продвижение","description":"Вывод сайтов в ТОП-10 Яндекс и Google. Техническое SEO, аудит, контент-стратегия.","provider":{"@type":"Organization","name":"SKYWAY"},"areaServed":"RU","url":"https://skyway-core.ru/services/#seo"},{"@type":"Service","name":"Создание сайтов","description":"Разработка продающих сайтов: лендинги, интернет-магазины, корпоративные сайты на современном стеке.","provider":{"@type":"Organization","name":"SKYWAY"},"areaServed":"RU","url":"https://skyway-core.ru/services/#web"},{"@type":"Service","name":"Внедрение ИИ","description":"Внедрение ИИ для автоматизации бизнес-процессов, интеграция LLM и RAG-систем.","provider":{"@type":"Organization","name":"SKYWAY"},"areaServed":"RU","url":"https://skyway-core.ru/services/#ai"}]}</script>
-
-    <link rel="stylesheet" href="/css/style.css">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <link rel="canonical" href="https://skyway-core.ru/services/">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500;600;700&family=Ubuntu:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/android-chrome-192x192.png">
-    <script src="/js/main.js" defer></script>
+        ym(106787007, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+    </script>
+<noscript><div><img alt="" src="https://mc.yandex.ru/watch/106787007" style="position:absolute; left:-9999px;"/></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta content="Разрабатываем ИИ-агентов, ИИ-менеджеров, админ-панели и кастомные CRM. Интегрируем решения в процессы команды и существующие сервисы." property="og:description"/>
+<meta content="Разрабатываем ИИ-агентов, ИИ-менеджеров, админ-панели и кастомные CRM. Интегрируем решения в процессы команды и существующие сервисы." name="twitter:description"/>
 </head>
-
-<body>
-
-    <div class="scan-line"></div>
-
-    <header class="header" id="header">
-
-        <div class="container">
-
-            <div class="header-content">
-
-                <div class="logo">
-
-                    <a href="/" class="logo-link">
-
-                        <span class="logo-brand">SKYWAY</span>
-
-                        <span class="logo-sub">Цифровые решения</span>
-
-                    </a>
-
-                </div>
-
-                <nav class="main-nav">
-
-                    <ul class="nav-list">
-
-                        <li><a href="/" class="nav-link">Главная</a></li>
-
-                        <li><a href="/services/" class="nav-link active">Услуги</a></li>
-
-                        <li><a href="/case/" class="nav-link">Кейсы</a></li>
-
-                        <li><a href="/about/" class="nav-link">О нас</a></li>
-
-                        <li><a href="/contact/" class="nav-link">Контакты</a></li>
-
-                    </ul>
-
-                </nav>
-
-                <div class="header-cta desktop-only">
-                     <a href="/#contactForm" class="btn btn-primary btn-small">
-                         <i class="fas fa-paper-plane"></i> Связаться
+<body class="site-core" data-field-mode="enterprise">
+<canvas aria-hidden="true" class="core-field" id="coreField"></canvas>
+<a class="skip-link" href="#main-content">Пропустить к контенту</a>
+<div class="scan-line"></div>
+<header class="header" id="header">
+<div class="container">
+<div class="header-content">
+<div class="logo">
+<a class="logo-link" href="/">
+<span class="logo-brand">SKYWAY</span>
+<span class="logo-sub">Цифровые решения</span>
+</a>
+</div>
+<nav class="main-nav">
+<ul class="nav-list">
+<li><a class="nav-link" href="/">Главная</a></li>
+<li><a class="nav-link active" href="/services/">Услуги</a></li>
+<li><a class="nav-link" href="/about/">О нас</a></li>
+<li><a class="nav-link" href="/contact/">Контакты</a></li>
+</ul>
+</nav>
+<div class="header-cta desktop-only">
+<a class="btn btn-primary btn-small" href="/#contactForm">
+<i class="fas fa-paper-plane"></i> Связаться
                      </a>
-                </div>
+</div>
+<button aria-expanded="false" aria-label="Открыть меню" class="mobile-menu-btn" id="mobileMenuBtn">
+<i aria-hidden="true" class="fas fa-bars"></i>
+</button>
+</div>
+</div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+<div class="mobile-menu-content">
+<button aria-label="Закрыть меню" class="mobile-menu-close" id="mobileMenuClose">
+<i aria-hidden="true" class="fas fa-times"></i>
+</button>
+<a class="mobile-nav-link" href="/">Главная</a>
+<a class="mobile-nav-link active" href="/services/">Услуги</a>
+<a class="mobile-nav-link" href="/about/">О нас</a>
+<a class="mobile-nav-link" href="/contact/">Контакты</a>
+<a class="btn btn-primary btn-block mobile-only" href="/#contactForm">Обсудить проект</a>
+</div>
+</div>
+<!-- Hero Banner Section -->
+<section class="banner hero-services">
+<!-- Matrix Canvas Background -->
+<div class="container">
+<div class="banner-content">
+<p class="page-kicker">УСЛУГИ</p>
+<h1 class="banner-title">ИИ-агенты, менеджеры и CRM</h1>
+<p class="banner-subtitle">Создаём ИИ-агентов и менеджеров, админ-панели и кастомные CRM. Также разрабатываем сайты и помогаем с SEO.</p>
+<div class="banner-actions">
+<a class="btn btn-primary btn-large" href="#ai">
+<i class="fas fa-robot"></i> ИИ-решения
 
-                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    </a>
+<a class="btn btn-outline btn-large" href="#crm">
+<i class="fas fa-diagram-project"></i> Кастомная CRM
 
-                    <i class="fas fa-bars"></i>
+                    </a>
+<a class="btn btn-outline btn-large" href="#web">
+<i class="fas fa-code"></i> Сайты и SEO
 
-                </button>
+                    </a>
+</div>
+</div>
+</div>
+</section>
+<main id="main-content">
+<nav aria-label="Хлебные крошки">
+<ol class="breadcrumbs container">
+<li><a href="/">Главная</a></li>
+<li aria-current="page">Услуги</li>
+</ol>
+</nav>
+<section class="services section">
+<div class="container">
+<!-- Создание сайтов - ОБНОВЛЕНО (ПРИОРИТЕТНАЯ УСЛУГА) -->
+<div class="service-detail-card animate-on-scroll" id="ai">
+<div class="service-header">
+<div class="service-icon-large">
+<i class="fas fa-robot"></i>
+</div>
+<div>
+<h2 class="service-title-large">Внедрение ИИ</h2>
+<!-- ОБНОВЛЕННЫЙ ТЕГЛАЙН -->
+<p class="service-tagline">Разрабатываем ИИ-агентов и менеджеров для диалогов с клиентами, а также админ-панели для контроля и настройки этих систем.</p>
+</div>
+</div>
+<div class="service-content">
+<!-- ОБНОВЛЕННЫЙ ТЕКСТ -->
+<p>Сначала описываем рабочий сценарий, затем настраиваем инструкции, подключаем нужные данные и проверяем систему на примерах из вашей работы.</p>
+<h3 class="heading-green">Варианты внедрения</h3>
+<div class="approaches-grid">
+<article aria-labelledby="ai-agent-title" class="approach-card" role="region">
+<header class="approach-header"><div aria-hidden="true" class="approach-icon"><i class="fas fa-robot"></i></div><div class="approach-title"><h4 id="ai-agent-title">ИИ-агент</h4></div></header>
+<div class="approach-body"><p>Выполняет заданный сценарий: отвечает на вопросы, собирает сведения и помогает обработать обращение.</p><ul class="approach-features"><li>Работа по материалам компании</li><li>Интеграция с выбранными каналами</li><li>Передача диалога сотруднику</li></ul></div>
+</article>
+<article aria-labelledby="ai-manager-title" class="approach-card" role="region">
+<header class="approach-header"><div aria-hidden="true" class="approach-icon"><i class="fas fa-headset"></i></div><div class="approach-title"><h4 id="ai-manager-title">ИИ-менеджер</h4></div></header>
+<div class="approach-body"><p>Ведёт первичный диалог с клиентом и передаёт менеджеру информацию по согласованному сценарию.</p><ul class="approach-features"><li>Уточнение потребности</li><li>Сбор данных для заявки</li><li>Передача информации в CRM</li></ul></div>
+</article>
+<article aria-labelledby="ai-admin-title" class="approach-card" id="ai-admin" role="region">
+<header class="approach-header"><div aria-hidden="true" class="approach-icon"><i class="fas fa-table-columns"></i></div><div class="approach-title"><h4 id="ai-admin-title">ИИ-админка</h4></div></header>
+<div class="approach-body"><p>Панель управления для команды: обращения, история диалогов, материалы и настройки агента.</p><ul class="approach-features"><li>Просмотр диалогов и обращений</li><li>Управление базой знаний</li><li>Настройка доступа и сценариев</li></ul></div>
+</article>
+</div>
+<div class="tech-stack-service">
+<h4><i class="fas fa-chart-bar"></i> Технологический стек ИИ</h4>
+<div class="tech-tags">
+<span class="tech-tag">OpenAI API / Claude</span>
+<span class="tech-tag">RAG (Retrieval-Augmented Generation)</span>
+<span class="tech-tag">Python (LangChain / LlamaIndex)</span>
+<span class="tech-tag">Векторные БД (Pinecone / Chroma)</span>
+<span class="tech-tag">Интеграция с Bnovo / CRM</span>
+<span class="tech-tag">Автоматизация API</span>
+</div>
+</div>
+</div>
+</div>
+<div class="service-detail-card animate-on-scroll service-featured" id="web">
+<div class="service-header">
+<div class="service-icon-large">
+<i class="fas fa-code"></i>
+</div>
+<div>
+<h2 class="service-title-large">Создание сайтов</h2>
+<!-- ОБНОВЛЕННЫЙ ТЕГЛАЙН -->
+<p class="service-tagline">Проектируем сайт под задачи бизнеса: от лендинга до сервиса с каталогом и интеграциями.</p>
+</div>
+</div>
+<div class="service-content">
+<!-- ОБНОВЛЕННЫЙ ТЕКСТ -->
+<p>Начинаем со структуры и сценариев пользователя, затем разрабатываем интерфейс, подключаем нужные сервисы и проверяем работу на разных устройствах.</p>
+<h3 class="heading-green">Стоимость и сроки разработки</h3>
+<div class="packages-grid">
+<div class="package-card recommended">
+<div class="package-name">Лендинг</div>
+<div class="package-price">от 15 000 ₽</div>
+<ul class="package-features">
+<li><i class="fas fa-check"></i> Срок разработки: 7-14 дней</li>
+<li><i class="fas fa-check"></i> Оптимизация скорости загрузки</li>
+<li><i class="fas fa-check"></i> Адаптивный дизайн</li>
+<li><i class="fas fa-check"></i> Базовая подготовка к индексации</li>
+<li><i class="fas fa-check"></i> Подключение аналитики</li>
+</ul>
+<a class="btn btn-primary btn-small" href="/#contactForm">Заказать</a>
+</div>
+<div class="package-card">
+<div class="package-name">Многостраничный сайт</div>
+<div class="package-price">от 40 000 ₽</div>
+<ul class="package-features">
+<li><i class="fas fa-check"></i> Срок разработки: 20-40 дней</li>
+<li><i class="fas fa-check"></i> Оптимизация скорости загрузки</li>
+<li><i class="fas fa-check"></i> Адаптивный дизайн</li>
+<li><i class="fas fa-check"></i> Расширенная структура</li>
+<li><i class="fas fa-check"></i> Интеграция с системами</li>
+<li><i class="fas fa-database"></i> Управление контентом через CMS</li>
+</ul>
+<a class="btn btn-primary btn-small" href="/#contactForm">Заказать</a>
+</div>
+<div class="package-card">
+<div class="package-name">Сайт с функционалом продаж</div>
+<div class="package-price">от 75 000 ₽</div>
+<ul class="package-features">
+<li><i class="fas fa-check"></i> Срок разработки: 30-60 дней</li>
+<li><i class="fas fa-check"></i> Оптимизация скорости загрузки</li>
+<li><i class="fas fa-check"></i> Адаптивный дизайн</li>
+<li><i class="fas fa-check"></i> Система заказов и оплаты</li>
+<li><i class="fas fa-check"></i> Интеграция с системами аналитики</li>
+<li><i class="fas fa-box"></i> Настройка размещения и обновлений</li>
+</ul>
+<a class="btn btn-primary btn-small" href="/#contactForm">Заказать</a>
+</div>
+</div>
+<h3 class="heading-green">Наш процесс разработки:</h3>
+<div class="process-timeline process-timeline-services" id="development-process">
+<!-- ОБНОВЛЕННЫЙ ПРОЦЕСС -->
+<div class="process-row">
+<div class="process-step-badge">1</div>
+<div class="process-step-panel">
+<h4>Проектирование интерфейсов</h4>
+<p>Обсуждаем цели и аудиторию. Проектируем структуру, путь к заявке и макеты основных страниц.</p>
+</div>
+</div>
+<div class="process-row">
+<div class="process-step-badge">2</div>
+<div class="process-step-panel">
+<h4>Разработка и оптимизация</h4>
+<p>Разрабатываем интерфейс и серверную часть. Оптимизируем изображения, загрузку ресурсов и работу страниц на мобильных устройствах.</p>
+</div>
+</div>
+<div class="process-row">
+<div class="process-step-badge">3</div>
+<div class="process-step-panel">
+<h4>Интеграция и запуск</h4>
+<p>Подключаем CRM, аналитику и оплату. Проверяем основные сценарии, настраиваем индексацию, добавляем контент и запускаем сайт.</p>
+</div>
+</div>
+</div>
+<div class="tech-stack-service">
+<h4><i class="fas fa-cogs"></i> Технологии разработки</h4>
+<div class="tech-tags">
+<span class="tech-tag">HTML5/CSS3</span>
+<span class="tech-tag">JavaScript (ES6+)</span>
+<span class="tech-tag">React.js</span>
+<span class="tech-tag">Vue.js</span>
+<span class="tech-tag">Next.js</span>
+<span class="tech-tag">Python/Django</span>
+<span class="tech-tag">PHP/Laravel</span>
+<span class="tech-tag">MySQL/PostgreSQL</span>
+<span class="tech-tag">REST API</span>
+</div>
+</div>
+</div>
+</div>
+<!-- SEO-продвижение - ОБНОВЛЕНО -->
+<div class="service-detail-card animate-on-scroll" id="seo">
+<div class="service-header">
+<div class="service-icon-large">
+<i class="fas fa-chart-line"></i>
+</div>
+<div>
+<h2 class="service-title-large">SEO-продвижение</h2>
+<!-- ОБНОВЛЕННЫЙ ТЕГЛАЙН -->
+<p class="service-tagline">Работаем над тем, чтобы страницы отвечали на запросы клиентов и были понятны поисковым системам.</p>
+</div>
+</div>
+<div class="service-content">
+<!-- ОБНОВЛЕННЫЙ ТЕКСТ -->
+<p>Проверяем техническое состояние сайта, структуру страниц и поисковые запросы. Составляем план правок, улучшаем контент и отслеживаем органический трафик.</p>
+<h3 class="heading-green">Что входит в услугу:</h3>
+<div class="packages-grid">
+<div class="package-card">
+<div class="package-name">СТАРТ</div>
+<div class="package-price">от 25 000₽/мес</div>
+<ul class="package-features">
+<!-- ОБНОВЛЕННЫЕ ФИЧИ -->
+<li><i class="fas fa-check"></i> Проектирование структуры под требования поисковых систем</li>
+<li><i class="fas fa-check"></i> Устранение критических ошибок, замедляющих индексацию</li>
+<li><i class="fas fa-check"></i> Анализ страниц входа и пути пользователя</li>
+<li><i class="fas fa-check"></i> Ежемесячный отчет по видимости</li>
+</ul>
+<a class="btn btn-outline btn-small" href="/#contactForm">Обсудить</a>
+</div>
+<div class="package-card recommended">
+<div class="package-name">ОПТИМА</div>
+<div class="package-price">от 45 000₽/мес</div>
+<ul class="package-features">
+<!-- ОБНОВЛЕННЫЕ ФИЧИ -->
+<li><i class="fas fa-check"></i> Все из пакета СТАРТ</li>
+<li><i class="fas fa-check"></i> Полное техническое SEO и аудит производительности</li>
+<li><i class="fas fa-check"></i> Улучшение структуры и удобства страниц</li>
+<li><i class="fas fa-check"></i> Контент, отвечающий на запросы клиентов</li>
+<li><i class="fas fa-check"></i> Региональное продвижение и карты</li>
+<li><i class="fas fa-check"></i> Еженедельные отчеты и корректировки</li>
+</ul>
+<a class="btn btn-primary btn-small" href="/#contactForm">Выбрать пакет</a>
+</div>
+<div class="package-card">
+<div class="package-name">ПРОФИ</div>
+<div class="package-price">от 75 000₽/мес</div>
+<ul class="package-features">
+<!-- ОБНОВЛЕННЫЕ ФИЧИ -->
+<li><i class="fas fa-check"></i> Все из пакета ОПТИМА</li>
+<li><i class="fas fa-check"></i> Работа с согласованными регионами</li>
+<li><i class="fas fa-check"></i> Сквозная аналитика и интеграция с CRM</li>
+<li><i class="fas fa-check"></i> Автоматизация отчетности и мониторинга</li>
+<li><i class="fas fa-check"></i> Регулярное обсуждение результатов и плана</li>
+<li><i class="fas fa-check"></i> Согласованный регламент поддержки</li>
+</ul>
+<a class="btn btn-outline btn-small" href="/#contactForm">Обсудить</a>
+</div>
+</div>
+<div class="tech-stack-service">
+<h4><i class="fas fa-tools"></i> Инструменты и технологии</h4>
+<div class="tech-tags">
+<span class="tech-tag">Яндекс.Вебмастер</span>
+<span class="tech-tag">Google Search Console</span>
+<span class="tech-tag">Ahrefs</span>
+<span class="tech-tag">Serpstat</span>
+<span class="tech-tag">KeyCollector</span>
+<span class="tech-tag">Скорость загрузки</span>
+<span class="tech-tag">GTmetrix</span>
+<span class="tech-tag">Google Analytics 4</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Миграция с конструкторов -->
+<div class="migration-banner animate-on-scroll">
+<div class="migration-content">
+<h3><i class="fas fa-shuttle-van"></i> Переезд на чистый код</h3>
+<p>Ваш сайт на Tilda или Wix стал тесным? Перенесём проект на самостоятельный стек, сохраняя важные страницы, адреса и поисковые сигналы.</p>
+<ul class="migration-list">
+<li><i class="fas fa-bolt"></i> Оптимизация загрузки страниц</li>
+<li><i class="fas fa-check-circle"></i> Выбор хостинга и сервисов под ваш бюджет</li>
+<li><i class="fas fa-lock"></i> Полный контроль над кодом и данными</li>
+</ul>
+</div>
+<a class="btn btn-outline" href="/#contactForm">Рассчитать стоимость переезда</a>
+</div>
+<!-- Контекстная реклама - ОБНОВЛЕНО -->
+<!-- Принципы работы -->
+</div>
+</section>
+<section aria-labelledby="crm-heading" class="core-section section" id="crm">
+<div class="container">
+<div class="section-header">
+<p class="page-kicker">CRM НА ЗАКАЗ</p>
+<h2 class="section-title" id="crm-heading">Кастомная CRM под процессы вашей команды</h2>
+<p class="section-subtitle">Проектируем рабочее пространство вокруг того, как вы ведёте клиентов и задачи. CRM можно связать с ИИ-агентами, сайтом и другими нужными системами.</p>
+</div>
+<div class="approaches-grid">
+<article class="approach-card"><h3>Рабочий процесс</h3><p>Карточки, этапы, задачи и уведомления по правилам вашей команды.</p></article>
+<article class="approach-card"><h3>Доступ и обзор</h3><p>Роли сотрудников, нужные данные и обзор текущих обращений.</p></article>
+<article class="approach-card"><h3>Интеграции</h3><p>Обмен данными с сайтом, мессенджерами и ИИ-инструментами по согласованному сценарию.</p></article>
+</div>
+</div>
+</section>
+<section class="contact section section-bg-green-gradient" id="contact">
+<div class="container">
+<div class="section-header section-header-center">
+<h2 class="section-title">Обсудим ваш проект</h2>
+<p class="section-subtitle section-subtitle-narrow">
 
-            </div>
-
-        </div>
-
-    </header>
-
-    <div class="mobile-menu" id="mobileMenu">
-
-        <div class="mobile-menu-content">
-
-            <button class="mobile-menu-close" id="mobileMenuClose">
-
-                <i class="fas fa-times"></i>
-
-            </button>
-
-            <a href="/" class="mobile-nav-link">Главная</a>
-
-            <a href="/services/" class="mobile-nav-link active">Услуги</a>
-
-            <a href="/case/" class="mobile-nav-link">Кейсы</a>
-
-            <a href="/about/" class="mobile-nav-link">О нас</a>
-
-            <a href="/contact/" class="mobile-nav-link">Контакты</a>
-
-            <a href="/#contactForm" class="btn btn-primary btn-block mobile-only">Обсудить проект</a>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- Hero Banner Section -->
-
-    <section class="banner hero-services">
-
-        <!-- Matrix Canvas Background -->
-
-        <canvas id="matrix-services"></canvas>
-
-        <div class="container">
-
-            <div class="banner-content">
-
-                <h1 class="banner-title">
-                    <span class="title-line">Комплексные цифровые решения</span>
-                    <span class="title-line typed-text" id="typedText"></span>
-                    <span class="typed-cursor">|</span>
-                </h1>
-
-                <p class="banner-subtitle">
-
-                    Мы не просто создаем сайты и настраиваем рекламу. Мы строим цифровую инфраструктуру, которая конвертирует трафик в прибыль, используя инженерный подход и сквозную аналитику.
+                    Расскажите о задаче — предложим состав работ и оценим сроки и стоимость.
 
                 </p>
-
-                
-
-                <div class="banner-actions">
-
-                    <a href="#seo" class="btn btn-primary btn-large">
-
-                        <i class="fas fa-chart-line"></i> SEO-продвижение
+<div class="hero-actions hero-actions-center">
+<a class="btn btn-telegram btn-large" href="https://t.me/skywayapsny" target="_blank">
+<i class="fab fa-telegram"></i> Обсудить в Telegram
 
                     </a>
-
-                    <a href="#web" class="btn btn-outline btn-large">
-
-                        <i class="fas fa-code"></i> Разработка сайтов
+<a class="btn btn-whatsapp btn-large" href="https://wa.me/79407117706" target="_blank">
+<i class="fab fa-whatsapp"></i> Обсудить в WhatsApp
 
                     </a>
-
-                    <a href="#ai" class="btn btn-outline btn-large">
-
-                        <i class="fas fa-brain"></i> Внедрение ИИ
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <main id="main-content">
-        <nav aria-label="Хлебные крошки">
-            <ol class="breadcrumbs container">
-                <li><a href="/">Главная</a></li>
-                <li aria-current="page">Услуги</li>
-            </ol>
-        </nav>
-    <section class="services section">
-
-        <div class="container">
-            <div class="services-nav animate-on-scroll" aria-label="Навигация по услугам">
-
-                <h2 class="services-nav-title"><i class="fas fa-list" aria-hidden="true"></i> Навигация по услугам</h2>
-
-                <ul class="services-nav-list">
-
-                    <li><a href="#web" class="active"><i class="fas fa-code"></i> Создание сайтов</a></li>
-
-                    <li><a href="#seo"><i class="fas fa-chart-line"></i> SEO-продвижение</a></li>
-
-                    <li><a href="#ai"><i class="fas fa-brain"></i> Внедрение ИИ</a></li>
-
-                    <li><a href="#principles"><i class="fas fa-handshake"></i> Принципы работы</a></li>
-
-                    <li><a href="/#contactForm"><i class="fas fa-rocket"></i> Обсудить проект</a></li>
-
-                </ul>
-
-            </div>
-
-            <!-- Создание сайтов - ОБНОВЛЕНО (ПРИОРИТЕТНАЯ УСЛУГА) -->
-
-            <div class="service-detail-card animate-on-scroll service-featured" id="web">
-
-                <div class="service-header">
-
-                    <div class="service-icon-large">
-
-                        <i class="fas fa-code"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h2 class="service-title-large">Создание сайтов</h2>
-
-                        <!-- ОБНОВЛЕННЫЙ ТЕГЛАЙН -->
-
-                        <p class="service-tagline">Сайт — это инструмент для продаж, а не картинка. Скорость, адаптивность, готовность к рекламе сразу после запуска.</p>
-
-                    </div>
-
-                </div>
-
-                
-
-                <div class="service-content">
-
-                    <!-- ОБНОВЛЕННЫЙ ТЕКСТ -->
-
-                    <p>Мы создаем сайты как полноценные бизнес-инструменты. Каждый проект проходит полный цикл: от проектирования пользовательского опыта до интеграции с аналитикой и системами учёта. Фокус на производительность, адаптивность и конверсию.</p>
-
-                    
-
-                    <h3 class="heading-green">Стоимость и сроки разработки</h3>
-
-                    <div class="packages-grid">
-                        <div class="package-card recommended">
-                            <div class="package-name">Лендинг</div>
-                            <div class="package-price">от 15 000 ₽</div>
-                            <ul class="package-features">
-                                <li><i class="fas fa-check"></i> Срок разработки: 7-14 дней</li>
-                                <li><i class="fas fa-check"></i> Производительность 90+ баллов</li>
-                                <li><i class="fas fa-check"></i> Адаптивный дизайн</li>
-                                <li><i class="fas fa-check"></i> SEO-оптимизация</li>
-                                <li><i class="fas fa-check"></i> Готовность к запуску рекламы</li>
-                            </ul>
-                            <a href="/#contactForm" class="btn btn-primary btn-small">Заказать</a>
-                        </div>
-
-                        <div class="package-card">
-                            <div class="package-name">Многостраничный сайт</div>
-                            <div class="package-price">от 40 000 ₽</div>
-                            <ul class="package-features">
-                                <li><i class="fas fa-check"></i> Срок разработки: 20-40 дней</li>
-                                <li><i class="fas fa-check"></i> Производительность 90+ баллов</li>
-                                <li><i class="fas fa-check"></i> Адаптивный дизайн</li>
-                                <li><i class="fas fa-check"></i> Расширенная структура</li>
-                                <li><i class="fas fa-check"></i> Интеграция с системами</li>
-                                <li><i class="fas fa-database"></i> Управление контентом через Directus CRM</li>
-                            </ul>
-                            <a href="/#contactForm" class="btn btn-primary btn-small">Заказать</a>
-                        </div>
-
-                        <div class="package-card">
-                            <div class="package-name">Сайт с функционалом продаж</div>
-                            <div class="package-price">от 75 000 ₽</div>
-                            <ul class="package-features">
-                                <li><i class="fas fa-check"></i> Срок разработки: 30-60 дней</li>
-                                <li><i class="fas fa-check"></i> Производительность 90+ баллов</li>
-                                <li><i class="fas fa-check"></i> Адаптивный дизайн</li>
-                                <li><i class="fas fa-check"></i> Система заказов и оплаты</li>
-                                <li><i class="fas fa-check"></i> Интеграция с системами аналитики</li>
-                                <li><i class="fas fa-box"></i> Контейнеризация (Docker) и CI/CD</li>
-                            </ul>
-                            <a href="/#contactForm" class="btn btn-primary btn-small">Заказать</a>
-                        </div>
-                    </div>
-
-                    <h3 class="heading-green">Наш процесс разработки:</h3>
-
-                    
-
-                    <div class="process-timeline process-timeline-services" id="development-process">
-
-                        
-
-                        <!-- ОБНОВЛЕННЫЙ ПРОЦЕСС -->
-
-                        <div class="process-row">
-
-                            <div class="process-step-badge">1</div>
-
-                            <div class="process-step-panel">
-
-                                <h4>Проектирование интерфейсов</h4>
-
-                                <p>Изучаем бизнес-цели и целевую аудиторию. Создаем прототипы и дизайн-макеты с фокусом на пользовательский опыт и конверсию.</p>
-
-                            </div>
-
-                        </div>
-
-                        
-
-                        <div class="process-row">
-
-                            <div class="process-step-badge">2</div>
-
-                            <div class="process-step-panel">
-
-                                <h4>Разработка на современном стеке</h4>
-
-                                <p>Фронтенд и бэкенд разработка на современных технологиях. Чистый код без лишнего мусора, высокая скорость загрузки (90+ баллов производительности).</p>
-
-                            </div>
-
-                        </div>
-
-                        
-
-                        <div class="process-row">
-
-                            <div class="process-step-badge">3</div>
-
-                            <div class="process-step-panel">
-
-                                <h4>Интеграция и запуск</h4>
-
-                                <p>Интеграция с CRM, системами аналитики и платежными системами. Тестирование, SEO-базовая оптимизация, наполнение контентом и запуск.</p>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    
-
-                    <div class="tech-stack-service">
-
-                        <h4><i class="fas fa-cogs"></i> Технологический стэк</h4>
-
-                        <div class="tech-tags">
-
-                            <span class="tech-tag">HTML5/CSS3</span>
-
-                            <span class="tech-tag">JavaScript (ES6+)</span>
-
-                            <span class="tech-tag">React.js</span>
-
-                            <span class="tech-tag">Vue.js</span>
-
-                            <span class="tech-tag">Next.js</span>
-
-                            <span class="tech-tag">Python/Django</span>
-
-                            <span class="tech-tag">PHP/Laravel</span>
-
-                            <span class="tech-tag">MySQL/PostgreSQL</span>
-
-                            <span class="tech-tag">REST API</span>
-
-                        </div>
-
-                    </div>
-
-                    
-
-                    <div class="service-cases">
-
-                        <div class="case-card">
-
-                            <div class="case-result">Скорость загрузки 0.8 сек</div>
-
-                            <div class="case-description">Лендинг для IT-компании. Достигли 98 баллов производительности, что повысило конверсию на 34%.</div>
-
-                        </div>
-
-                        <div class="case-card">
-
-                            <div class="case-result">Мобильный трафик +120%</div>
-
-                            <div class="case-description">Интернет-магазин одежды. После полного перехода на adaptive design конверсия с мобильных выросла в 2.2 раза.</div>
-
-                        </div>
-
-                        <div class="case-card">
-
-                            <div class="case-result">Интеграция с 3 CRM</div>
-
-                            <div class="case-description">Сервисный центр. Автоматизировали сбор заявок с сайта в AmoCRM, Bitrix24 и Google Sheets одновременно.</div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            
-
-            <!-- SEO-продвижение - ОБНОВЛЕНО -->
-
-            <div class="service-detail-card animate-on-scroll" id="seo">
-
-                <div class="service-header">
-
-                    <div class="service-icon-large">
-
-                        <i class="fas fa-chart-line"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h2 class="service-title-large">SEO-продвижение</h2>
-
-                        <!-- ОБНОВЛЕННЫЙ ТЕГЛАЙН -->
-
-                        <p class="service-tagline">Работаем не над «позициями», а над «видимостью и авторитетом» вашего сайта.</p>
-
-                    </div>
-
-                </div>
-
-                
-
-                <div class="service-content">
-
-                    <!-- ОБНОВЛЕННЫЙ ТЕКСТ -->
-
-                    <p>Выводим сайты в ТОП-10 Яндекс и Google. Мы фокусируемся на техническом здоровье сайта и поведенческих факторах, а не просто на количестве ключевых слов. Наша цель — устойчивый рост органического трафика, который конвертируется в заявки.</p>
-
-                    
-
-                    <h3 class="heading-green">Что входит в услугу:</h3>
-
-                    
-
-                    <div class="packages-grid">
-
-                        <div class="package-card">
-
-                            <div class="package-name">СТАРТ</div>
-
-                            <div class="package-price">от 25 000₽/мес</div>
-
-                            <ul class="package-features">
-
-                                <!-- ОБНОВЛЕННЫЕ ФИЧИ -->
-
-                                <li><i class="fas fa-check"></i> Проектирование структуры под требования поисковых систем</li>
-
-                                <li><i class="fas fa-check"></i> Устранение критических ошибок, замедляющих индексацию</li>
-
-                                <li><i class="fas fa-check"></i> Базовый анализ поведенческих факторов</li>
-
-                                <li><i class="fas fa-check"></i> Ежемесячный отчет по видимости</li>
-
-                            </ul>
-
-                            <a href="/#contactForm" class="btn btn-outline btn-small">Обсудить</a>
-
-                        </div>
-
-                        
-
-                        <div class="package-card recommended">
-
-                            <div class="package-name">ОПТИМА</div>
-
-                            <div class="package-price">от 45 000₽/мес</div>
-
-                            <ul class="package-features">
-
-                                <!-- ОБНОВЛЕННЫЕ ФИЧИ -->
-
-                                <li><i class="fas fa-check"></i> Все из пакета СТАРТ</li>
-
-                                <li><i class="fas fa-check"></i> Полное техническое SEO и аудит производительности</li>
-
-                                <li><i class="fas fa-check"></i> Глубокая работа с поведенческими факторами</li>
-
-                                <li><i class="fas fa-check"></i> Оптимизация контента под поисковые интенты</li>
-
-                                <li><i class="fas fa-check"></i> Региональное продвижение и карты</li>
-
-                                <li><i class="fas fa-check"></i> Еженедельные отчеты и корректировки</li>
-
-                            </ul>
-
-                            <a href="/#contactForm" class="btn btn-primary btn-small">Выбрать пакет</a>
-
-                        </div>
-
-                        
-
-                        <div class="package-card">
-
-                            <div class="package-name">ПРОФИ</div>
-
-                            <div class="package-price">от 75 000₽/мес</div>
-
-                            <ul class="package-features">
-
-                                <!-- ОБНОВЛЕННЫЕ ФИЧИ -->
-
-                                <li><i class="fas fa-check"></i> Все из пакета ОПТИМА</li>
-
-                                <li><i class="fas fa-check"></i> Комплексное продвижение по всем регионам</li>
-
-                                <li><i class="fas fa-check"></i> Сквозная аналитика и интеграция с CRM</li>
-
-                                <li><i class="fas fa-check"></i> Автоматизация отчетности и мониторинга</li>
-
-                                <li><i class="fas fa-check"></i> Персональный менеджер и стратегические сессии</li>
-
-                                <li><i class="fas fa-check"></i> Приоритетная поддержка 24/7</li>
-
-                            </ul>
-
-                            <a href="/#contactForm" class="btn btn-outline btn-small">Обсудить</a>
-
-                        </div>
-
-                    </div>
-
-                    
-
-                    <div class="tech-stack-service">
-
-                        <h4><i class="fas fa-tools"></i> Инструменты и технологии</h4>
-
-                        <div class="tech-tags">
-
-                            <span class="tech-tag">Яндекс.Вебмастер</span>
-
-                            <span class="tech-tag">Google Search Console</span>
-
-                            <span class="tech-tag">Ahrefs</span>
-
-                            <span class="tech-tag">Serpstat</span>
-
-                            <span class="tech-tag">KeyCollector</span>
-
-                            <span class="tech-tag">Скорость загрузки</span>
-
-                            <span class="tech-tag">GTmetrix</span>
-
-                            <span class="tech-tag">Google Analytics 4</span>
-
-                        </div>
-
-                    </div>
-
-                    
-
-                    <div class="service-cases">
-
-                        <!-- ОБНОВЛЕННЫЕ КЕЙСЫ С КОНКРЕТИКОЙ -->
-
-                        <div class="case-card">
-
-                            <div class="case-result">+245% трафика за 8 месяцев</div>
-
-                            <div class="case-description">Интернет-магазин автозапчастей. За счет технической оптимизации и работы с контентом вывели в ТОП-10 по 187 коммерческим запросам.</div>
-
-                        </div>
-
-                        <div class="case-card">
-
-                            <div class="case-result">Стоимость лида снижена на 40%</div>
-
-                            <div class="case-description">Студия дизайна интерьеров. Улучшили поведенческие факторы и структуру сайта, что повысило конверсию с органики на 65%.</div>
-
-                        </div>
-
-                        <div class="case-card">
-
-                            <div class="case-result">+94% заявок с органики</div>
-
-                            <div class="case-description">Юридическая компания. После устранения технических ошибок и оптимизации посадочных страниц конверсия выросла почти в 2 раза.</div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            
-            <!-- Миграция с конструкторов -->
-            <div class="migration-banner animate-on-scroll">
-                <div class="migration-content">
-                    <h3><i class="fas fa-shuttle-van"></i> Переезд на чистый код</h3>
-                    <p>Ваш сайт на Tilda или Wix стал тесным? Перенесем проект на независимый стек с сохранением дизайна и SEO-позиций.</p>
-                    <ul class="migration-list">
-                        <li><i class="fas fa-bolt"></i> Ускорение загрузки в 3-5 раз</li>
-                        <li><i class="fas fa-check-circle"></i> Никаких ежемесячных платежей за платформу</li>
-                        <li><i class="fas fa-lock"></i> Полный контроль над кодом и данными</li>
-                    </ul>
-                </div>
-                <a href="/#contactForm" class="btn btn-outline">Рассчитать стоимость переезда</a>
-            </div>
-            
-
-            <!-- Контекстная реклама - ОБНОВЛЕНО -->
-
-            <div class="service-detail-card animate-on-scroll" id="ai">
-
-                <div class="service-header">
-
-                    <div class="service-icon-large">
-
-                        <i class="fas fa-robot"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h2 class="service-title-large">Внедрение ИИ</h2>
-
-                        <!-- ОБНОВЛЕННЫЙ ТЕГЛАЙН -->
-
-                        <p class="service-tagline">Нестандартная автоматизация бизнес-процессов с помощью ИИ. От интеллектуальных автоответчиков до автономных систем обработки заявок.</p>
-
-                    </div>
-
-                </div>
-
-                
-
-                <div class="service-content">
-
-                    <!-- ОБНОВЛЕННЫЙ ТЕКСТ -->
-                    <p>Внедряем ИИ-решения для автоматизации рутинных задач и оптимизации бизнес-процессов. От простых чат-ботов до сложных нейросетевых систем, обученных на ваших данных. Фокус на результат и интеграцию с существующими системами.</p>
-
-                    
-
-                    <div class="service-cases">
-
-                        <!-- ОБНОВЛЕННЫЕ КЕЙСЫ С КОНКРЕТИКОЙ -->
-
-                        <div class="case-card">
-                            <div class="case-result">+50% конверсии заявок</div>
-                            <div class="case-description">Интернет-магазин. Внедрили ИИ-систему автоматической обработки и квалификации заявок, что повысило конверсию на 50% за счет мгновенного персонализированного ответа.</div>
-                        </div>
-
-                        <div class="case-card">
-                            <div class="case-result">Снижение нагрузки на 30%</div>
-                            <div class="case-description">Сервисная компания. ИИ-агент на базе GPT обрабатывает 70% входящих запросов клиентов, снижая нагрузку на операторов на 30% и улучшая качество обслуживания.</div>
-                        </div>
-
-                        <div class="case-card">
-                            <div class="case-result">Ускорение поиска на 40%</div>
-                            <div class="case-description">Корпорация. RAG-система для внутреннего поиска по базе знаний ускорила доступ к информации на 40%, повысив эффективность работы отдела продаж.</div>
-                        </div>
-
-                    </div>
-
-                    
-                    <h3 class="heading-green">Наши подходы:</h3>
-
-                    <div class="approaches-grid">
-                        <article class="approach-card" role="region" aria-labelledby="ai-chatbots-title">
-                            <header class="approach-header">
-                                <div class="approach-icon" aria-hidden="true">
-                                    <i class="fas fa-comments"></i>
-                                </div>
-                                <div class="approach-title">
-                                    <h4 id="ai-chatbots-title">ИИ-чатботы</h4>
-                                </div>
-                            </header>
-                            <div class="approach-body">
-                                <ul class="approach-features">
-                                    <li>Интеграция с Telegram/WhatsApp</li>
-                                    <li>Сценарии продаж и поддержки</li>
-                                    <li>Обучение на скриптах компании</li>
-                                    <li>Мгновенные ответы 24/7</li>
-                                    <li>Квалификация лидов</li>
-                                </ul>
-                            </div>
-                        </article>
-
-                        <article class="approach-card" role="region" aria-labelledby="ai-automation-title">
-                            <header class="approach-header">
-                                <div class="approach-icon" aria-hidden="true">
-                                    <i class="fas fa-cogs"></i>
-                                </div>
-                                <div class="approach-title">
-                                    <h4 id="ai-automation-title">Автоматизация процессов</h4>
-                                </div>
-                            </header>
-                            <div class="approach-body">
-                                <ul class="approach-features">
-                                    <li>Анализ и обработка документов</li>
-                                    <li>Генерация отчетов и контента</li>
-                                    <li>Интеграция с CRM и Task-трекерами</li>
-                                    <li>Классификация обращений</li>
-                                    <li>RAG (База знаний компании)</li>
-                                </ul>
-                            </div>
-                        </article>
-                    </div>
-
-                    
-
-                    <div class="tech-stack-service">
-
-                        <h4><i class="fas fa-chart-bar"></i> Технологический стек ИИ</h4>
-
-                        <div class="tech-tags">
-
-                            <span class="tech-tag">OpenAI API / Claude</span>
-
-                            <span class="tech-tag">RAG (Retrieval-Augmented Generation)</span>
-
-                            <span class="tech-tag">Python (LangChain / LlamaIndex)</span>
-
-                            <span class="tech-tag">Векторные БД (Pinecone / Chroma)</span>
-
-                            <span class="tech-tag">Интеграция с Bnovo / CRM</span>
-
-                            <span class="tech-tag">Автоматизация API</span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            
-
-            <!-- Принципы работы -->
-
-            <div class="service-detail-card animate-on-scroll" id="principles">
-
-                <div class="service-header">
-
-                    <div class="service-icon-large">
-
-                        <i class="fas fa-handshake"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h2 class="service-title-large">Принципы работы</h2>
-
-                        <p class="service-tagline">Прозрачность, экспертиза и результат. Почему клиенты выбирают нас и остаются на года.</p>
-
-                    </div>
-
-                </div>
-
-                
-
-                <div class="service-content">
-
-                    <p>Наше сотрудничество строится на трех фундаментальных принципах, которые гарантируют Вам не просто выполнение работ, а достижение измеримых бизнес-результатов.</p>
-
-                    
-
-                    <div class="principles-grid modern-grid">
-                        <div class="principle-card-v2">
-                            <div class="card-edge"></div>
-                            <div class="principle-header">
-                                <div class="principle-number">01</div>
-                                <i class="fas fa-eye-slash icon-accent"></i>
-                            </div>
-                            <h3 class="principle-title-v2">Прозрачность</h3>
-                            <p class="principle-text-v2">
-                                Еженедельные отчеты с ключевыми метриками. Полный доступ к кабинетам рекламы и аналитики. Вы всегда знаете, куда идет каждый рубль бюджета.
-                            </p>
-                            <div class="card-status"><span class="status-dot"></span> LIVE_DATA_ACCESS</div>
-                        </div>
-                        
-                        <div class="principle-card-v2">
-                            <div class="card-edge"></div>
-                            <div class="principle-header">
-                                <div class="principle-number">02</div>
-                                <i class="fas fa-microscope icon-accent"></i>
-                            </div>
-                            <h3 class="principle-title-v2">Экспертиза</h3>
-                            <p class="principle-text-v2">
-                                Работаем только с проверенными гипотезами. Никакой «накрутки» или серых схем. Долгосрочные результаты, подтвержденные глубоким анализом.
-                            </p>
-                            <div class="card-status"><span class="status-dot"></span> VERIFIED_METHOD</div>
-                        </div>
-                        
-                        <div class="principle-card-v2">
-                            <div class="card-edge"></div>
-                            <div class="principle-header">
-                                <div class="principle-number">03</div>
-                                <i class="fas fa-terminal icon-accent"></i>
-                            </div>
-                            <h3 class="principle-title-v2">Инженерный подход</h3>
-                            <p class="principle-text-v2">
-                                Цифровая инфраструктура как система. Автоматизация, интеграции, сквозная аналитика. Мы строим процессы, которые работают на Вас 24/7.
-                            </p>
-                            <div class="card-status"><span class="status-dot"></span> SYSTEM_CORE_READY</div>
-                        </div>
-                    </div>
-
-                    
-
-                    <!-- ФИНАЛЬНЫЙ ПРИЗЫВ К ДЕЙСТВИЮ -->
-
-                    <div class="cta-panel">
-
-                        <h3 class="cta-title">Готовы обсудить стратегию?</h3>
-
-                        <p class="cta-subtitle">
-
-                            Оставьте заявку на бесплатный экспресс-аудит вашего текущего сайта или рекламной кампании. Проанализируем слабые места и предложим план роста.
-
-                        </p>
-
-                        <a href="/#contactForm" class="btn btn-primary btn-large btn-large-custom">
-
-                            <i class="fas fa-search"></i> Получить бесплатный аудит
-
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-
-    <section class="contact section section-bg-green-gradient" id="contact">
-
-        <div class="container">
-
-            <div class="section-header section-header-center">
-
-                <h2 class="section-title">Выберите услугу и начните проект</h2>
-
-                <p class="section-subtitle section-subtitle-narrow">
-
-                    Опишите задачу, и мы предложим оптимальное решение с расчетом стоимости и сроков.
-
-                </p>
-
-                
-
-                <div class="code-snippet code-snippet-medium">
-
-                    <code>
-
-                        <span class="code-comment">// Алгоритм начала работы</span><br>
-
-                        1. <span class="code-variable">Выбираете</span> услугу из списка выше<br>
-
-                        2. <span class="code-variable">Связываетесь</span> с нами через мессенджер<br>
-
-                        3. <span class="code-variable">Обсуждаем</span> детали и формируем ТЗ<br>
-
-                        4. <span class="code-variable">Получаете</span> расчет стоимости и сроков<br>
-
-                        5. <span class="code-variable">Начинаем</span> работу после согласования<br>
-
-                    </code>
-
-                </div>
-
-                
-
-                <div class="hero-actions hero-actions-center">
-
-                    <a href="https://t.me/skywayapsny" class="btn btn-telegram btn-large" target="_blank">
-
-                        <i class="fab fa-telegram"></i> Обсудить в Telegram
-
-                    </a>
-
-                    <a href="https://wa.me/79407117706" class="btn btn-whatsapp btn-large" target="_blank">
-
-                        <i class="fab fa-whatsapp"></i> Обсудить в WhatsApp
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    </main>
-
-    <footer class="footer">
-
-        <div class="container">
-
-            <div class="footer-content">
-
-                <div class="footer-logo">
-
-                    <div class="logo">
-
-                        <div class="logo-brand">SKYWAY</div>
-
-                        <div class="logo-sub">Цифровые решения</div>
-
-                    </div>
-
-                    <p class="footer-tagline">
-
-                        Строим цифровую инфраструктуру для роста вашего бизнеса. Инженерный подход и измеримые результаты.
-
-                    </p>
-
-                </div>
-
-                
-
-                <div class="footer-links">
-
-                    <div class="footer-column">
-
-                        <h4 class="footer-title">Навигация</h4>
-
-                        <ul>
-
-                            <li><a href="/"><i class="fas fa-home"></i> Главная</a></li>
-
-                            <li><a href="/services/"><i class="fas fa-code"></i> Услуги</a></li>
-
-                            <li><a href="/case/"><i class="fas fa-chart-bar"></i> Кейсы</a></li>
-
-                            <li><a href="/about/"><i class="fas fa-users"></i> О нас</a></li>
-
-                            <li><a href="/contact/"><i class="fas fa-phone"></i> Контакты</a></li>
-
-                        </ul>
-
-                    </div>
-
-                    
-
-                    <div class="footer-column">
-
-                        <h4 class="footer-title">Услуги</h4>
-
-                        <ul>
-
-                            <li><a href="#seo"><i class="fas fa-chart-line"></i> SEO-продвижение</a></li>
-
-                            <li><a href="#web"><i class="fas fa-laptop-code"></i> Создание сайтов</a></li>
-
-                            <li><a href="#ads"><i class="fas fa-ad"></i> Контекстная реклама</a></li>
-
-                            <li><a href="/about/#principles"><i class="fas fa-handshake"></i> Принципы работы</a></li>
-
-                        </ul>
-
-                    </div>
-
-                    
-
-                    <div class="footer-column">
-
-                        <h4 class="footer-title">Связь</h4>
-
-                        <ul>
-
-                            <li><a href="https://t.me/skywayapsny" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></li>
-
-                            <li><a href="https://wa.me/79407117706" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
-
-                        </ul>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            
-
-            <div class="footer-bottom">
-
-                <div class="footer-copy">
-
-                    <p>&copy; <span id="currentYear">2026</span> SKYWAY. Цифровые решения. Все права защищены.</p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </footer>
-
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="footer">
+<div class="container">
+<div class="footer-content">
+<div class="footer-logo">
+<div class="logo">
+<div class="logo-brand">SKYWAY</div>
+<div class="logo-sub">Цифровые решения</div>
+</div>
+<p class="footer-tagline">Сайты и цифровые сервисы, которые можно развивать.</p>
+</div>
+<div class="footer-links">
+<div class="footer-column">
+<h4 class="footer-title">Услуги</h4>
+<ul>
+<li><a href="#ai"><i class="fas fa-robot"></i> ИИ-агенты и менеджеры</a></li>
+<li><a href="#crm"><i class="fas fa-diagram-project"></i> Кастомная CRM</a></li>
+<li><a href="#web"><i class="fas fa-code"></i> Сайты</a></li>
+<li><a href="#seo"><i class="fas fa-chart-line"></i> SEO</a></li>
+<li><a href="/about/#standards-heading"><i class="fas fa-handshake"></i> Наш подход</a></li>
+<li><a href="/privacy/"><i class="fas fa-shield-alt"></i> Конфиденциальность</a></li>
+</ul>
+</div>
+<div class="footer-column">
+<h4 class="footer-title">Связь</h4>
+<ul>
+<li><a href="https://t.me/skywayapsny" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></li>
+<li><a href="https://wa.me/79407117706" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="footer-bottom">
+<div class="footer-copy">
+<p>© <span id="currentYear">2026</span> SKYWAY. Цифровые решения. Все права защищены.</p>
+</div>
+</div>
+</div>
+</footer>
 </body>
-
 </html>

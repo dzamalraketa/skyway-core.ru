@@ -2,9 +2,12 @@
   "name": "skyway-core",
   "private": true,
   "scripts": {
-    "minify:css": "npx clean-css-cli css/style.css -o css/style.min.css --source-map",
-    "minify:js": "npx terser js/main.js -o js/main.min.js -c -m --source-map",
+    "minify:css": "cleancss css/style.css -o css/style.min.css --source-map",
+    "minify:js": "terser js/main.js -o js/main.min.js -c -m --source-map url=main.min.js.map",
     "minify": "npm run minify:css && npm run minify:js"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "clean-css-cli": "5.6.3",
+    "terser": "5.36.0"
+  }
 }
