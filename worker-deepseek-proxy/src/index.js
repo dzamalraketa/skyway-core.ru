@@ -93,13 +93,13 @@ async function askGemini(apiKey, message) {
   return '';
 }
 
-// Grok (xAI): OpenAI-совместимый API
-async function askGrok(apiKey, message, model) {
-  const response = await fetch('https://api.x.ai/v1/chat/completions', {
+// Универсальный клиент для OpenAI-совместимых API (Groq, xAI и др.)
+async function askOpenAICompat(url, apiKey, model, message) {
+  const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
     body: JSON.stringify({
-      model: model || 'grok-3-mini',
+      model,
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: message }
@@ -149,12 +149,21 @@ export default {
       }
 
       let reply = '';
+      const text = message.trim();
 
-      // Приоритет: Grok (xAI), если задан ключ; иначе Gemini
-      const grokKey = env.GROK_API_KEY || env.XAI_API_KEY;
-      if (grokKey) reply = await askGrok(grokKey, message.trim(), env.GROK_MODEL);
-      if (!reply && env.GEMINI_API_KEY) reply = await askGemini(env.GEMINI_API_KEY, message.trim());
-      if (!reply && !grokKey && !env.GEMINI_API_KEY) {
+      // Цепочка провайдеров: Groq → Grok (xAI) → Gemini.
+      // Работает то, для чего задан ключ в секретах воркера.
+      if (env.GROQ_API_KEY) {
+        reply = await askOpenAICompat('https://api.groq.com/openai/v1/chat/completions',
+          env.GROQ_API_KEY, env.GROQ_MODEL || 'openai/gpt-oss-120b', text);
+      }
+      const xaiKey = env.GROK_API_KEY || env.XAI_API_KEY;
+      if (!reply && xaiKey) {
+        reply = await askOpenAICompat('https://api.x.ai/v1/chat/completions',
+          xaiKey, env.GROK_MODEL || 'grok-3-mini', text);
+      }
+      if (!reply && env.GEMINI_API_KEY) reply = await askGemini(env.GEMINI_API_KEY, text);
+      if (!reply && !env.GROQ_API_KEY && !xaiKey && !env.GEMINI_API_KEY) {
         return jsonResponse({ error: 'Ключ API не настроен в Variables' }, 500, origin);
       }
 
