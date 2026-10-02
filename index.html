@@ -235,10 +235,10 @@
 <div class="terminal-window">
 <div class="terminal-titlebar"><span class="terminal-title">SKYWAY / АССИСТЕНТ</span><span class="core-terminal-status">● AI-АССИСТЕНТ</span></div>
 <div class="terminal-body">
-<div aria-live="polite" class="terminal-output" id="terminalOutput" role="log"><div class="terminal-line smith-response"><span class="terminal-smith-prefix">SKYWAY:</span> Расскажите о задаче. Например: «Нужен ИИ-менеджер, который отвечает клиентам и записывает заявки в CRM».</div></div>
+<div aria-live="polite" class="terminal-output" id="terminalOutput" role="log"><div class="terminal-line smith-response"><span class="terminal-smith-prefix">SKYWAY:</span> Здравствуйте! Я — ИИ-консультант агентства. Напишите, чем занимается ваш бизнес и что хотите автоматизировать — подскажу решение и ориентир по цене.</div><div class="terminal-line smith-response"><span class="terminal-smith-prefix">SKYWAY:</span> Например: «стоматология, теряем заявки в WhatsApp» или «нужна CRM для автосервиса на 5 менеджеров». Можно просто нажать готовый запрос ниже.</div></div>
 <div class="terminal-input-wrap"><div class="terminal-input-line">
 <span class="terminal-prompt">ЗАДАЧА &gt;</span>
-<textarea aria-label="Описание проекта" autocomplete="off" class="terminal-input" id="terminalInput" maxlength="500" placeholder="Опишите ваш проект..." rows="2" spellcheck="false"></textarea>
+<textarea aria-label="Описание проекта" autocomplete="off" class="terminal-input" id="terminalInput" maxlength="500" placeholder="Чем занимается бизнес и что автоматизировать?" rows="2" spellcheck="false"></textarea>
 <button aria-label="Отправить запрос" class="terminal-send-btn" type="button">ОТПРАВИТЬ ↗</button>
 </div></div>
 </div>
@@ -252,9 +252,12 @@
 </div>
 </div>
 <div aria-label="Примеры запросов" class="terminal-quick-replies">
+<span class="terminal-quick-label">Или выберите готовый запрос:</span>
 <button class="terminal-quick-btn" data-message="Нужен ИИ-менеджер для ответов и записи заявок в CRM" type="button">ИИ-МЕНЕДЖЕР + CRM</button>
 <button class="terminal-quick-btn" data-message="Нужна кастомная CRM с этапами, ролями и историей клиентов" type="button">КАСТОМНАЯ CRM</button>
 <button class="terminal-quick-btn" data-message="Нужна ИИ-админка для управления агентом, базой знаний и диалогами" type="button">ИИ-АДМИНКА</button>
+<button class="terminal-quick-btn" data-message="Сколько стоит сайт для малого бизнеса и за какой срок?" type="button">ЦЕНА И СРОКИ САЙТА</button>
+<button class="terminal-quick-btn" data-message="У меня свой бизнес, хочу автоматизировать продажи — с чего начать?" type="button">С ЧЕГО НАЧАТЬ?</button>
 </div>
 </div>
 </section>

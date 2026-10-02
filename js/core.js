@@ -14,6 +14,9 @@
         const caseCards = [...document.querySelectorAll('.core-case-card')];
         const mechanism = document.querySelector('.core-hero-diagram');
         const pointer = { x: -1000, y: -1000, active: false, vx: 0, vy: 0, stamp: 0 };
+        // На тач-устройствах курсора нет — эта точка медленно блуждает,
+        // чтобы поверхность изгибалась и оставалась живой без мыши
+        const autoFocus = { x: 0, y: 0, vx: 0, vy: 0 };
         const drift = { x: 0, y: 0 };
         const steps = 64;
         let springs = [];
@@ -40,10 +43,10 @@
             canvas.style.width = width + 'px';
             canvas.style.height = height + 'px';
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            laneCount = width < 700 ? 4 : 6;
+            laneCount = width < 700 ? 5 : 6;
             springs = Array.from({ length: laneCount }, () =>
                 Array.from({ length: steps + 1 }, () => ({ x: 0, y: 0, vx: 0, vy: 0 })));
-            const count = width < 700 ? 24 : 48;
+            const count = width < 700 ? 34 : 48;
             particles = Array.from({ length: count }, (_, i) => ({
                 lane: i % laneCount, offset: (i * .61803398875) % 1,
                 depth: .35 + (i % 7) / 10, seed: i * 2.39996, circuit: i % 8 === 0
@@ -63,7 +66,7 @@
                 y: height * (.12 + lane / (laneCount - 1) * .73 + (u - .5) * .22 + bend + detail) + drift.y
             };
         }
-        function updatePhysics(dt, time) {
+        function updatePhysics(dt, time, focus) {
             // Damped springs share movement with their neighbours. Small integration
             // steps keep the surface stable when a frame is delayed.
             const iterations = Math.ceil(dt / .012);
@@ -76,16 +79,16 @@
                         const node = row[i];
                         const left = row[Math.max(0, i - 1)], right = row[Math.min(steps, i + 1)];
                         let fx = 0, fy = 0;
-                        if (pointer.active) {
+                        if (focus) {
                             const base = restPoint(lane, i / steps * 1.08 - .04, time);
-                            const dx = base.x + node.x - pointer.x;
-                            const dy = base.y + node.y - pointer.y;
+                            const dx = base.x + node.x - focus.x;
+                            const dy = base.y + node.y - focus.y;
                             const distance = Math.hypot(dx, dy);
                             if (distance < radius) {
                                 const falloff = Math.pow(1 - distance / radius, 2);
                                 const divisor = Math.max(distance, 16);
-                                fx = (dx / divisor * 2100 + pointer.vx * 1.4) * falloff;
-                                fy = (dy / divisor * 2100 + pointer.vy * 1.4) * falloff;
+                                fx = (dx / divisor * 2100 + (focus.vx || 0) * 1.4) * falloff;
+                                fy = (dy / divisor * 2100 + (focus.vy || 0) * 1.4) * falloff;
                             }
                         }
                         node.vx += (fx - node.x * 25 - node.vx * 8 + (left.x + right.x - node.x * 2) * 48) * h;
@@ -135,10 +138,14 @@
             const desiredWave = activeMode === 'start' ? .035 : activeMode === 'terminal' ? .065 : connected ? .085 : .066;
             const ease = moving ? 1 - Math.exp(-dt * 1.1) : 1;
             wave += (desiredWave - wave) * ease;
-            const focus = hoverPoint || (pointer.active ? pointer : null);
+            const focus = hoverPoint || (pointer.active ? pointer : (coarsePointer.matches ? autoFocus : null));
+            if (coarsePointer.matches && !pointer.active && !hoverPoint && moving) {
+                autoFocus.x = width * (.5 + .3 * Math.sin(time * .21));
+                autoFocus.y = height * (.44 + .24 * Math.sin(time * .31 + 1.3));
+            }
             drift.x += ((moving && focus ? (focus.x / width - .5) * 14 : 0) - drift.x) * ease;
             drift.y += ((moving && focus ? (focus.y / height - .5) * 10 : 0) - drift.y) * ease;
-            if (moving) updatePhysics(dt, time);
+            if (moving) updatePhysics(dt, time, focus);
 
             // Wide, slowly moving light pools give depth without flashing behind the copy.
             const glowSize = Math.max(width * .8, height * .9);
@@ -188,7 +195,7 @@
                 }
             }
             // Only a few small signals move faster than the surface itself.
-            const signals = width < 700 ? 2 : 3;
+            const signals = width < 700 ? 3 : 3;
             for (let i = 0; i < signals; i++) {
                 const u = (i * .31 + time * .021) % 1;
                 const lane = (i * 2 + 1) % laneCount;
@@ -232,7 +239,7 @@
         addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { size(); updateSection(); }, 150); }, { passive: true });
         addEventListener('scroll', updateSection, { passive: true });
         addEventListener('pointermove', e => {
-            if (e.pointerType === 'touch' || reducedMotion.matches) return;
+            if (reducedMotion.matches) return;
             const now = performance.now();
             const dt = Math.max(.016, (now - pointer.stamp) / 1000);
             pointer.vx = pointer.active ? Math.max(-900, Math.min(900, (e.clientX - pointer.x) / dt)) : 0;
@@ -243,6 +250,9 @@
             pointer.active = true;
         }, { passive: true });
         document.addEventListener('pointerleave', () => { pointer.active = false; });
+        // На тачах палец отпускают — точка касания перестаёт тянуть поверхность
+        addEventListener('pointerup', e => { if (e.pointerType === 'touch') pointer.active = false; }, { passive: true });
+        addEventListener('pointercancel', e => { if (e.pointerType === 'touch') pointer.active = false; }, { passive: true });
         addEventListener('blur', () => { pointer.active = false; });
         document.addEventListener('visibilitychange', () => { visible = !document.hidden; if (visible) ensureAnimation(); else { cancelAnimationFrame(raf); raf = 0; } });
         reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) { cancelAnimationFrame(raf); raf = 0; draw(true); } else ensureAnimation(); });

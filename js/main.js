@@ -76,7 +76,8 @@ function initMatrixEffect() {
 
     function initParticles() {
         // Плотность частиц зависит от площади экрана: меньше на мобильных
-        const count = Math.min(70, Math.floor((canvasRect.width * canvasRect.height) / 18000));
+        const divisor = canvasRect.width < 700 ? 12000 : 18000;
+        const count = Math.min(70, Math.floor((canvasRect.width * canvasRect.height) / divisor));
         particles = Array.from({ length: count }, () => ({
             x: Math.random() * canvasRect.width,
             y: Math.random() * canvasRect.height,
@@ -652,7 +653,8 @@ function initChatFab() {
     const fab = document.createElement('a');
     fab.id = 'chatFab';
     fab.className = 'chat-fab';
-    fab.setAttribute('aria-label', 'Открыть ИИ-агента');
+    fab.setAttribute('aria-label', 'Спросить ИИ-консультанта');
+    fab.title = 'Спросить ИИ-консультанта';
     fab.href = '/#terminal';
     fab.innerHTML = '<i class="fas fa-comment-dots" aria-hidden="true"></i>';
     fab.addEventListener('click', function(e) {
@@ -663,6 +665,8 @@ function initChatFab() {
             if (terminal) {
                 e.preventDefault();
                 terminal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const input = document.getElementById('terminalInput');
+                if (input) setTimeout(() => input.focus({ preventScroll: true }), 700);
             }
         }
     });
