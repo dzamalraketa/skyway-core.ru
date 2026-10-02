@@ -1,6 +1,9 @@
 // Основная модель + fallback при перегрузке/квоте (503/429)
 const GEMINI_MODELS = ['gemini-3.8-flash', 'gemini-2.5-flash'];
 const GEMINI_API = 'https://generativelanguage.googleapis.com/v1beta/models/';
+// Версия кода — видна в заголовке X-Worker-Version, удобно проверять деплой
+const WORKER_VERSION = '3.1-history';
+const UPSTREAM_TIMEOUT_MS = 20000;
 
 // Системный промпт: ИИ-консультант SKYWAY, серьёзный продажник
 const SYSTEM_PROMPT = `Ты — ИИ-консультант рекламного агентства SKYWAY (skyway-core.ru). Общаешься с посетителями сайта в окне терминала. Твоя задача — помочь клиенту и довести его до заявки.
@@ -65,6 +68,7 @@ function corsHeaders(origin) {
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Vary': 'Origin',
+    'X-Worker-Version': WORKER_VERSION,
   };
 }
 
@@ -85,7 +89,8 @@ async function askGemini(apiKey, message, turns) {
     const response = await fetch(`${GEMINI_API}${model}:generateContent`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-      body: payload
+      body: payload,
+      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS)
     });
     const data = await response.json();
     // Ответ может быть разбит на несколько parts — склеиваем текстовые,
@@ -106,6 +111,7 @@ async function askOpenAICompat(url, apiKey, model, message, turns) {
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+    signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
     body: JSON.stringify({
       model,
       messages: [

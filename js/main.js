@@ -390,11 +390,15 @@ function initConsole() {
         const proxyUrl = 'https://smit.skywayapsny.workers.dev/';
 
         try {
+            const controller = new AbortController();
+            const timer = setTimeout(function() { controller.abort(); }, 40000);
             const response = await fetch(proxyUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: message, history: chatHistory })
+                body: JSON.stringify({ message: message, history: chatHistory }),
+                signal: controller.signal
             });
+            clearTimeout(timer);
 
             const data = await response.json();
             return data.content || SMITH_ERROR_MESSAGE;
@@ -406,8 +410,10 @@ function initConsole() {
     }
     
     var isFirstRequest = true;
+    var pending = false;
 
     function sendToSmith(text) {
+        if (pending) return;
         terminalInput.value = '';
         terminalInput.parentElement.classList.remove('has-text');
 
@@ -445,11 +451,12 @@ function initConsole() {
             return;
         }
 
+        pending = true;
         getSmithResponse(message).then(function(response) {
             chatHistory.push({ u: message, b: String(response).slice(0, 800) });
             if (chatHistory.length > 8) chatHistory = chatHistory.slice(-8);
             showResponse(response);
-        });
+        }).finally(function() { pending = false; });
     }
     
     terminalInput.addEventListener('input', function() {
