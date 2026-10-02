@@ -379,7 +379,7 @@ function initChatBox(refs) {
         type();
     }
     
-    var SMITH_ERROR_MESSAGE = 'Сервис перегружен. Попробуйте ещё раз или напишите нам в Telegram @skywayapsny';
+    var SMITH_ERROR_MESSAGE = 'Сервис перегружен. Попробуйте ещё раз или напишите нам в Telegram @skyway_core';
 
     /**
      * Функция для общения с Агентом Смитом
@@ -555,7 +555,7 @@ function initContactForm() {
         } catch (error) { 
             console.error('Ошибка:', error); 
             const errorMsg = error.name === 'AbortError' ? 'Время ожидания истекло' : 'Ошибка связи';
-            showNotification(`${errorMsg}. Напишите в Telegram @SkyWayApsny`, 'error');
+            showNotification(`${errorMsg}. Напишите в Telegram @skyway_core`, 'error');
         } finally { 
             if (submitBtn) {
                 submitBtn.disabled = false; 
@@ -674,7 +674,7 @@ function showNotification(message, type = 'info') {
 }
 
 // ===== ПЛАВАЮЩИЙ ЧАТ-ВИДЖЕТ (кнопка + раскрывающееся окно) =====
-var WIDGET_GREETING = 'Здравствуйте! Я — ИИ-консультант SKYWAY. Расскажите о задаче — подскажу решение и ориентир по цене.';
+var WIDGET_GREETING = 'Здравствуйте! Я — ИИ-агент SKYWAY, таких же мы внедряем в бизнес клиентов. Спросите о задаче, цене или сроках — заодно посмотрите, как я работаю.';
 
 function initChatFab() {
     if (document.getElementById('chatFab')) return;
@@ -701,8 +701,13 @@ function initChatFab() {
             '<button class="chat-widget-quick-btn" type="button" data-message="Сколько стоит сайт и за какой срок?">ЦЕНА САЙТА</button>' +
         '</div>' +
         '<div class="chat-widget-input">' +
-            '<textarea id="chatWidgetInput" class="chat-widget-textarea" rows="1" maxlength="500" placeholder="Напишите сообщение..." aria-label="Сообщение ИИ-консультанту"></textarea>' +
+            '<textarea id="chatWidgetInput" class="chat-widget-textarea" rows="1" maxlength="500" placeholder="Напишите сообщение..." enterkeyhint="send" aria-label="Сообщение ИИ-консультанту"></textarea>' +
             '<button type="button" class="chat-widget-send" aria-label="Отправить сообщение">↑</button>' +
+        '</div>' +
+        '<div class="chat-widget-channels">' +
+            '<span>или напрямую:</span>' +
+            '<a href="https://t.me/skyway_core" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram" aria-hidden="true"></i> Telegram</a>' +
+            '<a href="https://wa.me/79407117706" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp</a>' +
         '</div>';
     document.body.appendChild(widget);
 
@@ -727,13 +732,28 @@ function initChatFab() {
 
     const closeBtn = widget.querySelector('.chat-widget-close');
     const input = widget.querySelector('#chatWidgetInput');
+    const isTouch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+
+    // Высота видимой области с учётом экранной клавиатуры (фолбэк для
+    // браузеров без interactive-widget=resizes-content)
+    if (window.visualViewport) {
+        const vv = window.visualViewport;
+        const trackVV = function() {
+            document.documentElement.style.setProperty('--chat-vv', vv.height + 'px');
+        };
+        vv.addEventListener('resize', trackVV);
+        trackVV();
+    }
 
     function setOpen(open) {
         widget.classList.toggle('open', open);
         widget.setAttribute('aria-hidden', open ? 'false' : 'true');
         fab.setAttribute('aria-expanded', open ? 'true' : 'false');
         fab.querySelector('i').className = open ? 'fas fa-times' : 'fas fa-comment-dots';
-        if (open && input) setTimeout(function() { input.focus(); }, 250);
+        // На тачах не фокусируемся сами — клавиатура не выскочит и не закроет полэкрана
+        if (open && input && !isTouch) setTimeout(function() { input.focus(); }, 250);
+        // При открытии блокируем скролл страницы на мобиле (виджет — полный экран)
+        document.body.style.overflow = (open && isTouch) ? 'hidden' : '';
     }
 
     fab.addEventListener('click', function() {
