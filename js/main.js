@@ -313,10 +313,10 @@ function initScrollAnimations() {
     checkScroll(); // Check on load
 }
 
-// ===== ТЕРМИНАЛ СМИТА (БИЗНЕС-АССИСТЕНТ) =====
-var SMITH_FIRST_REPLY = 'Система активна. Я помогу спроектировать ваш проект с нуля. Какой бизнес масштабируем?';
+// ===== ТЕРМИНАЛ ИИ-КОНСУЛЬТАНТА =====
+var SMITH_FIRST_REPLY = 'Здравствуйте. Я — ИИ-консультант SKYWAY. Расскажите о задаче — подскажу решение и ориентир по стоимости.';
 var TERMINAL_PROMPT = 'Агент ИИ';
-var SMITH_PREFIX = 'Агент Смит:';
+var SMITH_PREFIX = 'SKYWAY:';
 
 function initConsole() {
     const terminalInput = document.getElementById('terminalInput');

@@ -4,4 +4,5 @@ compatibility_date = "2024-01-01"
 
 # Ключ Gemini задаётся в панели Cloudflare:
 # Workers & Pages → smit → Settings → Variables → GEMINI_API_KEY (Secret)
+# Опционально: GROK_API_KEY (Secret, приоритетнее Gemini), GROK_MODEL (vars)
 # vars = { GEMINI_API_KEY = "..." }  # или только через Dashboard

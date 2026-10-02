@@ -28,6 +28,7 @@
    - Workers & Pages → ваш Worker → Settings → Variables.
    - Add variable: имя **GEMINI_API_KEY**, значение — ключ Gemini, включи "Encrypt" (Secret).
    - Либо через CLI: `wrangler secret put GEMINI_API_KEY`
+   - Опционально Grok (xAI): `wrangler secret put GROK_API_KEY` — если задан, используется он; модель можно переопределить переменной `GROK_MODEL` (по умолчанию `grok-3-mini`). При сбое Grok воркер автоматически уходит на Gemini.
 
 ## Защита воркера
 
