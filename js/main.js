@@ -549,7 +549,7 @@ function initContactForm() {
             clearTimeout(timeoutId);
 
             if (response.ok) { 
-                showNotification('Заявка принята. Агент свяжется с вами.', 'success');
+                showNotification('Заявка принята. Мы свяжемся с вами в ближайшее время.', 'success');
                 contactForm.reset(); 
             } else { 
                 throw new Error('Ошибка сервера'); 
@@ -676,7 +676,7 @@ function showNotification(message, type = 'info') {
 }
 
 // ===== ПЛАВАЮЩИЙ ЧАТ-ВИДЖЕТ (кнопка + раскрывающееся окно) =====
-var WIDGET_GREETING = 'Здравствуйте! Я — ИИ-агент SKYWAY, таких же мы внедряем в бизнес клиентов. Спросите о задаче, цене или сроках — заодно посмотрите, как я работаю.';
+var WIDGET_GREETING = 'Здравствуйте! Я консультант SKYWAY. Помогу понять, что вашему бизнесу даст сайт, ИИ-менеджер или CRM, и прикину стоимость. Расскажите, чем занимаетесь?';
 
 function initChatFab() {
     if (document.getElementById('chatFab')) return;
@@ -698,9 +698,9 @@ function initChatFab() {
             '<div class="terminal-line smith-response"><span class="terminal-smith-prefix">SKYWAY:</span> ' + WIDGET_GREETING + '</div>' +
         '</div>' +
         '<div class="chat-widget-quick">' +
-            '<button class="chat-widget-quick-btn" type="button" data-message="Нужен ИИ-менеджер для ответов и записи заявок в CRM">ИИ-МЕНЕДЖЕР</button>' +
-            '<button class="chat-widget-quick-btn" type="button" data-message="Нужна кастомная CRM под процессы моей команды">CRM НА ЗАКАЗ</button>' +
-            '<button class="chat-widget-quick-btn" type="button" data-message="Сколько стоит сайт и за какой срок?">ЦЕНА САЙТА</button>' +
+            '<button class="chat-widget-quick-btn" type="button" data-message="Хочу, чтобы клиенты получали ответ сразу и заявки не терялись — что вы предложите?">НЕ ТЕРЯТЬ ЗАЯВКИ</button>' +
+            '<button class="chat-widget-quick-btn" type="button" data-message="Нужен сайт, который будет приводить клиентов">САЙТ ПОД КЛЮЧ</button>' +
+            '<button class="chat-widget-quick-btn" type="button" data-message="Сколько это стоит и за какой срок можно запустить?">СКОЛЬКО СТОИТ</button>' +
         '</div>' +
         '<div class="chat-widget-input">' +
             '<textarea id="chatWidgetInput" class="chat-widget-textarea" rows="1" maxlength="500" placeholder="Напишите сообщение..." enterkeyhint="send" aria-label="Сообщение ИИ-консультанту"></textarea>' +
