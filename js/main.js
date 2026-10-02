@@ -319,13 +319,14 @@ var SMITH_FIRST_REPLY = 'Здравствуйте. Я — ИИ-консульт�
 var TERMINAL_PROMPT = 'Агент ИИ';
 var SMITH_PREFIX = 'SKYWAY:';
 
-function initConsole() {
-    const terminalInput = document.getElementById('terminalInput');
-    const terminalOutput = document.getElementById('terminalOutput');
-    const terminalBody = document.querySelector('.terminal-body');
-    const sendBtn = document.querySelector('.terminal-send-btn');
-    const quickBtns = document.querySelectorAll('.terminal-quick-btn');
-    
+// Универсальный чат: refs = { input, output, body, send, quickBtns }
+function initChatBox(refs) {
+    const terminalInput = refs.input;
+    const terminalOutput = refs.output;
+    const terminalBody = refs.body;
+    const sendBtn = refs.send;
+    const quickBtns = refs.quickBtns || [];
+
     if (!terminalInput || !terminalOutput) return;
     
     function addLine(html, className) {
@@ -478,7 +479,7 @@ function initConsole() {
 
     if (terminalBody) {
         terminalBody.addEventListener('click', function(e) {
-            if (!e.target.closest('.terminal-send-btn') && !e.target.closest('a')) {
+            if (!e.target.closest('button') && !e.target.closest('a')) {
                 terminalInput.focus();
             }
         });
@@ -489,6 +490,17 @@ function initConsole() {
             var msg = btn.getAttribute('data-message');
             if (msg) sendToSmith(msg);
         });
+    });
+}
+
+// Чат в секции «Расскажите о задаче» (главная)
+function initConsole() {
+    initChatBox({
+        input: document.getElementById('terminalInput'),
+        output: document.getElementById('terminalOutput'),
+        body: document.querySelector('.terminal-body'),
+        send: document.querySelector('.terminal-send-btn'),
+        quickBtns: document.querySelectorAll('.terminal-quick-btn')
     });
 }
 
@@ -661,30 +673,76 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
-// ===== ПЛАВАЮЩАЯ КНОПКА ЧАТА (ТЕРМИНАЛ) =====
+// ===== ПЛАВАЮЩИЙ ЧАТ-ВИДЖЕТ (кнопка + раскрывающееся окно) =====
+var WIDGET_GREETING = 'Здравствуйте! Я — ИИ-консультант SKYWAY. Расскажите о задаче — подскажу решение и ориентир по цене.';
+
 function initChatFab() {
     if (document.getElementById('chatFab')) return;
-    const fab = document.createElement('a');
+
+    // Окно чата
+    const widget = document.createElement('div');
+    widget.id = 'chatWidget';
+    widget.className = 'chat-widget';
+    widget.setAttribute('aria-hidden', 'true');
+    widget.setAttribute('role', 'dialog');
+    widget.setAttribute('aria-label', 'Чат с ИИ-консультантом');
+    widget.innerHTML =
+        '<div class="chat-widget-head">' +
+            '<span class="chat-widget-status"></span>' +
+            '<span class="chat-widget-title">ИИ-консультант SKYWAY</span>' +
+            '<button type="button" class="chat-widget-close" aria-label="Закрыть чат">×</button>' +
+        '</div>' +
+        '<div class="chat-widget-output" id="chatWidgetOutput" role="log" aria-live="polite">' +
+            '<div class="terminal-line smith-response"><span class="terminal-smith-prefix">SKYWAY:</span> ' + WIDGET_GREETING + '</div>' +
+        '</div>' +
+        '<div class="chat-widget-quick">' +
+            '<button class="chat-widget-quick-btn" type="button" data-message="Нужен ИИ-менеджер для ответов и записи заявок в CRM">ИИ-МЕНЕДЖЕР</button>' +
+            '<button class="chat-widget-quick-btn" type="button" data-message="Нужна кастомная CRM под процессы моей команды">CRM НА ЗАКАЗ</button>' +
+            '<button class="chat-widget-quick-btn" type="button" data-message="Сколько стоит сайт и за какой срок?">ЦЕНА САЙТА</button>' +
+        '</div>' +
+        '<div class="chat-widget-input">' +
+            '<textarea id="chatWidgetInput" class="chat-widget-textarea" rows="1" maxlength="500" placeholder="Напишите сообщение..." aria-label="Сообщение ИИ-консультанту"></textarea>' +
+            '<button type="button" class="chat-widget-send" aria-label="Отправить сообщение">↑</button>' +
+        '</div>';
+    document.body.appendChild(widget);
+
+    initChatBox({
+        input: widget.querySelector('#chatWidgetInput'),
+        output: widget.querySelector('#chatWidgetOutput'),
+        body: widget.querySelector('.chat-widget-output'),
+        send: widget.querySelector('.chat-widget-send'),
+        quickBtns: widget.querySelectorAll('.chat-widget-quick-btn')
+    });
+
+    // Кнопка
+    const fab = document.createElement('button');
     fab.id = 'chatFab';
     fab.className = 'chat-fab';
-    fab.setAttribute('aria-label', 'Спросить ИИ-консультанта');
+    fab.type = 'button';
+    fab.setAttribute('aria-label', 'Открыть чат с ИИ-консультантом');
+    fab.setAttribute('aria-expanded', 'false');
     fab.title = 'Спросить ИИ-консультанта';
-    fab.href = '/#terminal';
     fab.innerHTML = '<i class="fas fa-comment-dots" aria-hidden="true"></i>';
-    fab.addEventListener('click', function(e) {
-        const path = window.location.pathname;
-        const isHome = path === '/' || path === '' || path === '/index.html';
-        if (isHome) {
-            const terminal = document.getElementById('terminal');
-            if (terminal) {
-                e.preventDefault();
-                terminal.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                const input = document.getElementById('terminalInput');
-                if (input) setTimeout(() => input.focus({ preventScroll: true }), 700);
-            }
-        }
-    });
     document.body.appendChild(fab);
+
+    const closeBtn = widget.querySelector('.chat-widget-close');
+    const input = widget.querySelector('#chatWidgetInput');
+
+    function setOpen(open) {
+        widget.classList.toggle('open', open);
+        widget.setAttribute('aria-hidden', open ? 'false' : 'true');
+        fab.setAttribute('aria-expanded', open ? 'true' : 'false');
+        fab.querySelector('i').className = open ? 'fas fa-times' : 'fas fa-comment-dots';
+        if (open && input) setTimeout(function() { input.focus(); }, 250);
+    }
+
+    fab.addEventListener('click', function() {
+        setOpen(!widget.classList.contains('open'));
+    });
+    closeBtn.addEventListener('click', function() { setOpen(false); });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && widget.classList.contains('open')) setOpen(false);
+    });
 }
 
 // ===== MOBILE ACCORDIONS (< 768px) =====
