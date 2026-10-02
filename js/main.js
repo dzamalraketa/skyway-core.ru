@@ -41,6 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initSmoothScroll();
     initHeaderScroll();
     initChatFab();
+    initReveal();
+    initCoreDiagram();
     initMobileAccordions();
     initHeaderDropdown();
     updateCurrentYear();
@@ -759,6 +761,9 @@ function initChatFab() {
     fab.addEventListener('click', function() {
         setOpen(!widget.classList.contains('open'));
     });
+    document.querySelectorAll('[data-open-chat]').forEach(function(btn) {
+        btn.addEventListener('click', function() { setOpen(true); });
+    });
     closeBtn.addEventListener('click', function() { setOpen(false); });
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && widget.classList.contains('open')) setOpen(false);
@@ -1035,3 +1040,91 @@ function debounce(func, wait) {
     };
 }
 
+
+
+// ===== ПОЯВЛЕНИЕ БЛОКОВ ПРИ СКРОЛЛЕ + ЖИВОЕ ДЕМО ДИАЛОГА =====
+function initReveal() {
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const phone = document.querySelector('.core-demo-phone');
+    if (reduce || !('IntersectionObserver' in window)) { if (phone) phone.classList.add('is-live'); return; }
+    const items = document.querySelectorAll('.home-core .service-card, .home-core .feature-card, .faq-item, .core-steps li, .core-demo-phone, .section-header, .core-section-heading');
+    if (!items.length) return;
+    document.documentElement.classList.add('js-rv');
+    const io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+            if (!e.isIntersecting) return;
+            e.target.classList.add('rv-in');
+            if (e.target === phone) phone.classList.add('is-live');
+            io.unobserve(e.target);
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    items.forEach(function(el, i) {
+        el.classList.add('rv');
+        el.style.setProperty('--rv-d', ((i % 4) * 0.08) + 's');
+        io.observe(el);
+    });
+    if (phone) {
+        const po = new IntersectionObserver(function(en) {
+            if (en[0].isIntersecting) { phone.classList.add('is-live'); po.disconnect(); }
+        }, { threshold: 0.3 });
+        po.observe(phone);
+    }
+}
+
+
+// ===== ЖИВОЕ ЯДРО: наклон за курсором/пальцем и лента событий =====
+function initCoreDiagram() {
+    const box = document.querySelector('.core-hero-diagram');
+    if (!box) return;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const stage = box.querySelector('.core-diagram-stage');
+    const feed = document.getElementById('coreFeed');
+
+    if (!reduce && stage) {
+        let hotTimer;
+        const tilt = function(e) {
+            const r = box.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width - 0.5;
+            const y = (e.clientY - r.top) / r.height - 0.5;
+            stage.style.setProperty('--ry', (x * 14).toFixed(2) + 'deg');
+            stage.style.setProperty('--rx', (-y * 12).toFixed(2) + 'deg');
+        };
+        const reset = function() {
+            stage.style.setProperty('--rx', '0deg');
+            stage.style.setProperty('--ry', '0deg');
+        };
+        box.addEventListener('pointermove', tilt);
+        box.addEventListener('pointerleave', reset);
+        box.addEventListener('pointerdown', function(e) {
+            tilt(e);
+            box.classList.add('is-hot');
+            clearTimeout(hotTimer);
+            hotTimer = setTimeout(function() { box.classList.remove('is-hot'); reset(); }, 1400);
+        });
+        box.addEventListener('pointerup', function() {
+            clearTimeout(hotTimer);
+            hotTimer = setTimeout(function() { box.classList.remove('is-hot'); reset(); }, 700);
+        });
+    }
+
+    if (feed && !reduce) {
+        const msgs = [
+            '→ новая заявка · Telegram',
+            '→ клиент записан · WhatsApp',
+            '→ диалог передан в CRM',
+            '→ лид квалифицирован · сайт',
+            '→ напоминание отправлено',
+            '→ ответ за 3 сек · Instagram'
+        ];
+        let i = 0;
+        setInterval(function() {
+            if (document.hidden) return;
+            feed.classList.add('swap');
+            setTimeout(function() {
+                i = (i + 1) % msgs.length;
+                feed.textContent = msgs[i];
+                feed.classList.remove('swap');
+            }, 300);
+        }, 2800);
+    }
+}
