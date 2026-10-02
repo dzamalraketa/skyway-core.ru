@@ -95,7 +95,8 @@
 /* AI command center */
 .home-core .terminal-section { border-top: 1px solid var(--core-line); }
 .core-section-heading { max-width: 800px; margin-bottom: 45px; }
-.core-command-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(275px, .7fr); gap: 18px; align-items: stretch; }
+/* Чат — одна колонка по центру, панель проекта — компактной полосой снизу */
+.core-command-grid { display: flex; flex-direction: column; gap: 14px; max-width: 760px; margin: 0 auto; }
 .home-core .terminal-window-wrapper { margin: 0; }
 /* Чат в стиле Gemini: чистая карточка, пузыри, круглое поле ввода */
 .home-core .terminal-window { height: 100%; border: 1px solid var(--core-line); border-radius: 22px; background: rgba(9,18,20,.94); box-shadow: none; overflow: hidden; }
@@ -128,15 +129,15 @@
 .terminal-quick-label { flex-basis: 100%; color: #91b6a9; font: 600 .68rem var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
 .home-core .terminal-quick-btn { color: #aac6be; border-color: var(--core-line); background: rgba(12,25,26,.8); border-radius: 2px; font-size: .69rem; padding: 10px 13px; }
 .home-core .terminal-quick-btn:hover { color: var(--core-accent); border-color: var(--core-accent); box-shadow: none; }
-.core-command-plan { border: 1px solid var(--core-line); background: rgba(14,26,27,.95); padding: 22px; min-height: 400px; display: flex; flex-direction: column; }
-.core-plan-head { display: flex; justify-content: space-between; gap: 12px; color: var(--core-accent); font: 600 .62rem var(--font-mono); letter-spacing: .08em; border-bottom: 1px solid var(--core-line); padding-bottom: 16px; }
-.core-plan-head span:last-child { color: #91b6a9; text-align: right; }
-.core-plan-intro { font: 600 .77rem var(--font-mono); letter-spacing: .1em; color: var(--core-paper); margin-top: 32px; }
-.core-plan-modules { display: flex; flex-direction: column; gap: 9px; margin: 20px 0; }
-.core-plan-module { color: #c7ded6; border: 1px solid var(--core-line); background: #152626; padding: 10px 13px; font: 600 .76rem var(--font-mono); }
+.core-command-plan { border: 1px solid var(--core-line); background: rgba(14,26,27,.95); padding: 13px 18px; min-height: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.core-plan-head { display: flex; justify-content: space-between; gap: 14px; color: var(--core-accent); font: 600 .62rem var(--font-mono); letter-spacing: .08em; }
+.core-plan-head span:last-child { color: #91b6a9; }
+.core-plan-intro { font: 600 .68rem var(--font-mono); letter-spacing: .08em; color: #8ba6a2; }
+.core-plan-modules { display: flex; flex-wrap: wrap; gap: 8px; }
+.core-plan-module { color: #c7ded6; border: 1px solid var(--core-line); background: #152626; padding: 7px 11px; font: 600 .7rem var(--font-mono); }
 .core-plan-module::before { content: '✓'; margin-right: 13px; color: var(--core-accent); }
 .core-plan-empty { color: #7e9791; font-size: .85rem; line-height: 1.55; }
-.core-plan-foot { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--core-line); color: #879e98; font-size: .74rem; line-height: 1.5; }
+.core-plan-foot { margin-left: auto; color: #879e98; font-size: .68rem; line-height: 1.4; }
 
 /* Cases and principles */
 .home-core .core-cases { border-top: 1px solid var(--core-line); }
@@ -178,7 +179,7 @@
     .core-case-card { min-height: 210px; }
     .core-cases-head { align-items: start; flex-direction: column; }
     .home-core .terminal-body { min-height: 310px; }
-    .core-command-plan { min-height: 270px; }
+    .core-command-plan { min-height: 0; }
 }
 @media (max-width: 480px) {
     .core-hero-title { font-size: clamp(2.8rem, 12vw, 4.4rem); }

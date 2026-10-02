@@ -384,6 +384,8 @@ function initConsole() {
      * Функция для общения с Агентом Смитом
      * @param {string} message - текст сообщения от пользователя
      */
+    var chatHistory = [];
+
     async function getSmithResponse(message) {
         const proxyUrl = 'https://smit.skywayapsny.workers.dev/';
 
@@ -391,7 +393,7 @@ function initConsole() {
             const response = await fetch(proxyUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: message })
+                body: JSON.stringify({ message: message, history: chatHistory })
             });
 
             const data = await response.json();
@@ -444,6 +446,8 @@ function initConsole() {
         }
 
         getSmithResponse(message).then(function(response) {
+            chatHistory.push({ u: message, b: String(response).slice(0, 800) });
+            if (chatHistory.length > 8) chatHistory = chatHistory.slice(-8);
             showResponse(response);
         });
     }

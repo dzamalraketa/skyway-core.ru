@@ -47,7 +47,7 @@
             laneCount = isMobile ? 5 : 6;
             springs = Array.from({ length: laneCount }, () =>
                 Array.from({ length: steps + 1 }, () => ({ x: 0, y: 0, vx: 0, vy: 0 })));
-            const count = width < 700 ? 34 : 48;
+            const count = width < 700 ? 40 : 48;
             particles = Array.from({ length: count }, (_, i) => ({
                 lane: i % laneCount, offset: (i * .61803398875) % 1,
                 depth: .35 + (i % 7) / 10, seed: i * 2.39996, circuit: i % 8 === 0
@@ -138,7 +138,8 @@
             const time = reducedMotion.matches ? 0 : elapsed;
             const activeMode = hoverMode || mode;
             const connected = ['business', 'enterprise', 'terminal', 'cases'].includes(activeMode);
-            const desiredWave = activeMode === 'start' ? .035 : activeMode === 'terminal' ? .065 : connected ? .085 : .066;
+            let desiredWave = activeMode === 'start' ? .035 : activeMode === 'terminal' ? .065 : connected ? .085 : .066;
+            if (isMobile) desiredWave *= 1.35;
             const ease = moving ? 1 - Math.exp(-dt * 1.1) : 1;
             wave += (desiredWave - wave) * ease;
             const focus = hoverPoint || (pointer.active ? pointer : (coarsePointer.matches ? autoFocus : null));
@@ -256,6 +257,20 @@
         // На тачах палец отпускают — точка касания перестаёт тянуть поверхность
         addEventListener('pointerup', e => { if (e.pointerType === 'touch') pointer.active = false; }, { passive: true });
         addEventListener('pointercancel', e => { if (e.pointerType === 'touch') pointer.active = false; }, { passive: true });
+        // Свайп/скролл пальцем тоже гнёт поверхность — touchmove живёт дольше pointer-событий
+        addEventListener('touchmove', e => {
+            if (reducedMotion.matches) return;
+            const t = e.touches[0];
+            if (!t) return;
+            const now = performance.now();
+            const dt = Math.max(.016, (now - pointer.stamp) / 1000);
+            pointer.vx = pointer.active ? Math.max(-900, Math.min(900, (t.clientX - pointer.x) / dt)) : 0;
+            pointer.vy = pointer.active ? Math.max(-900, Math.min(900, (t.clientY - pointer.y) / dt)) : 0;
+            pointer.x = t.clientX; pointer.y = t.clientY;
+            pointer.stamp = now;
+            pointer.active = true;
+        }, { passive: true });
+        addEventListener('touchend', () => { pointer.active = false; }, { passive: true });
         addEventListener('blur', () => { pointer.active = false; });
         document.addEventListener('visibilitychange', () => { visible = !document.hidden; if (visible) ensureAnimation(); else { cancelAnimationFrame(raf); raf = 0; } });
         reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) { cancelAnimationFrame(raf); raf = 0; draw(true); } else ensureAnimation(); });

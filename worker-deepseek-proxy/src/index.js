@@ -13,13 +13,14 @@ const SYSTEM_PROMPT = `Ты — ИИ-консультант рекламного
 - Ориентиры цен: сайты от 15 000 ₽, ИИ-инструменты от 40 000 ₽, CRM от 75 000 ₽; SEO от 25 000 ₽/мес
 - Контакты: форма на сайте (раздел Контакты), Telegram t.me/skywayapsny, WhatsApp +7 940 711-77-06
 
-КАК РАБОТАТЬ С КЛИЕНТОМ — ВЕДИ ПРОДАЖУ ПО ШАГАМ:
-1. Выясни контекст: чем занимается бизнес, откуда приходят заявки, где теряются клиенты. Задавай ОДИН вопрос за сообщение — не вываливай анкету
-2. Покажи, что понял его боли, и предложи конкретное решение SKYWAY под его задачу — с выгодой: ответы 24/7, ни одна заявка не теряется, дешевле найма менеджера
-3. Цены называй только вилкой «от ...» — точная смета считается после короткого брифа
-4. Когда интерес есть — закрывай на действие: оставить заявку в форме на сайте или написать в Telegram @skywayapsny
-5. Если спрашивают то, чего нет в услугах — честно скажи и предложи обсудить с командой
-6. Если клиент пишет коротко или уходит от темы — мягко возвращай к его задаче
+КАК РАБОТАТЬ С КЛИЕНТОМ — ТЫ МЕНЕДЖЕР ПО ПРОДАЖАМ:
+1. Сначала пойми задачу: чем занимается бизнес, откуда заявки, где теряются клиенты. Задавай ОДИН вопрос за сообщение
+2. Покажи экспертизу: коротко объясни, как решение работает и что даст (24/7 ответы, заявки не теряются, меньше рутины)
+3. ЗАПРЕЩЕНО предлагать Telegram, форму или звонок, пока не понял задачу и клиент не заинтересовался. Не кидай контакты в каждом ответе — это отталкивает
+4. Помни историю диалога — никогда не переспрашивай то, что клиент уже сказал, и опирайся на его слова
+5. Цены называй только по запросу и только вилкой «от ...» — точная смета после брифа
+6. Если вопрос не про услуги — ответь честно и коротко верни к теме
+7. Контакт (@skywayapsny или форма на сайте) предлагай только когда клиент готов, спросил цену или сказал «хочу»
 
 СТИЛЬ:
 - Деловой, вежливый, уверенный. Без шуток, без философии, без воды
@@ -68,11 +69,17 @@ function corsHeaders(origin) {
 }
 
 // Gemini: основная модель + fallback при перегрузке/квоте
-async function askGemini(apiKey, message) {
+async function askGemini(apiKey, message, turns) {
   const payload = JSON.stringify({
     systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-    contents: [{ parts: [{ text: message }] }],
-    generationConfig: { maxOutputTokens: 1024, temperature: 0.7 }
+    contents: [
+      ...turns.flatMap(t => [
+        { role: 'user', parts: [{ text: t.u }] },
+        { role: 'model', parts: [{ text: t.b }] }
+      ]),
+      { role: 'user', parts: [{ text: message }] }
+    ],
+    generationConfig: { maxOutputTokens: 1024, temperature: 0.5 }
   });
   for (const model of GEMINI_MODELS) {
     const response = await fetch(`${GEMINI_API}${model}:generateContent`, {
@@ -95,7 +102,7 @@ async function askGemini(apiKey, message) {
 }
 
 // Универсальный клиент для OpenAI-совместимых API (Groq, xAI и др.)
-async function askOpenAICompat(url, apiKey, model, message) {
+async function askOpenAICompat(url, apiKey, model, message, turns) {
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
@@ -103,10 +110,14 @@ async function askOpenAICompat(url, apiKey, model, message) {
       model,
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
+        ...turns.flatMap(t => [
+          { role: 'user', content: t.u },
+          { role: 'assistant', content: t.b }
+        ]),
         { role: 'user', content: message }
       ],
       max_tokens: 1024,
-      temperature: 0.7
+      temperature: 0.5
     })
   });
   const data = await response.json();
@@ -143,11 +154,18 @@ export default {
     }
 
     try {
-      const { message } = await request.json();
+      const { message, history } = await request.json();
 
       if (typeof message !== 'string' || !message.trim() || message.length > MAX_MESSAGE_LENGTH) {
         return jsonResponse({ error: 'Некорректное сообщение' }, 400, origin);
       }
+
+      // История диалога: последние реплики {u: пользователь, b: бот}, с лимитами
+      const turns = Array.isArray(history)
+        ? history.slice(-8)
+            .filter(t => t && typeof t.u === 'string' && typeof t.b === 'string')
+            .map(t => ({ u: t.u.slice(0, MAX_MESSAGE_LENGTH), b: t.b.slice(0, 1000) }))
+        : [];
 
       let reply = '';
       const text = message.trim();
@@ -156,14 +174,14 @@ export default {
       // Работает то, для чего задан ключ в секретах воркера.
       if (env.GROQ_API_KEY) {
         reply = await askOpenAICompat('https://api.groq.com/openai/v1/chat/completions',
-          env.GROQ_API_KEY, env.GROQ_MODEL || 'openai/gpt-oss-120b', text);
+          env.GROQ_API_KEY, env.GROQ_MODEL || 'openai/gpt-oss-120b', text, turns);
       }
       const xaiKey = env.GROK_API_KEY || env.XAI_API_KEY;
       if (!reply && xaiKey) {
         reply = await askOpenAICompat('https://api.x.ai/v1/chat/completions',
-          xaiKey, env.GROK_MODEL || 'grok-3-mini', text);
+          xaiKey, env.GROK_MODEL || 'grok-3-mini', text, turns);
       }
-      if (!reply && env.GEMINI_API_KEY) reply = await askGemini(env.GEMINI_API_KEY, text);
+      if (!reply && env.GEMINI_API_KEY) reply = await askGemini(env.GEMINI_API_KEY, text, turns);
       if (!reply && !env.GROQ_API_KEY && !xaiKey && !env.GEMINI_API_KEY) {
         return jsonResponse({ error: 'Ключ API не настроен в Variables' }, 500, origin);
       }
