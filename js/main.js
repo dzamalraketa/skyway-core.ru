@@ -378,7 +378,7 @@ function initConsole() {
         type();
     }
     
-    var SMITH_ERROR_MESSAGE = '[ КАНАЛ ПЕРЕГРУЖЕН ] Матрица блокирует сигнал. Повторите попытку или свяжитесь с Архитектором: @skywayapsny';
+    var SMITH_ERROR_MESSAGE = 'Сервис перегружен. Попробуйте ещё раз или напишите нам в Telegram @skywayapsny';
 
     /**
      * Функция для общения с Агентом Смитом
@@ -395,11 +395,11 @@ function initConsole() {
             });
 
             const data = await response.json();
-            return data.content || "Мистер Андерсон, возникла ошибка в системе.";
+            return data.content || SMITH_ERROR_MESSAGE;
 
         } catch (err) {
             console.error('Terminal Error:', err);
-            return "[ КАНАЛ ПЕРЕГРУЖЕН ] Матрица блокирует сигнал.";
+            return SMITH_ERROR_MESSAGE;
         }
     }
     
@@ -416,8 +416,11 @@ function initConsole() {
         }
         addUserLine(message || '(запрос)');
         
-        addSmithLine('[ загрузка... ]', 'loading');
-        var loadingLine = terminalOutput.lastElementChild;
+        var loadingLine = document.createElement('div');
+        loadingLine.className = 'terminal-line smith-response loading';
+        loadingLine.innerHTML = '<span class="typing-dots" aria-label="ИИ печатает"><i></i><i></i><i></i></span>';
+        terminalOutput.appendChild(loadingLine);
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
         
         function showResponse(response) {
             if (loadingLine && loadingLine.parentNode) loadingLine.remove();

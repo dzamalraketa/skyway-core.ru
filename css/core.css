@@ -97,21 +97,33 @@
 .core-section-heading { max-width: 800px; margin-bottom: 45px; }
 .core-command-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(275px, .7fr); gap: 18px; align-items: stretch; }
 .home-core .terminal-window-wrapper { margin: 0; }
-.home-core .terminal-window { height: 100%; border: 1px solid var(--core-line); border-radius: 2px; background: rgba(9,18,20,.94); box-shadow: none; }
-.home-core .terminal-titlebar { border-bottom: 1px solid var(--core-line); background: #101d1f; padding: 16px 20px; }
+/* Чат в стиле Gemini: чистая карточка, пузыри, круглое поле ввода */
+.home-core .terminal-window { height: 100%; border: 1px solid var(--core-line); border-radius: 22px; background: rgba(9,18,20,.94); box-shadow: none; overflow: hidden; }
+.home-core .terminal-titlebar { display: none; }
 .home-core .terminal-title, .core-terminal-status { color: var(--core-accent); font: 600 .7rem var(--font-mono); letter-spacing: .1em; }
 .core-terminal-status { color: #a8c7bd; font-size: .61rem; }
-.home-core .terminal-body { min-height: 355px; display: flex; flex-direction: column; padding: 20px; }
-.home-core .terminal-output { flex: 1; min-height: 215px; max-height: 315px; background: transparent; padding: 0; margin-bottom: 18px; }
-.home-core .terminal-output .terminal-line { color: #b6cbc5; line-height: 1.7; font-size: .84rem; }
-.home-core .terminal-smith-prefix { color: var(--core-accent); }
-.home-core .terminal-input-wrap { background: #142426; border: 1px solid rgba(124,224,213,.42); padding: 10px 14px; }
+.home-core .terminal-body { min-height: 0; display: flex; flex-direction: column; padding: 26px; }
+.home-core .terminal-output { flex: 1; min-height: 215px; max-height: 315px; background: transparent; padding: 0; margin-bottom: 16px; }
+.home-core .terminal-output .terminal-line { color: #cfe0da; line-height: 1.6; font-size: .88rem; font-family: var(--font-sans); padding: 4px 0; }
+/* Сообщения пользователя — пузырь справа */
+.home-core .terminal-output .terminal-line:has(.terminal-prompt) { background: rgba(124,224,213,.12); border: 1px solid rgba(124,224,213,.28); border-radius: 16px 16px 4px 16px; padding: 10px 15px; margin: 8px 0 8px auto; width: fit-content; max-width: 85%; color: #eafaf6; }
+.home-core .terminal-output .terminal-prompt { display: none; }
+.home-core .terminal-smith-prefix { display: none; }
+.home-core .terminal-input-wrap { background: #101f21; border: 1px solid rgba(124,224,213,.32); border-radius: 26px; padding: 6px 6px 6px 20px; transition: border-color .25s ease; }
+.home-core .terminal-input-wrap:focus-within { border-color: var(--core-accent); }
 .home-core .terminal-input-line { align-items: center; }
-.home-core .terminal-prompt { color: var(--core-accent); font-size: .68rem; white-space: nowrap; }
-.home-core .terminal-input { color: var(--core-paper); font-size: .84rem; }
+.home-core .terminal-input-line .terminal-prompt { display: none; }
+.home-core .terminal-input { color: var(--core-paper); font-size: .9rem; font-family: var(--font-sans); }
 .home-core .terminal-input::placeholder { color: #7e9b96; }
-.home-core .terminal-send-btn { color: #061112; background: var(--core-accent); border: 0; border-radius: 2px; font-size: .68rem; letter-spacing: .06em; white-space: nowrap; }
-.home-core .terminal-send-btn:hover { color: #061112; background: #b1f4eb; box-shadow: none; }
+.home-core .terminal-send-btn { font-size: 0; width: 42px; height: 42px; padding: 0; border-radius: 50%; color: #061112; background: var(--core-accent); border: 0; flex-shrink: 0; }
+.home-core .terminal-send-btn::after { content: "↑"; font-size: 1.05rem; font-weight: 700; }
+.home-core .terminal-send-btn:hover { background: #b1f4eb; box-shadow: none; }
+/* Индикатор «ИИ печатает» — три пульсирующие точки */
+.typing-dots { display: inline-flex; gap: 5px; align-items: center; padding: 10px 4px; }
+.typing-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--core-accent); opacity: .3; animation: typing-bounce 1.2s infinite; }
+.typing-dots i:nth-child(2) { animation-delay: .15s; }
+.typing-dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes typing-bounce { 0%, 60%, 100% { transform: translateY(0); opacity: .3; } 30% { transform: translateY(-4px); opacity: 1; } }
 .home-core .terminal-quick-replies { justify-content: flex-start; gap: 8px; margin-top: 18px; }
 .terminal-quick-label { flex-basis: 100%; color: #91b6a9; font: 600 .68rem var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
 .home-core .terminal-quick-btn { color: #aac6be; border-color: var(--core-line); background: rgba(12,25,26,.8); border-radius: 2px; font-size: .69rem; padding: 10px 13px; }
@@ -173,9 +185,8 @@
     .core-kicker { font-size: .59rem; letter-spacing: .1em; }
     .core-hero-actions { gap: 20px; }
     .core-diagram-top, .core-diagram-bottom { font-size: .52rem; }
-    .home-core .terminal-input-line { flex-wrap: wrap; }
-    .home-core .terminal-input { min-width: 0; flex-basis: 60%; }
-    .home-core .terminal-send-btn { width: 100%; }
+    .home-core .terminal-input-wrap { border-radius: 20px; padding: 5px 5px 5px 14px; }
+    .home-core .terminal-send-btn { width: 38px; height: 38px; }
 }
 @media (prefers-reduced-motion: reduce) {
     .home-core .service-card, .home-core .feature-card, .core-case-card { transition: none; }

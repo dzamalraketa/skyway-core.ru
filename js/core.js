@@ -22,7 +22,7 @@
         let springs = [];
         let width = 0, height = 0, dpr = 1, particles = [], mode = 'hero', hoverMode = null, hoverPoint = null;
         let lastFrame = 0, raf = 0, visible = !document.hidden, elapsed = 0, wave = .066, laneCount = 6;
-        let lineGradient;
+        let lineGradient, isMobile = false;
         // A small cached light texture avoids rebuilding full-screen gradients every frame.
         const light = document.createElement('canvas');
         light.width = light.height = 256;
@@ -43,7 +43,8 @@
             canvas.style.width = width + 'px';
             canvas.style.height = height + 'px';
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            laneCount = width < 700 ? 5 : 6;
+            isMobile = width < 700;
+            laneCount = isMobile ? 5 : 6;
             springs = Array.from({ length: laneCount }, () =>
                 Array.from({ length: steps + 1 }, () => ({ x: 0, y: 0, vx: 0, vy: 0 })));
             const count = width < 700 ? 34 : 48;
@@ -51,11 +52,13 @@
                 lane: i % laneCount, offset: (i * .61803398875) % 1,
                 depth: .35 + (i % 7) / 10, seed: i * 2.39996, circuit: i % 8 === 0
             }));
+            // На мобильных поверхность делаем заметно ярче — тонкие штрихи теряются на маленьком экране
+            const boost = isMobile ? 2 : 1;
             lineGradient = ctx.createLinearGradient(0, 0, width, 0);
-            lineGradient.addColorStop(0, 'rgba(108,201,194,.025)');
-            lineGradient.addColorStop(.34, 'rgba(108,201,194,.055)');
-            lineGradient.addColorStop(.72, 'rgba(124,224,213,.18)');
-            lineGradient.addColorStop(1, 'rgba(108,201,194,.055)');
+            lineGradient.addColorStop(0, `rgba(108,201,194,${.025 * boost})`);
+            lineGradient.addColorStop(.34, `rgba(108,201,194,${.055 * boost})`);
+            lineGradient.addColorStop(.72, `rgba(124,224,213,${Math.min(.34, .18 * boost)})`);
+            lineGradient.addColorStop(1, `rgba(108,201,194,${.055 * boost})`);
             draw(true);
         }
         function restPoint(lane, u, time) {
@@ -158,11 +161,11 @@
             ctx.globalAlpha = 1;
 
             ctx.strokeStyle = lineGradient;
-            ctx.lineWidth = .8;
+            ctx.lineWidth = isMobile ? 1.1 : .8;
             for (let lane = 0; lane < laneCount; lane++) {
                 traceContour(lane, time);
                 // A faint parallel line reads as a flowing surface, rather than a wire mesh.
-                ctx.globalAlpha = .3;
+                ctx.globalAlpha = isMobile ? .45 : .3;
                 traceContour(lane, time, 15 + lane * 2);
                 ctx.globalAlpha = 1;
             }
@@ -170,10 +173,10 @@
                 const u = (p.offset + time * .006 * p.depth) % 1;
                 const point = contourPoint(p.lane, u, time);
                 const edge = Math.min(1, u * 9, (1 - u) * 9);
-                const alpha = (.12 + p.depth * .18) * edge;
+                const alpha = Math.min(1, (.12 + p.depth * .18) * edge * (isMobile ? 1.5 : 1));
                 ctx.fillStyle = `rgba(155,225,217,${alpha})`;
                 ctx.beginPath();
-                ctx.arc(point.x, point.y, .55 + p.depth * .75, 0, Math.PI * 2);
+                ctx.arc(point.x, point.y, (.55 + p.depth * .75) * (isMobile ? 1.4 : 1), 0, Math.PI * 2);
                 ctx.fill();
                 // A handful of bright square nodes make the moving surface read as a
                 // quiet circuit network. They follow the same cursor-bent contours.
@@ -202,9 +205,9 @@
                 const fade = Math.min(1, u * 12, (1 - u) * 12);
                 for (let tail = 7; tail >= 0; tail--) {
                     const point = contourPoint(lane, Math.max(0, u - tail * .004), time);
-                    ctx.fillStyle = `rgba(162,239,226,${(.42 - tail * .05) * fade})`;
+                    ctx.fillStyle = `rgba(162,239,226,${(.42 - tail * .05) * fade * (isMobile ? 1.25 : 1)})`;
                     ctx.beginPath();
-                    ctx.arc(point.x, point.y, tail ? .85 : 1.5, 0, Math.PI * 2);
+                    ctx.arc(point.x, point.y, (tail ? .85 : 1.5) * (isMobile ? 1.4 : 1), 0, Math.PI * 2);
                     ctx.fill();
                 }
             }
