@@ -13,7 +13,9 @@
         const serviceCards = [...document.querySelectorAll('.service-card[data-service]')];
         const caseCards = [...document.querySelectorAll('.core-case-card')];
         const mechanism = document.querySelector('.core-hero-diagram');
-        const pointer = { x: -1000, y: -1000, active: false, vx: 0, vy: 0, stamp: 0 };
+        const pointer = { x: -1000, y: -1000, active: false, vx: 0, vy: 0, stamp: 0, isTouch: false };
+        // Кольца-«пульс» от касаний пальцем
+        const ripples = [];
         // На тач-устройствах курсора нет — эта точка медленно блуждает,
         // чтобы поверхность изгибалась и оставалась живой без мыши
         const autoFocus = { x: 0, y: 0, vx: 0, vy: 0 };
@@ -74,7 +76,8 @@
             // steps keep the surface stable when a frame is delayed.
             const iterations = Math.ceil(dt / .012);
             const h = dt / iterations;
-            const radius = Math.min(245, Math.max(165, width * .19));
+            // На тачах зона влияния больше — палец менее точный, чем курсор
+            const radius = Math.min(245, Math.max(165, width * .19)) * (isMobile ? 1.3 : 1);
             for (let pass = 0; pass < iterations; pass++) {
                 for (let lane = 0; lane < laneCount; lane++) {
                     const row = springs[lane];
@@ -90,8 +93,10 @@
                             if (distance < radius) {
                                 const falloff = Math.pow(1 - distance / radius, 2);
                                 const divisor = Math.max(distance, 16);
-                                fx = (dx / divisor * 2100 + (focus.vx || 0) * 1.4) * falloff;
-                                fy = (dy / divisor * 2100 + (focus.vy || 0) * 1.4) * falloff;
+                                // От пальца поверхность гнётся сильнее — эффект заметнее
+                                const push = focus.isTouch ? 3200 : 2100;
+                                fx = (dx / divisor * push + (focus.vx || 0) * 1.4) * falloff;
+                                fy = (dy / divisor * push + (focus.vy || 0) * 1.4) * falloff;
                             }
                         }
                         node.vx += (fx - node.x * 25 - node.vx * 8 + (left.x + right.x - node.x * 2) * 48) * h;
@@ -212,6 +217,29 @@
                     ctx.fill();
                 }
             }
+
+            // Кольца от касаний — расходятся и затухают, как вода от пальца
+            for (let i = ripples.length - 1; i >= 0; i--) {
+                const r = ripples[i];
+                const age = time - r.born;
+                if (age > .9) { ripples.splice(i, 1); continue; }
+                const fade = 1 - age / .9;
+                ctx.strokeStyle = `rgba(124,224,213,${.55 * fade})`;
+                ctx.lineWidth = 1.2;
+                ctx.beginPath();
+                ctx.arc(r.x, r.y, 14 + age * 130, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            // Свечение под пальцем, пока он на экране
+            if (pointer.active && pointer.isTouch) {
+                ctx.globalAlpha = .5;
+                ctx.drawImage(light, pointer.x - 75, pointer.y - 75, 150, 150);
+                ctx.globalAlpha = 1;
+                ctx.fillStyle = 'rgba(190,255,245,.9)';
+                ctx.beginPath();
+                ctx.arc(pointer.x, pointer.y, 2.6, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
         function animate(now) {
             if (!visible || reducedMotion.matches) { raf = 0; return; }
@@ -252,11 +280,19 @@
             pointer.y = e.clientY;
             pointer.stamp = now;
             pointer.active = true;
+            pointer.isTouch = e.pointerType === 'touch';
         }, { passive: true });
         document.addEventListener('pointerleave', () => { pointer.active = false; });
         // На тачах палец отпускают — точка касания перестаёт тянуть поверхность
         addEventListener('pointerup', e => { if (e.pointerType === 'touch') pointer.active = false; }, { passive: true });
         addEventListener('pointercancel', e => { if (e.pointerType === 'touch') pointer.active = false; }, { passive: true });
+        // Тап рождает кольцо-пульс в точке касания
+        addEventListener('pointerdown', e => {
+            if (e.pointerType !== 'touch' || reducedMotion.matches) return;
+            pointer.isTouch = true;
+            pointer.x = e.clientX; pointer.y = e.clientY; pointer.active = true;
+            ripples.push({ x: e.clientX, y: e.clientY, born: elapsed });
+        }, { passive: true });
         // Свайп/скролл пальцем тоже гнёт поверхность — touchmove живёт дольше pointer-событий
         addEventListener('touchmove', e => {
             if (reducedMotion.matches) return;
@@ -269,8 +305,13 @@
             pointer.x = t.clientX; pointer.y = t.clientY;
             pointer.stamp = now;
             pointer.active = true;
+            pointer.isTouch = true;
+            // Пока палец ведёт — оставляет за собой серию колец (не чаще ~90 мс)
+            const last = ripples[ripples.length - 1];
+            if (!last || elapsed - last.born > .09) ripples.push({ x: t.clientX, y: t.clientY, born: elapsed });
+            if (ripples.length > 20) ripples.splice(0, ripples.length - 20);
         }, { passive: true });
-        addEventListener('touchend', () => { pointer.active = false; }, { passive: true });
+        addEventListener('touchend', () => { pointer.active = false; pointer.isTouch = false; }, { passive: true });
         addEventListener('blur', () => { pointer.active = false; });
         document.addEventListener('visibilitychange', () => { visible = !document.hidden; if (visible) ensureAnimation(); else { cancelAnimationFrame(raf); raf = 0; } });
         reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) { cancelAnimationFrame(raf); raf = 0; draw(true); } else ensureAnimation(); });
