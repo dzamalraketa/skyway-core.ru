@@ -327,7 +327,6 @@ function initScrollAnimations() {
 }
 
 // ===== ТЕРМИНАЛ ИИ-КОНСУЛЬТАНТА =====
-var SMITH_FIRST_REPLY = 'Здравствуйте. Я — ИИ-консультант SKYWAY. Расскажите о задаче — подскажу решение и ориентир по стоимости.';
 var TERMINAL_PROMPT = 'Агент ИИ';
 var SMITH_PREFIX = 'SKYWAY:';
 
@@ -353,10 +352,6 @@ function initChatBox(refs) {
         addLine('<span class="terminal-prompt">' + escapeHtml(TERMINAL_PROMPT) + '</span> ' + escapeHtml(text));
     }
     
-    function addSmithLine(text, className) {
-        addLine('<span class="terminal-smith-prefix">' + escapeHtml(SMITH_PREFIX) + '</span> ' + formatTerminalText(text), className || 'smith-response');
-    }
-
     function formatTerminalText(s) {
         var escaped = escapeHtml(s);
         escaped = escaped.replace(/\[SUCCESS\]/g, '<span class="terminal-tag terminal-tag-success">[SUCCESS]</span>');
@@ -403,15 +398,28 @@ function initChatBox(refs) {
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), 45000);
         try {
+            // The existing Worker accepts message/history. Include the opening UI
+            // context without inventing a previous user message.
+            const opening = refs.greeting
+                ? `Вы — Смит, ИИ-консультант SKYWAY. Посетитель уже видит: «${refs.greeting}». Не повторяйте приветствие и представление. Помогайте с запросом без анкеты: уточняйте нужные функции или результат. Не спрашивайте про источники или потерю заявок, если посетитель сам не поднял эту тему. На простое приветствие предложите помощь.\n\nСообщение посетителя: `
+                : '';
             const response = await fetch('https://smit.skywayapsny.workers.dev/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message, history: chatHistory }),
+                body: JSON.stringify({ message: opening + message, history: chatHistory }),
                 signal: controller.signal
             });
             if (!response.ok) throw new Error('Chat HTTP ' + response.status);
             const data = await response.json();
             if (typeof data.content !== 'string' || !data.content.trim()) throw new Error('Empty chat reply');
+            // The model may still echo a salutation despite the UI context.
+            // Remove only that echo when the visitor's first message is itself
+            // a greeting; preserve substantive answers and translation requests.
+            const greetingOnly = /^(?:привет(?:ствую)?|здравствуй(?:те)?|добрый (?:день|вечер)|доброе утро|hi|hello)[\s!.,]*$/iu;
+            if (refs.greeting && chatHistory.length === 0 && greetingOnly.test(message.trim())) {
+                return data.content.replace(/^\s*(?:здравствуй(?:те)?|привет(?:ствую)?|добрый (?:день|вечер)|доброе утро)[\s!.,:;—–-]*/iu, '').trim()
+                    || 'Расскажите, с чем вам помочь.';
+            }
             return data.content;
         } catch (err) {
             console.error('Chat unavailable:', err);
@@ -421,21 +429,16 @@ function initChatBox(refs) {
         }
     }
 
-    var isFirstRequest = true;
     var pending = false;
 
     function sendToSmith(text) {
         if (pending) return;
+        const message = typeof text === 'string' ? text.trim().slice(0, 500) : '';
+        if (!message) return;
         terminalInput.value = '';
         terminalInput.parentElement.classList.remove('has-text');
+        addUserLine(message);
 
-        var message = (text && text.trim()) ? text.trim().substring(0, 500) : '';
-        if (!message && !isFirstRequest) {
-            addUserLine('[ ПУСТОЙ ВВОД ]');
-            return;
-        }
-        addUserLine(message || '(запрос)');
-        
         var loadingLine = document.createElement('div');
         loadingLine.className = 'terminal-line smith-response loading';
         loadingLine.innerHTML = '<span class="typing-dots" aria-label="ИИ печатает"><i></i><i></i><i></i></span>';
@@ -448,17 +451,6 @@ function initChatBox(refs) {
             outLine.className = 'terminal-line smith-response';
             terminalOutput.appendChild(outLine);
             return new Promise(resolve => typewriter(outLine, response, 8, resolve));
-        }
-
-        if (isFirstRequest) {
-            isFirstRequest = false;
-            // Приветствие системы, затем реальный ответ на вопрос пользователя
-            addSmithLine(SMITH_FIRST_REPLY);
-        }
-
-        if (!message) {
-            if (loadingLine && loadingLine.parentNode) loadingLine.remove();
-            return;
         }
 
         pending = true;
@@ -698,7 +690,7 @@ function showNotification(message, type = 'info') {
 }
 
 // ===== ПЛАВАЮЩИЙ ЧАТ-ВИДЖЕТ (кнопка + раскрывающееся окно) =====
-var WIDGET_GREETING = 'Здравствуйте! Я консультант SKYWAY. Помогу понять, что вашему бизнесу даст сайт, ИИ-менеджер или CRM, и прикину стоимость. Расскажите, чем занимаетесь?';
+var WIDGET_GREETING = 'Здравствуйте, я Смит. Чем могу вам помочь?';
 
 function initChatFab() {
     if (document.getElementById('chatFab')) return;
@@ -741,7 +733,8 @@ function initChatFab() {
         output: widget.querySelector('#chatWidgetOutput'),
         body: widget.querySelector('.chat-widget-output'),
         send: widget.querySelector('.chat-widget-send'),
-        quickBtns: widget.querySelectorAll('.chat-widget-quick-btn')
+        quickBtns: widget.querySelectorAll('.chat-widget-quick-btn'),
+        greeting: WIDGET_GREETING
     });
 
     // Кнопка
