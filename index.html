@@ -32,7 +32,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"SKYWAY","alternateName":"Веб-студия SKYWAY","url":"https://skyway-core.ru/","logo":"https://skyway-core.ru/android-chrome-192x192.png","description":"Разработка ИИ-агентов, ИИ-менеджеров, админ-панелей и кастомных CRM для бизнеса.","sameAs":["https://t.me/skyway_core","https://wa.me/79407117706"],"contactPoint":[{"@type":"ContactPoint","contactType":"sales","telephone":"+7-940-711-77-06","availableLanguage":["Russian"]}],"@id":"https://skyway-core.ru/#organization"},{"@type":"WebSite","name":"SKYWAY","url":"https://skyway-core.ru/","publisher":{"@id":"https://skyway-core.ru/#organization"},"@id":"https://skyway-core.ru/#website","inLanguage":"ru"},{"@type":"Service","serviceType":"ИИ-агенты, ИИ-менеджеры, админ-панели и кастомная CRM","provider":{"@id":"https://skyway-core.ru/#organization"},"name":"ИИ-решения и кастомные CRM","description":"Разработка ИИ-агентов и ИИ-менеджеров, админ-панелей и CRM для процессов бизнеса."},{"@type":"WebPage","@id":"https://skyway-core.ru/#webpage","url":"https://skyway-core.ru/","name":"Сайты, ИИ-менеджеры и CRM для роста продаж | SKYWAY","description":"Делаем сайты, ИИ-менеджеров, CRM и ботов в одной связке: клиенты вас находят, получают ответ за секунды и становятся заявками. Живое демо ИИ-агента — прямо на сайте.","inLanguage":"ru","isPartOf":{"@id":"https://skyway-core.ru/#website"},"publisher":{"@id":"https://skyway-core.ru/#organization"}}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Сколько стоит ИИ-агент для бизнеса?","acceptedAnswer":{"@type":"Answer","text":"ИИ-менеджер для ответов клиентам и приёма заявок — от 40 000 ₽, кастомная CRM — от 75 000 ₽, сайт под ключ — от 15 000 ₽. Точная смета формируется после короткого брифа."}},{"@type":"Question","name":"Чем ИИ-агент отличается от обычного чат-бота?","acceptedAnswer":{"@type":"Answer","text":"Кнопочный бот — дерево сценариев, которое ломается на нестандартном вопросе. ИИ-агент понимает свободный текст, помнит контекст диалога, отвечает по базе знаний компании и передаёт разговор живому менеджеру."}},{"@type":"Question","name":"Сколько времени занимает внедрение?","acceptedAnswer":{"@type":"Answer","text":"Типовой сценарий — 1–3 недели: аудит задачи, настройка агента на материалах компании, подключение каналов и тестирование."}},{"@type":"Question","name":"С чем интегрируется ИИ-менеджер?","acceptedAnswer":{"@type":"Answer","text":"Сайт, Telegram, WhatsApp, CRM, телефония и внутренние системы — через API. Агент создаёт заявки, записывает клиентов и передаёт диалоги менеджеру."}},{"@type":"Question","name":"Есть ли абонентская плата?","acceptedAnswer":{"@type":"Answer","text":"Обязательной нет: решение и код принадлежат клиенту. Ежемесячные расходы — только API языковой модели и хостинг."}},{"@type":"Question","name":"Что если ИИ не знает ответа на вопрос клиента?","acceptedAnswer":{"@type":"Answer","text":"Агент не выдумывает: он передаёт диалог менеджеру и фиксирует вопрос для пополнения базы знаний."}}]}</script>
 <link href="/css/style.min.css?v=21" rel="stylesheet"/>
-<link href="/css/core.css?v=21" rel="stylesheet"/>
+<link href="/css/core.css?v=22" rel="stylesheet"/>
 <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" referrerpolicy="no-referrer" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Ubuntu:wght@300;400;500;700&amp;family=JetBrains+Mono:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <!-- Favicon and Scripts -->
@@ -40,8 +40,8 @@
 <link href="/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
 <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="/site.webmanifest" rel="manifest"/>
-<script defer="" src="/js/main.min.js?v=21"></script>
-<script defer="" src="/js/core.js?v=15"></script>
+<script defer="" src="/js/main.min.js?v=22"></script>
+<script defer="" src="/js/core.js?v=22"></script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
     (function(m,e,t,r,i,k,a){
@@ -122,9 +122,9 @@
 <li><b>Код</b> остаётся у вас</li>
 </ul>
 </div>
-<div class="core-hero-diagram" role="img" aria-label="Механическое ядро SKYWAY: вращающиеся роторы связывают ИИ-агентов, CRM и ИИ-админку">
-<div class="core-diagram-top"><span>SKYWAY / CORE</span><span class="core-machine-live"><i aria-hidden="true"></i> СИСТЕМА АКТИВНА</span></div>
-<div class="core-diagram-stage">
+<div class="core-hero-diagram" role="group" aria-label="Интерактивная схема пути заявки" data-flow-step="0">
+<div class="core-diagram-top"><span>ПУТЬ ЗАЯВКИ / ДЕМО</span><button class="core-flow-toggle" type="button" aria-label="Приостановить смену этапов" aria-pressed="false"><span aria-hidden="true">Ⅱ</span></button></div>
+<button class="core-diagram-stage" type="button" aria-label="Следующий этап пути заявки">
 <svg class="core-engine" viewBox="0 0 480 390" fill="none" aria-hidden="true">
 <defs>
 <linearGradient id="core-metal" x1="110" y1="40" x2="360" y2="340" gradientUnits="userSpaceOnUse"><stop stop-color="#4a6869"/><stop offset=".3" stop-color="#1a3034"/><stop offset=".65" stop-color="#0a171c"/><stop offset="1" stop-color="#395957"/></linearGradient>
@@ -172,17 +172,24 @@
 <circle cx="135.35" cy="299.65" r="4" fill="#08171c" stroke="#587b75"/><path d="M133.85 299.65h3" stroke="#587b75"/>
 <circle class="engine-heart" cx="240" cy="170" r="3" fill="#9befd9"/>
 <text x="240" y="199" class="engine-brand">SKYWAY</text>
-<text x="240" y="218" class="engine-core-label">CORE</text>
+<text x="240" y="218" class="engine-core-label">ВОПРОС</text>
 <path class="engine-axis" d="M71 191V199 M67 195H75 M405 195H413 M409 191V199"/>
-<g class="engine-orbit"><g transform="translate(240,26)"><g class="orbit-label"><rect x="-28" y="-9" width="56" height="18" rx="9"/><text y="3.4">САЙТЫ</text></g></g><g transform="translate(409,195)"><g class="orbit-label"><rect x="-20" y="-9" width="40" height="18" rx="9"/><text y="3.4">ИИ</text></g></g><g transform="translate(240,364)"><g class="orbit-label"><rect x="-23" y="-9" width="46" height="18" rx="9"/><text y="3.4">CRM</text></g></g><g transform="translate(71,195)"><g class="orbit-label"><rect x="-22" y="-9" width="44" height="18" rx="9"/><text y="3.4">БОТЫ</text></g></g></g>
+<g class="engine-orbit">
+<g data-flow-node="0" class="is-active" transform="translate(240,26)"><g class="orbit-label"><rect x="-28" y="-11" width="56" height="22" rx="5"/><text y="3.4">САЙТ</text></g></g>
+<g data-flow-node="1" transform="translate(409,195)"><g class="orbit-label"><rect x="-20" y="-11" width="40" height="22" rx="5"/><text y="3.4">ИИ</text></g></g>
+<g data-flow-node="2" transform="translate(240,364)"><g class="orbit-label"><rect x="-23" y="-11" width="46" height="22" rx="5"/><text y="3.4">CRM</text></g></g>
+<g data-flow-node="3" transform="translate(71,195)"><g class="orbit-label"><rect x="-37" y="-11" width="74" height="22" rx="5"/><text y="3.4">КОМАНДА</text></g></g>
+</g>
 </svg>
+</button>
+<p class="core-touch-hint">Коснитесь ядра — проведите заявку по системе</p>
+<div class="core-machine-modules" role="group" aria-label="Этапы пути заявки">
+<button class="core-flow-step" type="button" data-step="0" aria-pressed="true"><span>01</span> Сайт</button>
+<button class="core-flow-step" type="button" data-step="1" aria-pressed="false"><span>02</span> ИИ</button>
+<button class="core-flow-step" type="button" data-step="2" aria-pressed="false"><span>03</span> CRM</button>
+<button class="core-flow-step" type="button" data-step="3" aria-pressed="false"><span>04</span> Команда</button>
 </div>
-<div class="core-machine-modules" aria-hidden="true">
-<span class="core-machine-module"><span>01</span> ИИ-агенты<i></i></span>
-<span class="core-machine-module"><span>02</span> CRM<i></i></span>
-<span class="core-machine-module"><span>03</span> ИИ-админка<i></i></span>
-</div>
-<div class="core-diagram-bottom"><span class="core-feed" id="coreFeed" aria-live="off">→ новая заявка · Telegram</span><span class="core-status-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></div>
+<div class="core-diagram-bottom"><p class="core-feed" id="coreFeed" aria-live="off">Клиент задаёт вопрос на сайте.</p><span class="core-flow-count" aria-hidden="true">01 / 04</span></div>
 </div>
 </div>
 <a class="core-scroll" href="#services">ИССЛЕДОВАТЬ СИСТЕМУ <span aria-hidden="true">↓</span></a>

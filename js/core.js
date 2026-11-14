@@ -1,331 +1,192 @@
-/* SKYWAY CORE FIELD: one lightweight canvas across the home page. */
+/* SKYWAY signal field: circuit paths carry packets; touch injects a signal. */
 (() => {
     'use strict';
     document.addEventListener('DOMContentLoaded', () => {
         const canvas = document.getElementById('coreField');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d', { alpha: true });
+        const ctx = canvas?.getContext('2d', { alpha: true });
         if (!ctx) return;
-        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-        const coarsePointer = window.matchMedia('(pointer: coarse)');
+        const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+        const coarse = matchMedia('(pointer: coarse)');
         const sections = [...document.querySelectorAll('[data-field-mode]')];
-        const pageMode = document.body.dataset.fieldMode || 'hero';
-        const serviceCards = [...document.querySelectorAll('.service-card[data-service]')];
-        const caseCards = [...document.querySelectorAll('.core-case-card')];
-        const mechanism = document.querySelector('.core-hero-diagram');
-        const pointer = { x: -1000, y: -1000, active: false, vx: 0, vy: 0, stamp: 0, isTouch: false };
-        // Кольца-«пульс» от касаний пальцем
-        const ripples = [];
-        // На тач-устройствах курсора нет — эта точка медленно блуждает,
-        // чтобы поверхность изгибалась и оставалась живой без мыши
-        const autoFocus = { x: 0, y: 0, vx: 0, vy: 0 };
-        const drift = { x: 0, y: 0 };
-        const steps = 64;
-        let springs = [];
-        let width = 0, height = 0, dpr = 1, particles = [], mode = 'hero', hoverMode = null, hoverPoint = null;
-        let lastFrame = 0, raf = 0, visible = !document.hidden, elapsed = 0, wave = .066, laneCount = 6;
-        let lineGradient, isMobile = false;
-        // A small cached light texture avoids rebuilding full-screen gradients every frame.
-        const light = document.createElement('canvas');
-        light.width = light.height = 256;
-        const lightContext = light.getContext('2d');
-        const lightGradient = lightContext.createRadialGradient(128, 128, 0, 128, 128, 128);
-        lightGradient.addColorStop(0, 'rgba(70,175,167,.2)');
-        lightGradient.addColorStop(.4, 'rgba(42,127,126,.09)');
-        lightGradient.addColorStop(1, 'rgba(22,76,82,0)');
-        lightContext.fillStyle = lightGradient;
-        lightContext.fillRect(0, 0, 256, 256);
+        const pointer = { x: -1000, y: -1000, active: false, strength: 0 };
+        const packets = [];
+        let width = 0, height = 0, routes = [], elapsed = 0, raf = 0, last = 0;
+        let lastTouchSignal = -1, sectionIndex = 0, activeRoute = -1;
+        // Reused texture keeps the interaction inexpensive on phones.
+        const glow = document.createElement('canvas');
+        glow.width = glow.height = 192;
+        const gc = glow.getContext('2d');
+        if (!gc) return;
+        const gradient = gc.createRadialGradient(96, 96, 0, 96, 96, 96);
+        gradient.addColorStop(0, 'rgba(124,224,213,.24)');
+        gradient.addColorStop(.25, 'rgba(70,170,160,.1)');
+        gradient.addColorStop(1, 'rgba(70,170,160,0)');
+        gc.fillStyle = gradient;
+        gc.fillRect(0, 0, 192, 192);
 
-        function size() {
-            width = innerWidth;
-            height = innerHeight;
-            dpr = Math.min(devicePixelRatio || 1, coarsePointer.matches ? 1.25 : 1.5);
+        function resize() {
+            width = innerWidth; height = innerHeight;
+            const dpr = Math.min(devicePixelRatio || 1, 1.5);
             canvas.width = Math.round(width * dpr);
             canvas.height = Math.round(height * dpr);
-            canvas.style.width = width + 'px';
-            canvas.style.height = height + 'px';
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            isMobile = width < 700;
-            laneCount = isMobile ? 5 : 6;
-            springs = Array.from({ length: laneCount }, () =>
-                Array.from({ length: steps + 1 }, () => ({ x: 0, y: 0, vx: 0, vy: 0 })));
-            const count = width < 700 ? 40 : 48;
-            particles = Array.from({ length: count }, (_, i) => ({
-                lane: i % laneCount, offset: (i * .61803398875) % 1,
-                depth: .35 + (i % 7) / 10, seed: i * 2.39996, circuit: i % 8 === 0
+            const count = width < 700 ? 7 : 8;
+            routes = Array.from({length: count}, (_, i) => {
+                const y = height * ((i + .4) / count);
+                const direction = i % 2 ? 1 : -1;
+                const bend = Math.min(64, width * .12) * direction;
+                const x = width * (.16 + (i % 3) * .075);
+                const x2 = width * (.62 + (i % 2) * .1);
+                const points = [
+                    {x:-60,y}, {x,y}, {x:x+Math.abs(bend),y:y+bend},
+                    {x:x2,y:y+bend}, {x:x2+Math.abs(bend),y}, {x:width+60,y}
+                ];
+                let length = 0;
+                const segments = points.slice(1).map((point,j) => {
+                    const from = points[j];
+                    const size = Math.hypot(point.x-from.x,point.y-from.y);
+                    const segment = {from,to:point,start:length,length:size};
+                    length += size;
+                    return segment;
+                });
+                return {points,segments,length};
+            });
+            packets.length = 0;
+            draw(0);
+        }
+        function pointAt(route, position) {
+            const distance = Math.max(0,Math.min(1,position))*route.length;
+            const segment = route.segments.find(s => distance <= s.start+s.length) || route.segments.at(-1);
+            const t = Math.max(0,Math.min(1,(distance-segment.start)/segment.length));
+            return {x:segment.from.x+(segment.to.x-segment.from.x)*t,y:segment.from.y+(segment.to.y-segment.from.y)*t};
+        }
+        function nearest(x,y) {
+            let best = {distance: Infinity, index: 0, position: .5};
+            routes.forEach((route,index) => route.segments.forEach(segment => {
+                const dx=segment.to.x-segment.from.x,dy=segment.to.y-segment.from.y;
+                const t=Math.max(0,Math.min(1,((x-segment.from.x)*dx+(y-segment.from.y)*dy)/(segment.length**2)));
+                const distance=Math.hypot(x-segment.from.x-dx*t,y-segment.from.y-dy*t);
+                if(distance<best.distance) best={distance,index,position:(segment.start+t*segment.length)/route.length};
             }));
-            // На мобильных поверхность делаем заметно ярче — тонкие штрихи теряются на маленьком экране
-            const boost = isMobile ? 2 : 1;
-            lineGradient = ctx.createLinearGradient(0, 0, width, 0);
-            lineGradient.addColorStop(0, `rgba(108,201,194,${.025 * boost})`);
-            lineGradient.addColorStop(.34, `rgba(108,201,194,${.055 * boost})`);
-            lineGradient.addColorStop(.72, `rgba(124,224,213,${Math.min(.34, .18 * boost)})`);
-            lineGradient.addColorStop(1, `rgba(108,201,194,${.055 * boost})`);
-            draw(true);
+            return best;
         }
-        function restPoint(lane, u, time) {
-            const bend = Math.sin(u * 5.2 + time * .13 + lane * .55) * wave;
-            const detail = Math.sin(u * 9 - time * .075 + lane * .9) * .019;
-            return {
-                x: u * width + drift.x * (lane % 2 ? .45 : 1),
-                y: height * (.12 + lane / (laneCount - 1) * .73 + (u - .5) * .22 + bend + detail) + drift.y
-            };
-        }
-        function updatePhysics(dt, time, focus) {
-            // Damped springs share movement with their neighbours. Small integration
-            // steps keep the surface stable when a frame is delayed.
-            const iterations = Math.ceil(dt / .012);
-            const h = dt / iterations;
-            // На тачах зона влияния больше — палец менее точный, чем курсор
-            const radius = Math.min(245, Math.max(165, width * .19)) * (isMobile ? 1.3 : 1);
-            for (let pass = 0; pass < iterations; pass++) {
-                for (let lane = 0; lane < laneCount; lane++) {
-                    const row = springs[lane];
-                    for (let i = 0; i <= steps; i++) {
-                        const node = row[i];
-                        const left = row[Math.max(0, i - 1)], right = row[Math.min(steps, i + 1)];
-                        let fx = 0, fy = 0;
-                        if (focus) {
-                            const base = restPoint(lane, i / steps * 1.08 - .04, time);
-                            const dx = base.x + node.x - focus.x;
-                            const dy = base.y + node.y - focus.y;
-                            const distance = Math.hypot(dx, dy);
-                            if (distance < radius) {
-                                const falloff = Math.pow(1 - distance / radius, 2);
-                                const divisor = Math.max(distance, 16);
-                                // От пальца поверхность гнётся сильнее — эффект заметнее
-                                const push = focus.isTouch ? 3200 : 2100;
-                                fx = (dx / divisor * push + (focus.vx || 0) * 1.4) * falloff;
-                                fy = (dy / divisor * push + (focus.vy || 0) * 1.4) * falloff;
-                            }
-                        }
-                        node.vx += (fx - node.x * 25 - node.vx * 8 + (left.x + right.x - node.x * 2) * 48) * h;
-                        node.vy += (fy - node.y * 25 - node.vy * 8 + (left.y + right.y - node.y * 2) * 48) * h;
-                    }
-                    for (const node of row) {
-                        node.x += node.vx * h;
-                        node.y += node.vy * h;
-                        const displacement = Math.hypot(node.x, node.y);
-                        if (displacement > 72) {
-                            node.x *= 72 / displacement;
-                            node.y *= 72 / displacement;
-                            node.vx *= .6;
-                            node.vy *= .6;
-                        }
-                    }
-                }
-            }
-            pointer.vx *= Math.exp(-dt * 12);
-            pointer.vy *= Math.exp(-dt * 12);
-        }
-        function contourPoint(lane, u, time) {
-            const point = restPoint(lane, u, time);
-            if (reducedMotion.matches) return point;
-            const position = Math.max(0, Math.min(steps, (u + .04) / 1.08 * steps));
-            const index = Math.floor(position), blend = position - index;
-            const a = springs[lane][index], b = springs[lane][Math.min(steps, index + 1)];
-            point.x += a.x + (b.x - a.x) * blend;
-            point.y += a.y + (b.y - a.y) * blend;
-            return point;
-        }
-        function traceContour(lane, time, offset = 0) {
+        function trace(route) {
             ctx.beginPath();
-            for (let step = 0; step <= steps; step++) {
-                const p = contourPoint(lane, step / steps * 1.08 - .04, time);
-                if (!step) ctx.moveTo(p.x, p.y + offset);
-                else ctx.lineTo(p.x, p.y + offset);
-            }
+            route.points.forEach((p,i) => i ? ctx.lineTo(p.x,p.y) : ctx.moveTo(p.x,p.y));
             ctx.stroke();
         }
-        function draw(staticOnly = false, dt = 1 / 30) {
-            ctx.clearRect(0, 0, width, height);
-            const moving = !staticOnly && !reducedMotion.matches;
-            const time = reducedMotion.matches ? 0 : elapsed;
-            const activeMode = hoverMode || mode;
-            const connected = ['business', 'enterprise', 'terminal', 'cases'].includes(activeMode);
-            let desiredWave = activeMode === 'start' ? .035 : activeMode === 'terminal' ? .065 : connected ? .085 : .066;
-            if (isMobile) desiredWave *= 1.35;
-            const ease = moving ? 1 - Math.exp(-dt * 1.1) : 1;
-            wave += (desiredWave - wave) * ease;
-            const focus = hoverPoint || (pointer.active ? pointer : (coarsePointer.matches ? autoFocus : null));
-            if (coarsePointer.matches && !pointer.active && !hoverPoint && moving) {
-                autoFocus.x = width * (.5 + .3 * Math.sin(time * .21));
-                autoFocus.y = height * (.44 + .24 * Math.sin(time * .31 + 1.3));
+        function spark(route, position, alpha, direction=1, bright=false) {
+            for(let tail=6;tail>=0;tail--) {
+                const u=position-tail*.004*direction;
+                if(u<0 || u>1) continue;
+                const p=pointAt(route,u);
+                ctx.fillStyle=`rgba(${bright?'200,255,236':'124,224,213'},${alpha*(1-tail/7)})`;
+                ctx.fillRect(p.x-(tail?1:2),p.y-(tail?1:2),tail?2:4,tail?2:4);
             }
-            drift.x += ((moving && focus ? (focus.x / width - .5) * 14 : 0) - drift.x) * ease;
-            drift.y += ((moving && focus ? (focus.y / height - .5) * 10 : 0) - drift.y) * ease;
-            if (moving) updatePhysics(dt, time, focus);
-
-            // Wide, slowly moving light pools give depth without flashing behind the copy.
-            const glowSize = Math.max(width * .8, height * .9);
-            const gx = width * (.79 + Math.sin(time * .055) * .055);
-            const gy = height * (.43 + Math.cos(time * .067) * .13);
-            ctx.globalAlpha = .78;
-            ctx.drawImage(light, gx - glowSize / 2, gy - glowSize / 2, glowSize, glowSize);
-            ctx.globalAlpha = .32;
-            ctx.drawImage(light, -glowSize * .45, height * (.74 + Math.sin(time * .04) * .08) - glowSize / 2, glowSize, glowSize);
-            ctx.globalAlpha = 1;
-
-            ctx.strokeStyle = lineGradient;
-            ctx.lineWidth = isMobile ? 1.1 : .8;
-            for (let lane = 0; lane < laneCount; lane++) {
-                traceContour(lane, time);
-                // A faint parallel line reads as a flowing surface, rather than a wire mesh.
-                ctx.globalAlpha = isMobile ? .45 : .3;
-                traceContour(lane, time, 15 + lane * 2);
-                ctx.globalAlpha = 1;
-            }
-            for (const p of particles) {
-                const u = (p.offset + time * .006 * p.depth) % 1;
-                const point = contourPoint(p.lane, u, time);
-                const edge = Math.min(1, u * 9, (1 - u) * 9);
-                const alpha = Math.min(1, (.12 + p.depth * .18) * edge * (isMobile ? 1.5 : 1));
-                ctx.fillStyle = `rgba(155,225,217,${alpha})`;
-                ctx.beginPath();
-                ctx.arc(point.x, point.y, (.55 + p.depth * .75) * (isMobile ? 1.4 : 1), 0, Math.PI * 2);
-                ctx.fill();
-                // A handful of bright square nodes make the moving surface read as a
-                // quiet circuit network. They follow the same cursor-bent contours.
-                if (p.circuit && alpha > .1) {
-                    const next = contourPoint(p.lane, Math.min(.995, u + .008), time);
-                    ctx.globalAlpha = Math.min(.72, alpha * 2.1);
-                    ctx.strokeStyle = 'rgba(124,224,213,.72)';
-                    ctx.lineWidth = .7;
-                    ctx.beginPath();
-                    ctx.moveTo(point.x, point.y);
-                    ctx.lineTo(next.x, next.y);
-                    ctx.stroke();
-                    ctx.fillStyle = '#9af5e8';
-                    ctx.shadowColor = '#6fe0d0';
-                    ctx.shadowBlur = 7;
-                    ctx.fillRect(point.x - 1.5, point.y - 1.5, 3, 3);
-                    ctx.shadowBlur = 0;
-                    ctx.globalAlpha = 1;
+        }
+        function draw(dt) {
+            ctx.clearRect(0,0,width,height);
+            pointer.strength += ((pointer.active ? 1 : 0)-pointer.strength)*Math.min(1,dt*8);
+            const focus=pointer.strength>.015 ? nearest(pointer.x,pointer.y) : null;
+            const mobile=width<700;
+            routes.forEach((route,index) => {
+                const selected = focus?.index===index;
+                const highlight=selected ? pointer.strength*.3 : index===activeRoute ? .16 : 0;
+                ctx.strokeStyle=`rgba(124,224,213,${(mobile ? .13 : .085)+highlight})`;
+                ctx.lineWidth=selected ? 1.5 : 1;
+                trace(route);
+                route.points.slice(1,-1).forEach(p => {
+                    ctx.fillStyle=`rgba(124,224,213,${.22+highlight})`;
+                    ctx.fillRect(p.x-2,p.y-2,4,4);
+                    ctx.strokeStyle=`rgba(124,224,213,${.12+highlight})`;
+                    ctx.strokeRect(p.x-5,p.y-5,10,10);
+                });
+                if(!reduced.matches) {
+                    const position=(elapsed*(index % 2 ? .037 : .029)+index*.193+sectionIndex*.08)%1;
+                    spark(route,index%2 ? 1-position : position,.55,index%2 ? -1 : 1);
                 }
+            });
+            if(focus) {
+                ctx.globalAlpha=pointer.strength;
+                ctx.drawImage(glow,pointer.x-125,pointer.y-125,250,250);
+                const p=pointAt(routes[focus.index],focus.position);
+                ctx.strokeStyle=`rgba(175,255,230,${pointer.strength*.65})`;
+                ctx.beginPath(); ctx.moveTo(pointer.x,pointer.y);ctx.lineTo(p.x,p.y);ctx.stroke();
+                ctx.strokeRect(p.x-7,p.y-7,14,14);
+                ctx.globalAlpha=1;
             }
-            // Only a few small signals move faster than the surface itself.
-            const signals = width < 700 ? 3 : 3;
-            for (let i = 0; i < signals; i++) {
-                const u = (i * .31 + time * .021) % 1;
-                const lane = (i * 2 + 1) % laneCount;
-                const fade = Math.min(1, u * 12, (1 - u) * 12);
-                for (let tail = 7; tail >= 0; tail--) {
-                    const point = contourPoint(lane, Math.max(0, u - tail * .004), time);
-                    ctx.fillStyle = `rgba(162,239,226,${(.42 - tail * .05) * fade * (isMobile ? 1.25 : 1)})`;
-                    ctx.beginPath();
-                    ctx.arc(point.x, point.y, (tail ? .85 : 1.5) * (isMobile ? 1.4 : 1), 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
-
-            // Кольца от касаний — расходятся и затухают, как вода от пальца
-            for (let i = ripples.length - 1; i >= 0; i--) {
-                const r = ripples[i];
-                const age = time - r.born;
-                if (age > .9) { ripples.splice(i, 1); continue; }
-                const fade = 1 - age / .9;
-                ctx.strokeStyle = `rgba(124,224,213,${.55 * fade})`;
-                ctx.lineWidth = 1.2;
-                ctx.beginPath();
-                ctx.arc(r.x, r.y, 14 + age * 130, 0, Math.PI * 2);
-                ctx.stroke();
-            }
-            // Свечение под пальцем, пока он на экране
-            if (pointer.active && pointer.isTouch) {
-                ctx.globalAlpha = .5;
-                ctx.drawImage(light, pointer.x - 75, pointer.y - 75, 150, 150);
-                ctx.globalAlpha = 1;
-                ctx.fillStyle = 'rgba(190,255,245,.9)';
-                ctx.beginPath();
-                ctx.arc(pointer.x, pointer.y, 2.6, 0, Math.PI * 2);
-                ctx.fill();
+            for(let i=packets.length-1;i>=0;i--) {
+                const packet=packets[i];
+                const age=elapsed-packet.born;
+                const position=packet.position+age*packet.direction*.36;
+                if(age>2.3 || position<0 || position>1) {packets.splice(i,1);continue;}
+                spark(routes[packet.route],position,Math.min(1,(2.3-age)*2),packet.direction,true);
             }
         }
         function animate(now) {
-            if (!visible || reducedMotion.matches) { raf = 0; return; }
-            const interval = coarsePointer.matches ? 42 : 32;
-            if (!lastFrame || now - lastFrame >= interval) {
-                const dt = lastFrame ? Math.min((now - lastFrame) / 1000, .08) : 1 / 30;
-                lastFrame = now;
-                elapsed += dt;
-                draw(false, dt);
+            if(document.hidden || reduced.matches) {raf=0;return;}
+            if(!last || now-last >= (coarse.matches ? 40 : 32)) {
+                const dt=last ? Math.min(.08,(now-last)/1000) : .033;
+                last=now;elapsed+=dt;draw(dt);
             }
-            raf = requestAnimationFrame(animate);
+            raf=requestAnimationFrame(animate);
         }
-        function ensureAnimation() {
-            if (!raf && visible && !reducedMotion.matches) { lastFrame = 0; raf = requestAnimationFrame(animate); }
+        function start() {
+            if(!raf && !document.hidden && !reduced.matches) {last=0;raf=requestAnimationFrame(animate);}
         }
-        function updateSection() {
-            let current = sections[0];
-            const center = height * .48;
-            let best = Infinity;
-            for (const section of sections) {
-                const r = section.getBoundingClientRect();
-                const distance = center < r.top ? r.top - center : center > r.bottom ? center - r.bottom : 0;
-                if (distance < best) { best = distance; current = section; }
-            }
-            mode = current ? current.dataset.fieldMode : pageMode;
-            if (reducedMotion.matches) draw(true);
+        function inject(x,y) {
+            if(reduced.matches || !routes.length) return;
+            const hit=nearest(x,y);
+            for(const direction of [-1,1]) packets.push({route:hit.index,position:hit.position,direction,born:elapsed});
+            if(packets.length>24) packets.splice(0,packets.length-24);
         }
+        function move(x,y) {pointer.x=x;pointer.y=y;pointer.active=true;}
+        function ignore(target) {return target instanceof Element && target.closest('input,textarea,select,.chat-widget,.mobile-menu');}
+        // Passive listeners observe touches; they never capture or cancel page scrolling.
+        addEventListener('pointermove',e => {if(!reduced.matches && !ignore(e.target)) move(e.clientX,e.clientY);},{passive:true});
+        addEventListener('pointerdown',e => {
+            if(ignore(e.target)) return;
+            move(e.clientX,e.clientY);inject(e.clientX,e.clientY);
+        },{passive:true});
+        addEventListener('touchmove',e => {
+            if(reduced.matches || ignore(e.target)) return;
+            const t=e.touches[0];if(!t)return;
+            move(t.clientX,t.clientY);
+            if(elapsed-lastTouchSignal>.18) {inject(t.clientX,t.clientY);lastTouchSignal=elapsed;}
+        },{passive:true});
+        addEventListener('touchend',()=>{pointer.active=false;},{passive:true});
+        addEventListener('pointerup',e=>{if(e.pointerType==='touch')pointer.active=false;},{passive:true});
+        addEventListener('pointercancel',()=>{pointer.active=false;},{passive:true});
+        document.addEventListener('pointerleave',()=>{pointer.active=false;});
+        addEventListener('blur',()=>{pointer.active=false;});
         let resizeTimer;
-        addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { size(); updateSection(); }, 150); }, { passive: true });
-        addEventListener('scroll', updateSection, { passive: true });
-        addEventListener('pointermove', e => {
-            if (reducedMotion.matches) return;
-            const now = performance.now();
-            const dt = Math.max(.016, (now - pointer.stamp) / 1000);
-            pointer.vx = pointer.active ? Math.max(-900, Math.min(900, (e.clientX - pointer.x) / dt)) : 0;
-            pointer.vy = pointer.active ? Math.max(-900, Math.min(900, (e.clientY - pointer.y) / dt)) : 0;
-            pointer.x = e.clientX;
-            pointer.y = e.clientY;
-            pointer.stamp = now;
-            pointer.active = true;
-            pointer.isTouch = e.pointerType === 'touch';
-        }, { passive: true });
-        document.addEventListener('pointerleave', () => { pointer.active = false; });
-        // На тачах палец отпускают — точка касания перестаёт тянуть поверхность
-        addEventListener('pointerup', e => { if (e.pointerType === 'touch') pointer.active = false; }, { passive: true });
-        addEventListener('pointercancel', e => { if (e.pointerType === 'touch') pointer.active = false; }, { passive: true });
-        // Тап рождает кольцо-пульс в точке касания
-        addEventListener('pointerdown', e => {
-            if (e.pointerType !== 'touch' || reducedMotion.matches) return;
-            pointer.isTouch = true;
-            pointer.x = e.clientX; pointer.y = e.clientY; pointer.active = true;
-            ripples.push({ x: e.clientX, y: e.clientY, born: elapsed });
-        }, { passive: true });
-        // Свайп/скролл пальцем тоже гнёт поверхность — touchmove живёт дольше pointer-событий
-        addEventListener('touchmove', e => {
-            if (reducedMotion.matches) return;
-            const t = e.touches[0];
-            if (!t) return;
-            const now = performance.now();
-            const dt = Math.max(.016, (now - pointer.stamp) / 1000);
-            pointer.vx = pointer.active ? Math.max(-900, Math.min(900, (t.clientX - pointer.x) / dt)) : 0;
-            pointer.vy = pointer.active ? Math.max(-900, Math.min(900, (t.clientY - pointer.y) / dt)) : 0;
-            pointer.x = t.clientX; pointer.y = t.clientY;
-            pointer.stamp = now;
-            pointer.active = true;
-            pointer.isTouch = true;
-            // Пока палец ведёт — оставляет за собой серию колец (не чаще ~90 мс)
-            const last = ripples[ripples.length - 1];
-            if (!last || elapsed - last.born > .09) ripples.push({ x: t.clientX, y: t.clientY, born: elapsed });
-            if (ripples.length > 20) ripples.splice(0, ripples.length - 20);
-        }, { passive: true });
-        addEventListener('touchend', () => { pointer.active = false; pointer.isTouch = false; }, { passive: true });
-        addEventListener('blur', () => { pointer.active = false; });
-        document.addEventListener('visibilitychange', () => { visible = !document.hidden; if (visible) ensureAnimation(); else { cancelAnimationFrame(raf); raf = 0; } });
-        reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) { cancelAnimationFrame(raf); raf = 0; draw(true); } else ensureAnimation(); });
-        serviceCards.forEach(card => {
-            card.addEventListener('pointerenter', () => { hoverMode = card.dataset.service === 'start' ? 'start' : card.dataset.service === 'business' ? 'business' : 'enterprise'; });
-            card.addEventListener('pointerleave', () => { hoverMode = null; });
-            card.addEventListener('focusin', () => { hoverMode = card.dataset.service === 'start' ? 'start' : card.dataset.service === 'business' ? 'business' : 'enterprise'; });
-            card.addEventListener('focusout', () => { hoverMode = null; });
+        addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(resize,120);},{passive:true});
+        addEventListener('scroll',()=>{
+            let best=Infinity;
+            sections.forEach((section,index)=>{
+                const rect=section.getBoundingClientRect();
+                const distance=Math.abs(rect.top+Math.min(rect.height,height)/2-height/2);
+                if(distance<best){best=distance;sectionIndex=index;}
+            });
+        },{passive:true});
+        document.querySelectorAll('.service-card').forEach((card,index)=>{
+            const select=()=>{activeRoute=index%routes.length;};
+            const reset=()=>{activeRoute=-1;};
+            card.addEventListener('pointerenter',select);card.addEventListener('pointerleave',reset);
+            card.addEventListener('focusin',select);card.addEventListener('focusout',reset);
         });
-        caseCards.forEach(card => {
-            card.addEventListener('pointerenter', () => { const r = card.getBoundingClientRect(); hoverPoint = { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
-            card.addEventListener('pointerleave', () => { hoverPoint = null; });
+        document.addEventListener('skyway:signal',e=>{
+            activeRoute=(Number(e.detail?.step)||0)%routes.length;
+            inject(width*.75,height*.4);
         });
-
+        document.addEventListener('visibilitychange',()=>{
+            if(document.hidden){cancelAnimationFrame(raf);raf=0;pointer.active=false;}
+            else start();
+        });
+        reduced.addEventListener('change',()=>{
+            cancelAnimationFrame(raf);raf=0;pointer.active=false;pointer.strength=0;packets.length=0;
+            draw(0);start();
+        });
         const moduleNames = { WEB: 'Сайт', BOOKING: 'Бронирование и запись', STORE: 'Интернет-магазин', CRM: 'Кастомная CRM', AI: 'ИИ-агент / менеджер / админ-панель', AUTO: 'Автоматизация', TELEGRAM: 'Уведомления в Telegram', SEO: 'SEO' };
         function setRequest(raw) {
             const text = (raw || '').trim().slice(0, 500);
@@ -363,14 +224,7 @@
         sendBtn?.addEventListener('click', () => setRequest(terminalInput?.value), true);
         terminalInput?.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) setRequest(terminalInput.value); }, true);
         document.querySelectorAll('.terminal-quick-btn').forEach(btn => btn.addEventListener('click', () => setRequest(btn.dataset.message), true));
-        if (mechanism && 'IntersectionObserver' in window) {
-            let inView = true;
-            const syncMechanism = () => mechanism.classList.toggle('is-idle', !inView || document.hidden);
-            new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; syncMechanism(); }, { rootMargin: '30px' }).observe(mechanism);
-            document.addEventListener('visibilitychange', syncMechanism);
-        }
-        size();
-        updateSection();
-        ensureAnimation();
+        resize();
+        start();
     });
 })();

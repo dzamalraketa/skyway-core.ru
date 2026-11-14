@@ -1103,61 +1103,66 @@ function initReveal() {
 }
 
 
-// ===== ЖИВОЕ ЯДРО: наклон за курсором/пальцем и лента событий =====
+// ===== An interactive, touch-first demonstration of a lead moving through the system. =====
 function initCoreDiagram() {
     const box = document.querySelector('.core-hero-diagram');
     if (!box) return;
-    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     const stage = box.querySelector('.core-diagram-stage');
+    const buttons = [...box.querySelectorAll('.core-flow-step')];
+    const toggle = box.querySelector('.core-flow-toggle');
     const feed = document.getElementById('coreFeed');
-
-    if (!reduce && stage) {
-        let hotTimer;
-        const tilt = function(e) {
-            const r = box.getBoundingClientRect();
-            const x = (e.clientX - r.left) / r.width - 0.5;
-            const y = (e.clientY - r.top) / r.height - 0.5;
-            stage.style.setProperty('--ry', (x * 14).toFixed(2) + 'deg');
-            stage.style.setProperty('--rx', (-y * 12).toFixed(2) + 'deg');
-        };
-        const reset = function() {
-            stage.style.setProperty('--rx', '0deg');
-            stage.style.setProperty('--ry', '0deg');
-        };
-        box.addEventListener('pointermove', tilt);
-        box.addEventListener('pointerleave', reset);
-        box.addEventListener('pointerdown', function(e) {
-            tilt(e);
-            box.classList.add('is-hot');
-            clearTimeout(hotTimer);
-            hotTimer = setTimeout(function() { box.classList.remove('is-hot'); reset(); }, 1400);
-        });
-        box.addEventListener('pointerup', function() {
-            clearTimeout(hotTimer);
-            hotTimer = setTimeout(function() { box.classList.remove('is-hot'); reset(); }, 700);
-        });
+    const labels = ['ВОПРОС', 'ОТВЕТ', 'ЗАЯВКА', 'ГОТОВО'];
+    const messages = [
+        'Клиент задаёт вопрос на сайте.',
+        'ИИ отвечает и уточняет задачу клиента.',
+        'CRM сохраняет контакт и детали заявки.',
+        'Команда получает заявку с контекстом.'
+    ];
+    let step = 0, paused = reduced.matches, inView = false, timer = 0, feedbackTimer = 0;
+    function schedule() {
+        clearTimeout(timer);
+        if (!paused && inView && !document.hidden && !reduced.matches) {
+            timer = setTimeout(() => select((step + 1) % 4, false), 3200);
+        }
     }
-
-    if (feed && !reduce) {
-        const msgs = [
-            '→ новая заявка · Telegram',
-            '→ клиент записан · WhatsApp',
-            '→ диалог передан в CRM',
-            '→ лид квалифицирован · сайт',
-            '→ напоминание отправлено',
-            '→ ответ за 3 сек · Instagram'
-        ];
-        let i = 0;
-        setInterval(function() {
-            if (document.hidden) return;
-            feed.classList.add('swap');
-            setTimeout(function() {
-                i = (i + 1) % msgs.length;
-                feed.textContent = msgs[i];
-                feed.classList.remove('swap');
-            }, 300);
-        }, 2800);
+    function sync() {
+        box.classList.toggle('is-idle', !inView || document.hidden || reduced.matches);
+        box.dataset.flowPaused = String(paused || reduced.matches);
+        toggle.hidden = reduced.matches;
+        toggle.setAttribute('aria-pressed', String(paused));
+        toggle.setAttribute('aria-label', paused ? 'Продолжить смену этапов' : 'Приостановить смену этапов');
+        toggle.querySelector('span').textContent = paused ? '▷' : 'Ⅱ';
+        schedule();
     }
+    function select(next, manual) {
+        step = next;
+        if (manual) paused = true;
+        box.dataset.flowStep = String(step);
+        buttons.forEach((button,index) => button.setAttribute('aria-pressed', String(index === step)));
+        box.querySelectorAll('[data-flow-node]').forEach((node,index) => node.classList.toggle('is-active', index === step));
+        box.querySelector('.engine-core-label').textContent = labels[step];
+        box.querySelector('.core-flow-count').textContent = '0' + (step + 1) + ' / 04';
+        feed.setAttribute('aria-live', manual ? 'polite' : 'off');
+        feed.textContent = messages[step];
+        box.classList.remove('is-signaling');
+        clearTimeout(feedbackTimer);
+        if (!reduced.matches) {
+            box.classList.add('is-signaling');
+            feedbackTimer = setTimeout(() => box.classList.remove('is-signaling'), 650);
+            document.dispatchEvent(new CustomEvent('skyway:signal', {detail: {step}}));
+        }
+        sync();
+    }
+    stage.addEventListener('click', () => select((step + 1) % 4, true));
+    buttons.forEach((button,index) => button.addEventListener('click', () => select(index, true)));
+    toggle.addEventListener('click', () => {paused = !paused;sync();});
+    if ('IntersectionObserver' in window) {
+        new IntersectionObserver(([entry]) => {inView = entry.isIntersecting;sync();}, {threshold: .12}).observe(box);
+    } else {inView = true;}
+    document.addEventListener('visibilitychange', sync);
+    reduced.addEventListener('change', () => {paused = reduced.matches;sync();});
+    sync();
 }
 
 // Keep keyboard navigation inside an open overlay.
