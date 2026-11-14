@@ -4,7 +4,8 @@
   "scripts": {
     "minify:css": "cleancss css/style.css -o css/style.min.css --source-map",
     "minify:js": "terser js/main.js -o js/main.min.js -c -m --source-map url=main.min.js.map",
-    "minify": "npm run minify:css && npm run minify:js"
+    "minify": "npm run minify:css && npm run minify:js",
+    "test": "node --test tests/*.test.mjs"
   },
   "devDependencies": {
     "clean-css-cli": "5.6.3",

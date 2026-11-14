@@ -1,0 +1,4 @@
+name = "leads"
+main = "src/index.mjs"
+compatibility_date = "2024-01-01"
+# Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID as Worker secrets, never in Git.

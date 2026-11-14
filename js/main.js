@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (terminal) {
             // Небольшая задержка для корректной отрисовки
             setTimeout(() => {
-                terminal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                terminal.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
                 // Очищаем хеш из URL
                 if (history.replaceState) {
                     history.replaceState(null, '', window.location.pathname + window.location.search);
@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initCoreDiagram();
     initMobileAccordions();
     initHeaderDropdown();
+    initFaq();
     updateCurrentYear();
 });
 
@@ -238,12 +239,21 @@ function initMobileMenu() {
     mobileMenuBtn.setAttribute('aria-expanded', 'false');
     mobileMenuBtn.setAttribute('aria-controls', 'mobileMenu');
     mobileMenu.setAttribute('aria-hidden', 'true');
+    mobileMenu.inert = true;
+    mobileMenu.setAttribute('role', 'dialog');
+    mobileMenu.setAttribute('aria-label', 'Навигация по сайту');
+    mobileMenu.setAttribute('aria-modal', 'true');
+    trapDialogFocus(mobileMenu);
     
     function toggleMenu(open) {
         const isOpen = open !== undefined ? open : !mobileMenu.classList.contains('active');
         mobileMenu.classList.toggle('active', isOpen);
         mobileMenuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         mobileMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        mobileMenu.inert = !isOpen;
+        mobileMenuBtn.setAttribute('aria-label', isOpen ? 'Закрыть меню' : 'Открыть меню');
+        if (isOpen) mobileMenuClose?.focus();
+        else mobileMenuBtn.focus();
         document.body.style.overflow = isOpen ? 'hidden' : '';
         
         // Изменение иконки кнопки меню
@@ -274,7 +284,7 @@ function initMobileMenu() {
     });
     
     // Close menu when clicking on navigation links
-    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+    mobileMenu.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             toggleMenu(false);
         });
@@ -366,7 +376,7 @@ function initChatBox(refs) {
         var container = document.createElement('span');
         container.className = 'smith-response-text';
         lineEl.appendChild(container);
-        var i = 0;
+        var i = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? text.length : 0;
         function type() {
             if (i < text.length) {
                 container.textContent = text.slice(0, i + 1);
@@ -390,28 +400,27 @@ function initChatBox(refs) {
     var chatHistory = [];
 
     async function getSmithResponse(message) {
-        const proxyUrl = 'https://smit.skywayapsny.workers.dev/';
-
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 45000);
         try {
-            const controller = new AbortController();
-            const timer = setTimeout(function() { controller.abort(); }, 40000);
-            const response = await fetch(proxyUrl, {
+            const response = await fetch('https://smit.skywayapsny.workers.dev/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: message, history: chatHistory }),
+                body: JSON.stringify({ message, history: chatHistory }),
                 signal: controller.signal
             });
-            clearTimeout(timer);
-
+            if (!response.ok) throw new Error('Chat HTTP ' + response.status);
             const data = await response.json();
-            return data.content || SMITH_ERROR_MESSAGE;
-
+            if (typeof data.content !== 'string' || !data.content.trim()) throw new Error('Empty chat reply');
+            return data.content;
         } catch (err) {
-            console.error('Terminal Error:', err);
-            return SMITH_ERROR_MESSAGE;
+            console.error('Chat unavailable:', err);
+            return null;
+        } finally {
+            clearTimeout(timer);
         }
     }
-    
+
     var isFirstRequest = true;
     var pending = false;
 
@@ -438,9 +447,7 @@ function initChatBox(refs) {
             var outLine = document.createElement('div');
             outLine.className = 'terminal-line smith-response';
             terminalOutput.appendChild(outLine);
-            typewriter(outLine, response, 20, function() {
-                terminalInput.focus();
-            });
+            return new Promise(resolve => typewriter(outLine, response, 8, resolve));
         }
 
         if (isFirstRequest) {
@@ -455,11 +462,21 @@ function initChatBox(refs) {
         }
 
         pending = true;
+        if (sendBtn) sendBtn.disabled = true;
+        quickBtns.forEach(btn => { btn.disabled = true; });
+        terminalOutput.setAttribute('aria-busy', 'true');
         getSmithResponse(message).then(function(response) {
-            chatHistory.push({ u: message, b: String(response).slice(0, 800) });
-            if (chatHistory.length > 8) chatHistory = chatHistory.slice(-8);
-            showResponse(response);
-        }).finally(function() { pending = false; });
+            if (response) {
+                chatHistory.push({ u: message, b: response.slice(0, 800) });
+                if (chatHistory.length > 8) chatHistory = chatHistory.slice(-8);
+            }
+            return showResponse(response || SMITH_ERROR_MESSAGE);
+        }).finally(function() {
+            pending = false;
+            if (sendBtn) sendBtn.disabled = false;
+            quickBtns.forEach(btn => { btn.disabled = false; });
+            terminalOutput.setAttribute('aria-busy', 'false');
+        });
     }
     
     terminalInput.addEventListener('input', function() {
@@ -467,7 +484,7 @@ function initChatBox(refs) {
     });
     
     terminalInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
             e.preventDefault();
             sendToSmith(terminalInput.value);
         }
@@ -507,64 +524,69 @@ function initConsole() {
 }
 
 // ===== CONTACT FORM =====
-function initContactForm() { 
-    const contactForm = document.getElementById('contactForm'); 
-    const submitBtn = document.getElementById('submitBtn'); 
-    const trapField = document.getElementById('trap_field');
- 
-    if (!contactForm) return; 
- 
-    contactForm.addEventListener('submit', async (e) => { 
-        e.preventDefault(); 
-
-        // Анти-спам проверка (trap field)
-        if (trapField && trapField.value !== '') return;
- 
-        // Безопасная проверка кнопки
-        const originalBtnText = submitBtn ? submitBtn.innerHTML : 'Отправить';
-        
-        if (submitBtn) {
-            submitBtn.disabled = true; 
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...'; 
+function initContactForm() {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+    const submit = form.querySelector('[type="submit"]');
+    const status = document.getElementById('formStatus');
+    const fallback = document.getElementById('formFallback');
+    const copy = document.getElementById('copyRequest');
+    let pending = false;
+    const values = () => Object.fromEntries(['name', 'phone', 'business', 'message'].map(key => [key, form.elements[key].value.trim()]));
+    function showStatus(message, type) {
+        status.hidden = false;
+        status.dataset.type = type;
+        status.textContent = message;
+    }
+    copy?.addEventListener('click', async () => {
+        const data = values();
+        const text = `Заявка с сайта SKYWAY\nИмя: ${data.name}\nКонтакт: ${data.phone}\nСфера бизнеса: ${data.business}\nКомментарий: ${data.message}`;
+        try {
+            await navigator.clipboard.writeText(text);
+            showStatus('Заявка скопирована. Откройте Telegram и вставьте её в сообщение @skyway_core.', 'info');
+        } catch {
+            showStatus('Не удалось скопировать автоматически. Напишите @skyway_core в Telegram — данные заявки сохранены в полях.', 'error');
         }
-
-        // Сбор данных
-        const formData = { 
-            name: document.getElementById('name').value, 
-            phone: document.getElementById('phone').value, 
-            business: document.getElementById('business').value, 
-            message: document.getElementById('message').value 
-        }; 
-
-        try { 
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-            const response = await fetch('https://leads.skywayapsny.workers.dev', { 
-                method: 'POST', 
+    });
+    form.addEventListener('submit', async event => {
+        event.preventDefault();
+        if (pending || form.elements.trap_field.value) return;
+        const data = values();
+        for (const key of ['name', 'phone', 'business']) {
+            form.elements[key].setCustomValidity(data[key] ? '' : 'Заполните это поле.');
+        }
+        if (!form.reportValidity()) return;
+        pending = true;
+        const originalText = submit.innerHTML;
+        submit.disabled = true;
+        submit.textContent = 'Отправка…';
+        form.setAttribute('aria-busy', 'true');
+        fallback.hidden = true;
+        showStatus('Отправляем заявку…', 'info');
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 12000);
+        try {
+            const response = await fetch('https://leads.skywayapsny.workers.dev', {
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(data),
                 signal: controller.signal
-            }); 
-            clearTimeout(timeoutId);
-
-            if (response.ok) { 
-                showNotification('Заявка принята. Мы свяжемся с вами в ближайшее время.', 'success');
-                contactForm.reset(); 
-            } else { 
-                throw new Error('Ошибка сервера'); 
-            } 
-        } catch (error) { 
-            console.error('Ошибка:', error); 
-            const errorMsg = error.name === 'AbortError' ? 'Время ожидания истекло' : 'Ошибка связи';
-            showNotification(`${errorMsg}. Напишите в Telegram @skyway_core`, 'error');
-        } finally { 
-            if (submitBtn) {
-                submitBtn.disabled = false; 
-                submitBtn.innerHTML = originalBtnText; 
-            }
-        } 
-    }); 
+            });
+            if (!response.ok) throw new Error('Lead HTTP ' + response.status);
+            showStatus('Заявка принята. Мы свяжемся с вами по указанному контакту.', 'success');
+            form.reset();
+        } catch (error) {
+            showStatus('Не удалось подтвердить отправку. Данные остались в форме. Свяжитесь с нами в Telegram или WhatsApp.', 'error');
+            fallback.hidden = false;
+        } finally {
+            clearTimeout(timer);
+            pending = false;
+            submit.disabled = false;
+            submit.innerHTML = originalText;
+            form.setAttribute('aria-busy', 'false');
+        }
+    });
+    form.addEventListener('input', event => event.target.setCustomValidity?.(''));
 }
 
 // ===== SMOOTH SCROLL =====
@@ -580,7 +602,7 @@ function initSmoothScroll() {
             if (target) {
                 e.preventDefault();
                 target.scrollIntoView({
-                    behavior: 'smooth',
+                    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
                     block: 'start'
                 });
             }
@@ -686,6 +708,7 @@ function initChatFab() {
     widget.id = 'chatWidget';
     widget.className = 'chat-widget';
     widget.setAttribute('aria-hidden', 'true');
+    widget.inert = true;
     widget.setAttribute('role', 'dialog');
     widget.setAttribute('aria-label', 'Чат с ИИ-консультантом');
     widget.innerHTML =
@@ -728,6 +751,7 @@ function initChatFab() {
     fab.type = 'button';
     fab.setAttribute('aria-label', 'Открыть чат с ИИ-консультантом');
     fab.setAttribute('aria-expanded', 'false');
+    fab.setAttribute('aria-controls', 'chatWidget');
     fab.title = 'Спросить ИИ-консультанта';
     fab.innerHTML = '<i class="fas fa-comment-dots" aria-hidden="true"></i>';
     document.body.appendChild(fab);
@@ -747,13 +771,20 @@ function initChatFab() {
         trackVV();
     }
 
+    let returnFocus = null;
+    trapDialogFocus(widget);
     function setOpen(open) {
+        if (open) returnFocus = document.activeElement;
+        widget.inert = !open;
         widget.classList.toggle('open', open);
         widget.setAttribute('aria-hidden', open ? 'false' : 'true');
         fab.setAttribute('aria-expanded', open ? 'true' : 'false');
+        fab.setAttribute('aria-label', open ? 'Закрыть чат' : 'Открыть чат с ИИ-консультантом');
+        if (open) closeBtn.focus();
+        else returnFocus?.focus();
         fab.querySelector('i').className = open ? 'fas fa-times' : 'fas fa-comment-dots';
         // На тачах не фокусируемся сами — клавиатура не выскочит и не закроет полэкрана
-        if (open && input && !isTouch) setTimeout(function() { input.focus(); }, 250);
+        if (open && input && !isTouch) input.focus();
         // При открытии блокируем скролл страницы на мобиле (виджет — полный экран)
         document.body.style.overflow = (open && isTouch) ? 'hidden' : '';
     }
@@ -1127,4 +1158,37 @@ function initCoreDiagram() {
             }, 300);
         }, 2800);
     }
+}
+
+// Keep keyboard navigation inside an open overlay.
+function trapDialogFocus(dialog) {
+    dialog.addEventListener('keydown', event => {
+        if (event.key !== 'Tab') return;
+        const focusable = [...dialog.querySelectorAll('a[href], button, input, textarea, [tabindex="0"]')]
+            .filter(el => !el.disabled && el.getClientRects().length);
+        const first = focusable[0], last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    });
+}
+
+function initFaq() {
+    document.querySelectorAll('button.faq-question').forEach((question, index) => {
+        const item = question.closest('.faq-item');
+        const answer = item.querySelector('.faq-answer');
+        answer.id = 'faq-answer-' + index;
+        question.setAttribute('aria-controls', answer.id);
+        answer.hidden = true;
+        question.addEventListener('click', () => {
+            const open = question.getAttribute('aria-expanded') !== 'true';
+            document.querySelectorAll('button.faq-question').forEach(other => {
+                other.setAttribute('aria-expanded', 'false');
+                other.closest('.faq-item').classList.remove('active');
+                document.getElementById(other.getAttribute('aria-controls')).hidden = true;
+            });
+            question.setAttribute('aria-expanded', String(open));
+            item.classList.toggle('active', open);
+            answer.hidden = !open;
+        });
+    });
 }

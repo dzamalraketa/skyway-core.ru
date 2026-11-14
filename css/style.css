@@ -7185,3 +7185,38 @@ margin: 0 auto 30px;
     color: #00f2ff;
     background: rgba(0, 242, 255, 0.06);
 }
+
+/* Shared brand and interaction refinements. */
+body.home-core, body.site-core { font-family: var(--font-sans); }
+.header .logo-link { position: relative; padding-left: 58px; min-height: 48px; justify-content: center; }
+.header .logo-link::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; background: url('/assets/skyway-mark.svg') center / contain no-repeat; }
+.header .logo-brand { font-size: 1.45rem; line-height: 1.25; background: none; -webkit-text-fill-color: #ecf7f4; color: #ecf7f4; }
+.logo-brand::after { display: none; }
+.header .logo-sub { font: 400 .72rem/1.5 var(--font-sans); margin-top: 3px; }
+.home-core :focus-visible, .site-core :focus-visible { outline: 2px solid #7ce0d5; outline-offset: 4px; }
+.mobile-menu[aria-hidden="true"], .chat-widget[aria-hidden="true"] { visibility: hidden; }
+.chat-widget { font-family: var(--font-sans); }
+.chat-widget-output { overflow-wrap: anywhere; }
+.chat-widget-send:disabled, .chat-widget-quick-btn:disabled { opacity: .45; cursor: wait; }
+.form-status { margin-top: 18px; padding: 16px; border: 1px solid rgba(124,224,213,.35); color: #d0f1e9; line-height: 1.6; }
+.form-status[data-type="error"] { border-color: #d69a77; color: #ffd9bf; }
+.form-fallback { margin-top: 16px; padding: 18px; background: rgba(124,224,213,.06); border: 1px solid rgba(124,224,213,.2); }
+.form-fallback p { margin-bottom: 12px; }
+.form-fallback .contact-link { display: inline-block; margin: 12px 4px 0; }
+[hidden] { display: none !important; }
+button.faq-question { width: 100%; border: 0; color: inherit; background: transparent; font: inherit; text-align: left; cursor: pointer; }
+@media (max-width: 480px) {
+    .header .logo-link { padding-left: 49px; }
+    .header .logo-link::before { width: 38px; height: 38px; }
+    .header .logo-brand { font-size: 1.25rem; }
+    .header .logo-sub { font-size: .65rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto !important; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+@media (max-width: 1024px) {
+    .mobile-menu .mobile-only { display: inline-flex; }
+    .mobile-menu-content { max-height: 100dvh; overflow-y: auto; gap: 12px; padding: 76px 24px 30px; }
+    .mobile-nav-link { font-size: 1.4rem; padding: 12px 0; }
+}

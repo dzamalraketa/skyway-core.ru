@@ -382,3 +382,17 @@
 .core-feed.swap { opacity: 0; transform: translateY(5px); }
 @media (max-width: 480px) { .orbit-label text { font-size: 10px; } }
 .core-diagram-bottom .core-feed { font-size: .62rem; letter-spacing: .04em; }
+
+/* A compact opening screen and calmer reading rhythm. */
+.home-core .core-hero { min-height: min(760px, 100svh); padding-top: 80px; padding-bottom: 76px; }
+.home-core .core-hero-title { letter-spacing: -.055em; text-wrap: balance; }
+.home-core .core-hero-lead { font-family: var(--font-sans); font-size: 1.1rem; line-height: 1.75; }
+.home-core .service-description, .home-core .section-subtitle { font-family: var(--font-sans); }
+.home-core .core-hero-diagram { border-radius: 16px; background: radial-gradient(ellipse at 50% 40%, rgba(62,135,125,.14), transparent 70%), rgba(9,20,22,.8); }
+@media (max-width: 768px) {
+    .home-core .core-hero { padding-top: 56px; padding-bottom: 60px; }
+    .home-core .core-hero-title { font-size: clamp(2.25rem, 9.3vw, 3.4rem); margin-bottom: 24px; }
+    .home-core .core-hero-lead { font-size: 1rem; line-height: 1.7; }
+    .core-kicker { margin-bottom: 20px; letter-spacing: .09em; }
+    .core-hero-actions { margin-top: 26px; }
+}
