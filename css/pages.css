@@ -20,7 +20,8 @@ body.site-core {
     background: #080e10;
     color: var(--core-paper);
 }
-.site-core .core-field { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: .58; }
+.site-core .core-field { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: .58; contain: strict; }
+@supports (height: 100lvh) { .site-core .core-field { bottom: auto; height: 100lvh; } }
 .site-core .header, .site-core .banner, .site-core main, .site-core .footer { position: relative; z-index: 1; }
 .site-core .scan-line, .site-core .binary-decor { display: none; }
 .site-core .header { background: rgba(8, 14, 16, .9); border-bottom: 1px solid var(--core-line); backdrop-filter: blur(14px); box-shadow: none; }
@@ -158,7 +159,7 @@ body.site-core {
 .site-core .case-content { display: flex; flex-direction: column; gap: 14px; }
 .site-core .case-content .btn { align-self: flex-start; margin-top: auto; }
 .site-core .case-description { line-height: 1.65; }
-@media (max-width: 768px) { .site-core .case-card { min-height: 0; } }
+@media (max-width: 768px) { .site-core .core-field { opacity: .76; } .site-core .case-card { min-height: 0; } }
 /* About: short statements should form compact cards. */
 .site-core .principles-grid { gap: 18px !important; padding: 0 !important; margin: 36px auto 0; }
 .site-core .principle-card { min-height: 0; padding: 30px 24px; gap: 0; }
